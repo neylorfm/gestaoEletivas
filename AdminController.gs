@@ -48,6 +48,7 @@ function gerarRelatorioSecretaria(payload) {
     
     var turma = entData[i][2];
     var idEletiva = entData[i][3];
+    var notaFinal = (entData[i][4] !== undefined && entData[i][4] !== null) ? entData[i][4].toString().trim() : '';
     
     var incluir = false;
     if (tipo === 'TURMA' && turma === valor) incluir = true;
@@ -61,6 +62,7 @@ function gerarRelatorioSecretaria(payload) {
           nome: entData[i][1],
           turma: turma,
           eletivas: [], // Array de eletivas que o aluno cursa (e que passaram no filtro)
+          notasMap: {}, // Mapeia idEletiva -> Nota
           faltas: 0,
           presencas: 0,
           dias: {},
@@ -69,6 +71,9 @@ function gerarRelatorioSecretaria(payload) {
       }
       if (alunosMap[key].eletivas.indexOf(idEletiva) === -1) {
         alunosMap[key].eletivas.push(idEletiva);
+      }
+      if (notaFinal !== '') {
+        alunosMap[key].notasMap[idEletiva] = notaFinal;
       }
       abasNecessarias[idEletiva] = true;
     }
@@ -156,7 +161,7 @@ function gerarRelatorioSecretaria(payload) {
   
   var pivot = [];
   var notes = [];
-  var header = ["Matrícula", "Nome", "Turma", "Faltas", "Presenças"];
+  var header = ["Matrícula", "Nome", "Turma", "Nota Final", "Total de Aulas", "Faltas", "Presenças"];
   for (var d = 0; d < sortedDates.length; d++) {
     header.push(sortedDates[d]);
   }
@@ -171,8 +176,27 @@ function gerarRelatorioSecretaria(payload) {
   
   for (var i = 0; i < chavesAlunos.length; i++) {
     var al = alunosMap[chavesAlunos[i]];
-    var row = [al.matricula, al.nome, al.turma, al.faltas, al.presencas];
-    var rowNotes = ["", "", "", "", ""]; // matching static headers
+    var totalAulas = al.presencas + al.faltas; // Soma de presenças e faltas
+    
+    // Obter Nota Final
+    var notaFinalStr = "";
+    if (tipo === 'ELETIVA') {
+      notaFinalStr = al.notasMap[valor] || "-";
+    } else {
+      var notasLista = [];
+      for (var e = 0; e < al.eletivas.length; e++) {
+        var elId = al.eletivas[e];
+        var n = al.notasMap[elId];
+        if (n) {
+          var nomeEl = eletivaNomes[elId] || elId;
+          notasLista.push(al.eletivas.length > 1 ? nomeEl + ": " + n : n);
+        }
+      }
+      notaFinalStr = notasLista.length > 0 ? notasLista.join(" | ") : "-";
+    }
+    
+    var row = [al.matricula, al.nome, al.turma, notaFinalStr, totalAulas, al.faltas, al.presencas];
+    var rowNotes = ["", "", "", "", "", "", ""]; // 7 colunas estáticas
     
     for (var d = 0; d < sortedDates.length; d++) {
       var dStr = sortedDates[d];
@@ -206,8 +230,17 @@ function gerarRelatorioSecretaria(payload) {
     notes.push(rowNotes);
   }
   
-  // 5. Saída
-  sheetRelatorio.clear(); // Clears values, formats, and notes
+  // 5. Limpa a aba completamente antes de inserir os novos dados
+  // Apaga todos os conteúdos, formatos e quaisquer comentários/anotações na aba inteira
+  sheetRelatorio.clear(); 
+  sheetRelatorio.clearNotes(); 
+  var maxR = sheetRelatorio.getMaxRows();
+  var maxC = sheetRelatorio.getMaxColumns();
+  if (maxR > 0 && maxC > 0) {
+    sheetRelatorio.getRange(1, 1, maxR, maxC).clearNote();
+  }
+  
+  // Escreve os novos dados e notas
   sheetRelatorio.getRange(1, 1, pivot.length, header.length).setValues(pivot);
   sheetRelatorio.getRange(1, 1, notes.length, header.length).setNotes(notes);
   

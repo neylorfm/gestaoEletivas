@@ -268,6 +268,7 @@
               <th>Nome do Aluno</th>
               <th>Turma Original</th>
               <th>Eletiva Atual</th>
+              <th>Nota Final</th>
               <th style="width: 100px; text-align: center;">Ações</th>
             </tr>
           </thead>
@@ -387,17 +388,19 @@
       const tbody = document.getElementById('tbodyDataset');
       
       if (enturmacoes.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 20px;">Nenhum aluno enturmado.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 20px;">Nenhum aluno enturmado.</td></tr>';
         return;
       }
       
       enturmacoes.forEach(e => {
         let tr = document.createElement('tr');
+        const notaBadge = e.notaFinal ? `<b style="background:#e6f4ea; color:#137333; padding:3px 8px; border-radius:4px;">${e.notaFinal}</b>` : `<span style="opacity:0.4;">-</span>`;
         tr.innerHTML = `
           <td>${e.matricula}</td>
           <td>${e.nome || '<i>Carregando PROCV...</i>'}</td>
           <td>${e.turma || '-'}</td>
           <td><span style="background:#e8f0fe; color:#1967d2; padding:4px 8px; border-radius:4px; font-weight:500;">${e.idEletiva}</span></td>
+          <td>${notaBadge}</td>
           <td style="text-align:center;">
             <button class="icon-btn" onclick="editar('${e.matricula}', '${e.turma}', '${e.idEletiva}')" title="Trocar Eletiva"><i class="material-icons">edit</i></button>
             <button class="icon-btn delete" onclick="remover('${e.matricula}', '${e.idEletiva}')" title="Desmatricular"><i class="material-icons">delete</i></button>
@@ -506,8 +509,8 @@
       for (let i = 1; i < tr.length; i++) {
         let tds = tr[i].getElementsByTagName("td");
         let found = false;
-        // Filtra nas 4 primeiras colunas
-        for (let j = 0; j < 4; j++) {
+        // Filtra nas 5 primeiras colunas (Matrícula, Nome, Turma, Eletiva, Nota)
+        for (let j = 0; j < 5; j++) {
           if (tds[j]) {
             let txtValue = tds[j].textContent || tds[j].innerText;
             if (txtValue.toUpperCase().indexOf(input) > -1) {

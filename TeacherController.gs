@@ -51,23 +51,39 @@ function getAulasDoProfessor() {
       var nomeEletiva = row[2];
       var qtdDias = parseInt(row[5]) || 0;
       
+      var todosDiasArr = [];
       var index = 6;
       for (var j = 0; j < qtdDias; j++) {
-        var dia = row[index] ? row[index].toString() : '';
-        var periodosStr = row[index+1] ? row[index+1].toString() : '';
+        var dia = row[index] ? row[index].toString().trim() : '';
+        var periodosStr = row[index+1] ? row[index+1].toString().trim() : '';
         var periodos = periodosStr.split(',').map(function(p) { return p.trim(); }).filter(String);
         
         if (dia && periodos.length > 0) {
-          resultados.push({
-            // Adicionamos um identificador único para o frontend diferenciar as opções (Ex: ELET1_Segunda)
-            idUnico: idEletiva + "_" + dia,
-            idEletiva: idEletiva,
-            nome: nomeEletiva,
+          var periodosFormatados = periodos.map(function(p) {
+            return p.toUpperCase().replace(/\s+/g, '');
+          }).join(',');
+          
+          todosDiasArr.push({
             dia: dia,
-            periodos: periodos
+            periodos: periodos,
+            formatado: dia.toUpperCase() + '(' + periodosFormatados + ')'
           });
         }
         index += 2;
+      }
+      
+      var diasAulasInfoStr = todosDiasArr.map(function(d) { return d.formatado; }).join(' : ');
+      
+      for (var k = 0; k < todosDiasArr.length; k++) {
+        var itemDia = todosDiasArr[k];
+        resultados.push({
+          idUnico: idEletiva + "_" + itemDia.dia,
+          idEletiva: idEletiva,
+          nome: nomeEletiva,
+          dia: itemDia.dia,
+          periodos: itemDia.periodos,
+          diasAulasInfo: diasAulasInfoStr
+        });
       }
     }
   }
@@ -116,14 +132,110 @@ function getAlunosDaEletiva(idEletiva) {
     var idEletivaAtual = row[3]; // Coluna D (índice 3: A=0, B=1, C=2, D=3)
     
     if (idEletivaAtual == idEletiva) {
+      var nota = (row[4] !== undefined && row[4] !== null) ? row[4].toString() : "";
       resultados.push({
         matricula: row[0], // Coluna A (índice 0)
         nome: row[1],      // Coluna B (índice 1)
-        turma: row[2]      // Coluna C (índice 2)
+        turma: row[2],     // Coluna C (índice 2)
+        notaFinal: nota    // Coluna E (índice 4)
       });
     }
   }
   return resultados;
+}
+
+/**
+ * Salva as notas finais dos alunos de uma eletiva específica na aba ENTURMACAO.
+ * Valida se o professor logado tem permissão para a eletiva correspondente.
+ * @param {string|number} idEletiva ID da Eletiva
+ * @param {Array} listaNotas Array de objetos { matricula, nota }
+ * @returns {Object} { status, message }
+ */
+function salvarNotasFinais(idEletiva, listaNotas) {
+  var email = Session.getActiveUser().getEmail() || '';
+  var userEmail = email.toString().trim().toLowerCase();
+  
+  // 1. Validação de Permissão do Professor
+  if (userEmail) {
+    var configSheet = getPlanilha('CONFIG_GERAL');
+    if (configSheet) {
+      var configData = configSheet.getDataRange().getValues();
+      var temPermissao = false;
+      for (var c = 1; c < configData.length; c++) {
+        if (configData[c][1] == idEletiva) {
+          var emailsList = (configData[c][4] || '').toString().toLowerCase().split(',').map(function(e) { 
+            return e.trim(); 
+          });
+          if (emailsList.indexOf(userEmail) !== -1) {
+            temPermissao = true;
+            break;
+          }
+        }
+      }
+      if (!temPermissao) {
+        throw new Error("Você não possui permissão para lançar notas nesta eletiva.");
+      }
+    }
+  }
+  
+  var sheet = getPlanilha('ENTURMACAO');
+  if (!sheet) throw new Error("Aba ENTURMACAO não encontrada.");
+  
+  // Garante cabeçalho na coluna E se não existir
+  if (!sheet.getRange(1, 5).getValue()) {
+    sheet.getRange(1, 5).setValue("Nota_Final");
+  }
+  
+  var notasMap = {};
+  for (var n = 0; n < listaNotas.length; n++) {
+    var item = listaNotas[n];
+    if (item && item.matricula) {
+      var raw = (item.nota !== undefined && item.nota !== null) ? item.nota.toString().trim() : '';
+      var finalNota = '';
+      
+      if (raw !== '') {
+        var normalized = raw.replace(',', '.');
+        var num = parseFloat(normalized);
+        
+        if (isNaN(num) || num < 0 || num > 10) {
+          throw new Error("Nota inválida para o aluno (matrícula: " + item.matricula + "). A nota final deve ser um número entre 0.0 e 10.0.");
+        }
+        
+        // Garante 1 casa decimal (ex: 8.5, 10.0, 7.0)
+        finalNota = (Math.round(num * 10) / 10).toFixed(1);
+      }
+      
+      notasMap[item.matricula.toString()] = finalNota;
+    }
+  }
+  
+  var data = sheet.getDataRange().getValues();
+  if (data.length < 2) {
+    return { status: 'SUCCESS', message: 'Nenhum aluno encontrado na enturmação.' };
+  }
+  
+  var colENotas = [];
+  var qtdAtualizados = 0;
+  
+  for (var i = 1; i < data.length; i++) {
+    var mat = data[i][0] ? data[i][0].toString() : '';
+    var el = data[i][3];
+    var notaAtual = (data[i][4] !== undefined && data[i][4] !== null) ? data[i][4].toString() : '';
+    
+    if (mat && el == idEletiva && notasMap.hasOwnProperty(mat)) {
+      colENotas.push([notasMap[mat]]);
+      qtdAtualizados++;
+    } else {
+      colENotas.push([notaAtual]);
+    }
+  }
+  
+  sheet.getRange(2, 5, colENotas.length, 1).setValues(colENotas);
+  
+  return {
+    status: 'SUCCESS',
+    message: qtdAtualizados + ' nota(s) final(is) salva(s) com sucesso!'
+  };
 }
 
 /**

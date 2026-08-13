@@ -37,6 +37,7 @@ Na primeira linha de cada aba (Linha 1), preencha os cabeçalhos exatamente na o
 - **Coluna B:** Nome *(Preenchido automaticamente pelo Modal de Enturmação)*
 - **Coluna C:** Turma_Regular *(Preenchido automaticamente pelo Modal de Enturmação)*
 - **Coluna D:** ID_Eletiva_Atual *(Preenchido automaticamente pelo Modal de Enturmação)*
+- **Coluna E:** Nota_Final *(Lançada e alterada pelos professores enturmados no Web App. Se um aluno for transferido/trocar de eletiva, a nota da disciplina anterior é limpa automaticamente).*
 > *(Atenção: Você não precisa digitar os alunos manualmente aqui! Utilize o menu superior "Gestão Eletivas > Enturmar Alunos" para abrir o formulário interativo. O script escreverá nesta aba de forma segura. Um mesmo aluno pode aparecer em várias linhas caso esteja matriculado em mais de uma eletiva).*
 
 #### Aba: `CONFIG_GERAL`
@@ -126,12 +127,22 @@ Copie a **URL do App da Web** que será gerada. Este é o link que os professore
 
 ### Como o Professor faz a Chamada (Multi-Períodos)
 1. O professor acessa o link do Web App e o sistema identifica as eletivas dele (e o respectivo dia da semana).
-2. Ao selecionar uma eletiva, o cartão de cada aluno aparecerá na tela com botões verdes para cada período configurado naquele dia (ex: `M1`, `M2`).
+2. Na aba **"📋 Frequência Diária"**, ao selecionar uma eletiva, o cartão de cada aluno aparecerá na tela com botões verdes para cada período configurado naquele dia (ex: `M1`, `M2`).
 3. Se um aluno faltar apenas no `M1`, basta o professor clicar no botão `M1` para desmarcá-lo (ele ficará vermelho indicando **Falta**). O botão `M2` continua verde (**Presente**).
 4. Se o aluno faltar o dia todo, o professor desmarca todos os botões.
 5. Ao clicar em **Salvar Chamada**, o sistema registrará no Google Sheets de forma inteligente as faltas apenas para os períodos que o professor deixou vermelhos!
 6. **Validação de Data:** O Web App do professor garante a consistência dos dados bloqueando o registro de frequência em dias da semana em que a eletiva não ocorre. Se a eletiva for de Segunda-feira e o professor selecionar uma data de Terça, o botão de Salvar será desabilitado com um aviso.
 7. **Controle de Duplicidade:** Caso o professor tente salvar uma chamada para uma Eletiva, Data e Período que já foram registrados, o sistema emitirá um alerta perguntando se ele deseja sobrescrever a chamada anterior. Ao confirmar, a chamada antiga será substituída pela nova de forma segura.
+
+### Como o Professor Lança ou Altera as Notas Finais
+1. No mesmo Web App, clique na aba superior **"📝 Lançamento de Notas Finais"**.
+2. A lista de alunos da eletiva selecionada será exibida com seus respectivos campos de **Nota Final**.
+3. Digite ou altere a nota de cada aluno. As notas devem ser valores entre **0.0 e 10.0** (inclusive) com **apenas 1 casa decimal** (ex: `0.0`, `7.5`, `8.0`, `10.0`). O sistema aceita tanto ponto quanto vírgula e auto-formata o valor.
+4. Caso uma nota seja digitada fora do intervalo (ex: `11` ou `-1`), o campo ficará destacado em vermelho com a tag **"INVÁLIDA (0-10)"** e o salvamento será bloqueado até a correção.
+5. O sistema sinalizará com uma tag amarela **"MODIFICADA"** os alunos cujas notas foram editadas.
+6. Você pode usar a barra de busca para localizar rapidamente qualquer estudante por nome ou matrícula.
+7. Clique em **"💾 Salvar Todas as Notas"**. O sistema validará suas permissões e gravará as notas com segurança na coluna `Nota_Final` da aba `ENTURMACAO`.
+8. *Nota de Segurança:* Caso um aluno mude de eletiva na secretaria, a nota anterior é automaticamente resetada e apenas os professores da nova disciplina poderão lançar sua nota.
 
 ---
 

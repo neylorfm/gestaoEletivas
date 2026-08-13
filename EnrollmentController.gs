@@ -74,11 +74,13 @@ function getAlunosEnturmados() {
   for (var i = 1; i < data.length; i++) {
     var matricula = data[i][0];
     if (matricula) {
+      var nota = (data[i][4] !== undefined && data[i][4] !== null) ? data[i][4].toString() : '';
       enturmacoes.push({
         matricula: matricula.toString(),
-        nome: data[i][1], // Fórmula
-        turma: data[i][2], // Fórmula
-        idEletiva: data[i][3]
+        nome: data[i][1], // Fórmula ou Texto
+        turma: data[i][2], // Fórmula ou Texto
+        idEletiva: data[i][3],
+        notaFinal: nota
       });
     }
   }
@@ -87,7 +89,8 @@ function getAlunosEnturmados() {
 
 /**
  * Salva ou atualiza a enturmação de um aluno.
- * Escreve na coluna A, B, C e D (abandonando fórmulas PROCV).
+ * Escreve nas colunas A, B, C, D e E (Nota_Final).
+ * Se o aluno trocar de eletiva, a Nota Final da eletiva anterior é limpa/resetada.
  */
 function salvarEnturmacao(matricula, idEletiva, oldIdEletiva) {
   var sheet = getPlanilha('ENTURMACAO');
@@ -95,6 +98,11 @@ function salvarEnturmacao(matricula, idEletiva, oldIdEletiva) {
   
   var baseSheet = getPlanilha('BASE_ALUNOS');
   if (!baseSheet) throw new Error("Aba BASE_ALUNOS não encontrada.");
+  
+  // Garante cabeçalho na coluna E se não existir
+  if (!sheet.getRange(1, 5).getValue()) {
+    sheet.getRange(1, 5).setValue("Nota_Final");
+  }
   
   var stringMatricula = matricula.toString();
   
@@ -120,11 +128,12 @@ function salvarEnturmacao(matricula, idEletiva, oldIdEletiva) {
   }
   
   // Se está trocando de eletiva (oldIdEletiva foi informado)
+  // Regra: A nota da eletiva anterior é limpa (resetada) para a nova eletiva
   if (oldIdEletiva && oldIdEletiva !== idEletiva) {
     for (var i = 1; i < data.length; i++) {
       if (data[i][0].toString() === stringMatricula && data[i][3] == oldIdEletiva) {
         var rowIndex = i + 1;
-        sheet.getRange(rowIndex, 1, 1, 4).setValues([[stringMatricula, nomeAluno, turmaAluno, idEletiva]]);
+        sheet.getRange(rowIndex, 1, 1, 5).setValues([[stringMatricula, nomeAluno, turmaAluno, idEletiva, ""]]);
         if (typeof atualizarControleTurmas === 'function') {
           atualizarControleTurmas(oldIdEletiva);
           atualizarControleTurmas(idEletiva);
@@ -146,8 +155,8 @@ function salvarEnturmacao(matricula, idEletiva, oldIdEletiva) {
   }
   if (novaLinha === 1) novaLinha = columnA.length + 1; // Fallback
   
-  // Escreve os 4 dados na nova linha
-  sheet.getRange(novaLinha, 1, 1, 4).setValues([[stringMatricula, nomeAluno, turmaAluno, idEletiva]]);
+  // Escreve os 5 dados na nova linha (com Nota Final vazia)
+  sheet.getRange(novaLinha, 1, 1, 5).setValues([[stringMatricula, nomeAluno, turmaAluno, idEletiva, ""]]);
   
   if (typeof atualizarControleTurmas === 'function') {
     atualizarControleTurmas(idEletiva);
@@ -194,6 +203,11 @@ function salvarEnturmacaoTurma(turma, idEletiva) {
   var baseSheet = getPlanilha('BASE_ALUNOS');
   if (!baseSheet) throw new Error("Aba BASE_ALUNOS não encontrada.");
   
+  // Garante cabeçalho na coluna E se não existir
+  if (!sheet.getRange(1, 5).getValue()) {
+    sheet.getRange(1, 5).setValue("Nota_Final");
+  }
+  
   // 1. Busca todos os alunos da turma na BASE_ALUNOS
   var baseData = baseSheet.getDataRange().getValues();
   var alunosTurma = [];
@@ -225,7 +239,7 @@ function salvarEnturmacaoTurma(turma, idEletiva) {
     }
   }
   
-  // 3. Monta as novas linhas a inserir
+  // 3. Monta as novas linhas a inserir (com Nota Final vazia)
   var novasLinhas = [];
   var qtdIgnorados = 0;
   
@@ -234,7 +248,7 @@ function salvarEnturmacaoTurma(turma, idEletiva) {
     if (jaMatriculadosMap[al.matricula]) {
       qtdIgnorados++;
     } else {
-      novasLinhas.push([al.matricula, al.nome, al.turma, idEletiva]);
+      novasLinhas.push([al.matricula, al.nome, al.turma, idEletiva, ""]);
       jaMatriculadosMap[al.matricula] = true;
     }
   }
@@ -254,8 +268,8 @@ function salvarEnturmacaoTurma(turma, idEletiva) {
   }
   if (startRow === 1) startRow = columnA.length + 1;
   
-  // 5. Escreve em lote (Batch write)
-  sheet.getRange(startRow, 1, novasLinhas.length, 4).setValues(novasLinhas);
+  // 5. Escreve em lote (Batch write com as 5 colunas)
+  sheet.getRange(startRow, 1, novasLinhas.length, 5).setValues(novasLinhas);
   
   if (typeof atualizarControleTurmas === 'function') {
     atualizarControleTurmas(idEletiva);

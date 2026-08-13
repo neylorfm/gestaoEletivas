@@ -233,12 +233,14 @@
       
       <div class="row">
         <div class="form-group">
-          <label>Nome do Professor</label>
-          <input type="text" id="nomeProfessor" placeholder="Ex: João Silva">
+          <label>Nome do(s) Professor(es)</label>
+          <input type="text" id="nomeProfessor" placeholder="Ex: João Silva ou João Silva, Maria Santos">
+          <small style="color:var(--text-sec); font-size:12px; margin-top:4px; display:block;">Para múltiplos professores, separe por vírgula.</small>
         </div>
         <div class="form-group">
-          <label>E-mail do Professor (Google)</label>
-          <input type="email" id="emailProfessor" placeholder="Ex: joao@escola.com">
+          <label>E-mail(s) do(s) Professor(es) (Google)</label>
+          <input type="text" id="emailProfessor" placeholder="Ex: joao@escola.com ou joao@escola.com, maria@escola.com">
+          <small style="color:var(--text-sec); font-size:12px; margin-top:4px; display:block;">Separe os e-mails que terão acesso à chamada por vírgula.</small>
         </div>
       </div>
       
@@ -274,7 +276,7 @@
             <tr>
               <th>ID</th>
               <th>Nome</th>
-              <th>Professor</th>
+              <th>Professor(es)</th>
               <th>Dias/Períodos</th>
               <th style="width: 100px; text-align: center;">Ações</th>
             </tr>

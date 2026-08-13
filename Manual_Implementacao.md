@@ -40,7 +40,13 @@ Na primeira linha de cada aba (Linha 1), preencha os cabeçalhos exatamente na o
 > *(Atenção: Você não precisa digitar os alunos manualmente aqui! Utilize o menu superior "Gestão Eletivas > Enturmar Alunos" para abrir o formulário interativo. O script escreverá nesta aba de forma segura. Um mesmo aluno pode aparecer em várias linhas caso esteja matriculado em mais de uma eletiva).*
 
 #### Aba: `CONFIG_GERAL`
-> *(Atenção: A aba `CONFIG_GERAL` **NÃO DEVE** mais ser preenchida manualmente! Utilize o menu superior "Gestão Eletivas > Registrar Eletivas" para abrir o gerenciador interativo. O sistema cadastrará e formatará as eletivas com seus dias e períodos de forma automatizada e à prova de erros).*
+- **Coluna B:** ID_Eletiva
+- **Coluna C:** Nome_Eletiva
+- **Coluna D:** Nome_Professor *(Permite múltiplos nomes de professores separados por vírgula)*
+- **Coluna E:** Email_Professor *(Permite múltiplos e-mails Google separados por vírgula - todos terão acesso à chamada)*
+- **Coluna F:** Qtd_Dias_Semana
+- **Colunas Seguintes:** Pares de Dia da Semana e Períodos/Aulas
+> *(Atenção: A aba `CONFIG_GERAL` **NÃO DEVE** ser preenchida manualmente! Utilize o menu superior "Gestão Eletivas > Registrar Eletivas" para abrir o gerenciador interativo. O sistema cadastrará e formatará as eletivas com seus professores, dias e períodos de forma automatizada e à prova de erros).*
 
 #### Abas Dinâmicas de Chamada (ex: `ELET1`, `ELET2`, etc.)
 > [!WARNING]
@@ -139,8 +145,8 @@ A Secretaria possui duas ferramentas principais operando direto da planilha: **G
 
 ### Registrar Eletivas (Modal Interativo)
 1. Clique em **Gestão Eletivas > Registrar Eletivas**.
-2. Uma janela vai se abrir. Aqui você insere o ID da Eletiva (ex: ELET1), o Nome, os dados do Professor responsável, e os dias de aula.
-3. Clique em **Adicionar Dia** para colocar as configurações, como "Segunda-feira", períodos "M1, M2".
+2. Uma janela vai se abrir. Aqui você insere o ID da Eletiva (ex: ELET1), o Nome, os dados do(s) Professor(es) responsável(is) (se houver mais de um professor ou mais de um e-mail com acesso à chamada, insira-os separados por vírgula), e os dias de aula.
+3. Clique em **Adicionar Dia** para colocar as configurações, como "Segunda-feira", marcando as aulas correspondentes.
 4. Salve e a eletiva já estará perfeitamente formatada na aba `CONFIG_GERAL`. Você também pode editar e excluir eletivas existentes por essa mesma tela.
 
 ### Enturmar Alunos (Modal Interativo)

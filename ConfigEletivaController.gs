@@ -23,9 +23,9 @@ function getConfigEletivas() {
     var eletiva = {
       rowIndex: i + 1,
       idEletiva: idEletiva,
-      nomeEletiva: row[2],
-      nomeProfessor: row[3],
-      emailProfessor: row[4],
+      nomeEletiva: row[2] ? row[2].toString() : '',
+      nomeProfessor: row[3] ? row[3].toString() : '',
+      emailProfessor: row[4] ? row[4].toString() : '',
       dias: []
     };
     

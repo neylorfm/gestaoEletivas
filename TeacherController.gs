@@ -4,22 +4,49 @@
  */
 
 /**
- * Lê a aba CONFIG_GERAL e retorna as eletivas vinculadas ao e-mail logado.
- * @returns {Array} Array de objetos de eletivas
+ * Lê a aba CONFIG_GERAL e retorna as informações do professor logado e suas eletivas vinculadas.
+ * @returns {Object} { usuario: { email, nome }, eletivas: Array }
  */
 function getAulasDoProfessor() {
-  var email = Session.getActiveUser().getEmail();
+  var email = Session.getActiveUser().getEmail() || '';
+  var userEmail = email.toString().trim().toLowerCase();
   var sheet = getPlanilha('CONFIG_GERAL');
-  if (!sheet) return [];
+  
+  if (!sheet) {
+    return {
+      usuario: { email: email, nome: formatNomeFromEmail(email) },
+      eletivas: []
+    };
+  }
   
   var data = sheet.getDataRange().getValues();
   var resultados = [];
+  var nomeProfessorEncontrado = '';
   
   for (var i = 1; i < data.length; i++) {
     var row = data[i];
-    var emailProfessor = row[4]; 
+    var nomeProfessorCell = row[3] ? row[3].toString() : '';
+    var emailProfessorCell = row[4] ? row[4].toString() : ''; 
+    var emailsList = emailProfessorCell.split(',').map(function(e) {
+      return e.trim().toLowerCase();
+    }).filter(String);
+    var nomesList = nomeProfessorCell.split(',').map(function(n) {
+      return n.trim();
+    }).filter(String);
     
-    if (emailProfessor === email) {
+    var emailIndex = userEmail ? emailsList.indexOf(userEmail) : -1;
+    if (userEmail && emailIndex !== -1) {
+      // Identifica o nome do professor baseado na posição do e-mail
+      if (!nomeProfessorEncontrado) {
+        if (nomesList[emailIndex]) {
+          nomeProfessorEncontrado = nomesList[emailIndex];
+        } else if (nomesList.length > 0) {
+          nomeProfessorEncontrado = nomesList[0];
+        } else if (nomeProfessorCell) {
+          nomeProfessorEncontrado = nomeProfessorCell.trim();
+        }
+      }
+
       var idEletiva = row[1];
       var nomeEletiva = row[2];
       var qtdDias = parseInt(row[5]) || 0;
@@ -44,7 +71,31 @@ function getAulasDoProfessor() {
       }
     }
   }
-  return resultados;
+
+  if (!nomeProfessorEncontrado && email) {
+    nomeProfessorEncontrado = formatNomeFromEmail(email);
+  }
+
+  return {
+    usuario: {
+      email: email,
+      nome: nomeProfessorEncontrado || "Professor(a)"
+    },
+    eletivas: resultados
+  };
+}
+
+/**
+ * Formata um nome amigável a partir do e-mail do usuário caso não haja nome cadastrado.
+ */
+function formatNomeFromEmail(email) {
+  if (!email) return "Professor(a)";
+  var usuario = email.split('@')[0];
+  var partes = usuario.split(/[._-]/).filter(String);
+  if (partes.length === 0) return usuario;
+  return partes.map(function(p) {
+    return p.charAt(0).toUpperCase() + p.slice(1).toLowerCase();
+  }).join(' ');
 }
 
 /**

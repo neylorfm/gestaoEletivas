@@ -152,8 +152,8 @@ A Secretaria possui duas ferramentas principais operando direto da planilha: **G
 ### Enturmar Alunos (Modal Interativo)
 1. Clique em **Gestão Eletivas > Enturmar Alunos**.
 2. Um painel moderno se abrirá no centro da tela. 
-3. Escolha a Eletiva, filtre a Turma Regular e selecione o Aluno desejado. Clique em **Enturmar Aluno**.
-4. A tabela abaixo atualizará instantaneamente. Você pode buscar alunos pela barra de pesquisa, editá-los (botão de lápis) ou desmatriculá-los (botão de lixeira). 
+3. Escolha a Eletiva e filtre a Turma Regular. No terceiro campo, você pode escolher **um aluno específico** ou selecionar **"⭐ Todos os Alunos da Turma"** para enturmar a sala inteira em um único clique!
+4. Clique no botão de ação para confirmar. A tabela abaixo atualizará instantaneamente. Você pode buscar alunos pela barra de pesquisa, editá-los (botão de lápis) ou desmatriculá-los (botão de lixeira). 
    - *Nota: Caso o aluno tenha mais de uma eletiva, a ação de edição/exclusão afetará apenas a eletiva específica que foi clicada na tabela.*
 
 ### Gerar Relatório Cruzado (Pivot)

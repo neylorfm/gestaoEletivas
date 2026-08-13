@@ -239,7 +239,7 @@
         </div>
         
         <div class="form-group" style="flex: 1.5;">
-          <label for="alunoSelect">3. Selecione o Aluno</label>
+          <label for="alunoSelect">3. Selecione o Aluno (ou Toda a Turma)</label>
           <select id="alunoSelect" disabled onchange="checkForm()">
             <option value="">Selecione a Turma primeiro</option>
           </select>
@@ -319,21 +319,28 @@
 
     function checkForm() {
       const eletiva = document.getElementById('eletivaSelect').value;
-      const turmaSelect = document.getElementById('turmaSelect');
-      const alunoSelect = document.getElementById('alunoSelect');
+      const turma = document.getElementById('turmaSelect').value;
+      const alunoVal = document.getElementById('alunoSelect').value;
       const btn = document.getElementById('btnSalvar');
 
       if (eletiva) {
-        turmaSelect.disabled = false;
+        document.getElementById('turmaSelect').disabled = false;
       } else {
-        turmaSelect.disabled = true;
-        alunoSelect.disabled = true;
+        document.getElementById('turmaSelect').disabled = true;
+        document.getElementById('alunoSelect').disabled = true;
       }
 
-      if (eletiva && alunoSelect.value) {
+      if (eletiva && alunoVal) {
         btn.disabled = false;
+        if (alunoVal === "TODOS") {
+          const filtrados = cacheDados.alunos.filter(a => a.turma === turma);
+          btn.innerText = `Enturmar Toda a Turma (${filtrados.length} alunos)`;
+        } else {
+          btn.innerText = "Enturmar Aluno";
+        }
       } else {
         btn.disabled = true;
+        btn.innerText = "Enturmar Aluno";
       }
     }
 
@@ -342,16 +349,22 @@
       const alunoSelect = document.getElementById('alunoSelect');
       
       if (!turma) {
-        alunoSelect.innerHTML = '<option value="">Selecione uma turma</option>';
+        alunoSelect.innerHTML = '<option value="">Selecione uma turma primeiro</option>';
         alunoSelect.disabled = true;
         checkForm();
         return;
       }
 
-      alunoSelect.disabled = false;
-      alunoSelect.innerHTML = '<option value="">-- Selecione o Aluno --</option>';
-      
       const filtrados = cacheDados.alunos.filter(a => a.turma === turma);
+      const qtd = filtrados.length;
+      
+      alunoSelect.disabled = false;
+      alunoSelect.innerHTML = `
+        <option value="">-- Selecione o Aluno ou Toda a Turma --</option>
+        <option value="TODOS" style="font-weight:bold; color:var(--primary);">⭐ Todos os ${qtd} Alunos da Turma (${turma})</option>
+        <option disabled>───────────────────────────</option>
+      `;
+      
       filtrados.forEach(a => {
         alunoSelect.innerHTML += `<option value="${a.matricula}">${a.nome} (${a.matricula})</option>`;
       });
@@ -396,15 +409,41 @@
 
     function salvarEnturmacao() {
       const matricula = document.getElementById('alunoSelect').value;
+      const turma = document.getElementById('turmaSelect').value;
       const eletiva = document.getElementById('eletivaSelect').value;
       const btn = document.getElementById('btnSalvar');
       
+      if (!eletiva || !matricula) return;
+
+      btn.disabled = true;
+
+      // Enturmação em lote de toda a turma
+      if (matricula === "TODOS") {
+        btn.innerText = "Enturmando turma...";
+        
+        google.script.run
+          .withSuccessHandler(msg => {
+            alert(msg);
+            btn.innerText = "Enturmar Aluno";
+            document.getElementById('alunoSelect').value = "";
+            checkForm();
+            atualizarTabela();
+          })
+          .withFailureHandler(err => {
+            btn.disabled = false;
+            btn.innerText = "Enturmar Aluno";
+            alert("Erro ao enturmar turma: " + err);
+          })
+          .salvarEnturmacaoTurma(turma, eletiva);
+        return;
+      }
+
+      // Enturmação individual de aluno
       let oldEletivaToPass = null;
       if (matricula === currentEditMatricula && currentEditOldEletiva) {
         oldEletivaToPass = currentEditOldEletiva;
       }
 
-      btn.disabled = true;
       btn.innerText = "Processando...";
 
       google.script.run

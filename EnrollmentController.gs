@@ -179,3 +179,91 @@ function removerEnturmacao(matricula, idEletiva) {
   }
   throw new Error("Matrícula e Eletiva não encontradas na planilha de Enturmação.");
 }
+
+/**
+ * Enturma todos os alunos de uma turma regular em uma eletiva em lote.
+ * Ignora alunos que já estejam matriculados nesta mesma eletiva para evitar duplicações.
+ * @param {string} turma Nome da Turma Regular
+ * @param {string} idEletiva ID da Eletiva
+ * @returns {string} Mensagem com o resultado
+ */
+function salvarEnturmacaoTurma(turma, idEletiva) {
+  var sheet = getPlanilha('ENTURMACAO');
+  if (!sheet) throw new Error("Aba ENTURMACAO não encontrada.");
+  
+  var baseSheet = getPlanilha('BASE_ALUNOS');
+  if (!baseSheet) throw new Error("Aba BASE_ALUNOS não encontrada.");
+  
+  // 1. Busca todos os alunos da turma na BASE_ALUNOS
+  var baseData = baseSheet.getDataRange().getValues();
+  var alunosTurma = [];
+  for (var j = 1; j < baseData.length; j++) {
+    var mat = baseData[j][0];
+    var nome = baseData[j][1];
+    var t = baseData[j][2];
+    if (mat && t === turma) {
+      alunosTurma.push({
+        matricula: mat.toString(),
+        nome: nome,
+        turma: t
+      });
+    }
+  }
+  
+  if (alunosTurma.length === 0) {
+    throw new Error("Nenhum aluno encontrado para a turma " + turma + " na BASE_ALUNOS.");
+  }
+  
+  // 2. Lê ENTURMACAO para checar duplicidades
+  var entData = sheet.getDataRange().getValues();
+  var jaMatriculadosMap = {};
+  for (var i = 1; i < entData.length; i++) {
+    var m = entData[i][0] ? entData[i][0].toString() : '';
+    var el = entData[i][3];
+    if (m && el == idEletiva) {
+      jaMatriculadosMap[m] = true;
+    }
+  }
+  
+  // 3. Monta as novas linhas a inserir
+  var novasLinhas = [];
+  var qtdIgnorados = 0;
+  
+  for (var a = 0; a < alunosTurma.length; a++) {
+    var al = alunosTurma[a];
+    if (jaMatriculadosMap[al.matricula]) {
+      qtdIgnorados++;
+    } else {
+      novasLinhas.push([al.matricula, al.nome, al.turma, idEletiva]);
+      jaMatriculadosMap[al.matricula] = true;
+    }
+  }
+  
+  if (novasLinhas.length === 0) {
+    return "Todos os " + alunosTurma.length + " alunos da turma " + turma + " já estão matriculados nesta eletiva.";
+  }
+  
+  // 4. Descobre a primeira linha livre da coluna A
+  var columnA = sheet.getRange("A:A").getValues();
+  var startRow = 1;
+  for (var i = 0; i < columnA.length; i++) {
+    if (columnA[i][0] === "") {
+      startRow = i + 1;
+      break;
+    }
+  }
+  if (startRow === 1) startRow = columnA.length + 1;
+  
+  // 5. Escreve em lote (Batch write)
+  sheet.getRange(startRow, 1, novasLinhas.length, 4).setValues(novasLinhas);
+  
+  if (typeof atualizarControleTurmas === 'function') {
+    atualizarControleTurmas(idEletiva);
+  }
+  
+  var msg = novasLinhas.length + " aluno(s) da turma " + turma + " foram enturmados com sucesso na eletiva!";
+  if (qtdIgnorados > 0) {
+    msg += " (" + qtdIgnorados + " já estavam matriculados).";
+  }
+  return msg;
+}

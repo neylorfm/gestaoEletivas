@@ -161,7 +161,7 @@ function gerarRelatorioSecretaria(payload) {
   
   var pivot = [];
   var notes = [];
-  var header = ["Matrícula", "Nome", "Turma", "Nota Final", "Total de Aulas", "Faltas", "Presenças"];
+  var header = ["Matrícula", "Nome", "Turma", "Nota Final", "Faltas", "Presenças", "Total de Aulas"];
   for (var d = 0; d < sortedDates.length; d++) {
     header.push(sortedDates[d]);
   }
@@ -195,7 +195,7 @@ function gerarRelatorioSecretaria(payload) {
       notaFinalStr = notasLista.length > 0 ? notasLista.join(" | ") : "-";
     }
     
-    var row = [al.matricula, al.nome, al.turma, notaFinalStr, totalAulas, al.faltas, al.presencas];
+    var row = [al.matricula, al.nome, al.turma, notaFinalStr, al.faltas, al.presencas, totalAulas];
     var rowNotes = ["", "", "", "", "", "", ""]; // 7 colunas estáticas
     
     for (var d = 0; d < sortedDates.length; d++) {

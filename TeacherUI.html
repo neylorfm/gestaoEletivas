@@ -746,7 +746,7 @@
           </div>
           <div class="form-group">
             <label for="data">Data</label>
-            <input type="date" id="data" onchange="onDataChange()">
+            <input type="date" id="data" onchange="onDataChange(true)">
           </div>
           <div class="form-group">
             <label>Períodos sendo registrados nesta aula:</label>
@@ -1082,10 +1082,10 @@
         container.appendChild(card);
       });
       
-      onDataChange();
+      onDataChange(false);
     }
     
-    function onDataChange() {
+    function onDataChange(isUserAction = false) {
       const idStr = document.getElementById('eletiva').value;
       const data = document.getElementById('data').value;
       const titleEl = document.getElementById('lista-alunos-title');
@@ -1114,7 +1114,10 @@
       
       if (expectedDayStr && expectedDayStr !== actualDayStr) {
         document.getElementById('btn-salvar').disabled = true;
-        showToast(`A Eletiva ocorre na ${eletiva.dia}. Por favor, escolha a data correta.`, true);
+        // Só exibe aviso caso tenha sido ação intencional do usuário na aba de Frequência
+        if (isUserAction && currentTab === 'frequencia') {
+          showToast(`A Eletiva ocorre na ${eletiva.dia}. Por favor, escolha a data correta.`, true);
+        }
       } else {
         document.getElementById('btn-salvar').disabled = false;
       }

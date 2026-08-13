@@ -71,9 +71,9 @@ Na primeira linha de cada aba (Linha 1), preencha os cabeçalhos exatamente na o
 - **Coluna B:** Nome *(Sem repetições. Um aluno aparece em apenas uma linha, mesmo matriculado em várias eletivas)*
 - **Coluna C:** Turma
 - **Coluna D:** Nota Final *(Nota lançada pelo professor na eletiva)*
-- **Coluna E:** Total de Aulas *(Soma total de presenças e faltas no período selecionado)*
-- **Coluna F:** Faltas *(Soma total no período selecionado)*
-- **Coluna G:** Presenças *(Soma total no período selecionado)*
+- **Coluna E:** Faltas *(Soma total no período selecionado)*
+- **Coluna F:** Presenças *(Soma total no período selecionado)*
+- **Coluna G:** Total de Aulas *(Soma total de presenças e faltas no período selecionado)*
 - **Colunas Seguintes (Datas):** São geradas automaticamente. Nas células, o sistema mostrará `0` se o aluno esteve presente nas eletivas daquele dia, `-` se não possuía aula, ou `X F` com a quantidade de faltas.
   - **Dica de Ouro:** Ao passar o mouse sobre as células das datas, um comentário aparecerá informando exatamente o nome da Eletiva e as faltas específicas daquela disciplina no dia! (ex: `Robótica(1F), Programação(0F)`). Ao gerar um novo relatório, todos os comentários anteriores da aba são limpos automaticamente.
 

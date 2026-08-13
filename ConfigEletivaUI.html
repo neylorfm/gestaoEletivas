@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <!-- Ícones Material -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1a73e8;
+      --primary-hover: #174ea6;
+      --surface: #ffffff;
+      --bg: #f8f9fa;
+      --text: #202124;
+      --text-sec: #5f6368;
+      --border: #dadce0;
+      --danger: #d93025;
+      --danger-bg: #fce8e6;
+      --success: #1e8e3e;
+      --success-bg: #e6f4ea;
+    }
+
+    body {
+      font-family: 'Google Sans', Roboto, Arial, sans-serif;
+      margin: 0;
+      padding: 24px;
+      background-color: var(--bg);
+      color: var(--text);
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--surface);
+      border-radius: 8px;
+      box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+      padding: 24px;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      margin-top: 0;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+      color: var(--primary);
+      margin-bottom: 20px;
+    }
+
+    .row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .form-group {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    select, input[type="text"], input[type="email"] {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    select:focus, input[type="text"]:focus, input[type="email"]:focus {
+      border-color: var(--primary);
+    }
+
+    button.primary, button.secondary {
+      border: none;
+      padding: 10px 24px;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      align-self: flex-start;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    button.primary {
+      background-color: var(--primary);
+      color: white;
+    }
+    button.primary:hover:not(:disabled) { background-color: var(--primary-hover); }
+    button.primary:disabled { background-color: #a8c7fa; cursor: not-allowed; }
+
+    button.secondary {
+      background-color: white;
+      color: var(--primary);
+      border: 1px solid var(--primary);
+    }
+    button.secondary:hover { background-color: #f8f9fa; }
+
+    button.icon-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-sec);
+      border-radius: 50%;
+      padding: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+    button.icon-btn:hover { background-color: #f1f3f4; color: var(--text); }
+    button.icon-btn.delete:hover { color: var(--danger); background-color: var(--danger-bg); }
+
+    .header-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+      margin-bottom: 20px;
+    }
+    
+    .header-actions h2 {
+      border-bottom: none; margin-bottom: 0; padding-bottom: 0;
+    }
+
+    .search-box {
+      width: 300px;
+      position: relative;
+    }
+    .search-box i {
+      position: absolute; left: 10px; top: 10px; color: var(--text-sec); font-size: 18px;
+    }
+    .search-box input {
+      padding-left: 36px;
+    }
+
+    /* Tabela */
+    .table-container {
+      max-height: 350px;
+      overflow-y: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      text-align: left;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      color: var(--text-sec);
+      font-weight: 500;
+      position: sticky;
+      top: 0;
+      background-color: var(--surface);
+      z-index: 1;
+    }
+    tr:hover { background-color: #f1f3f4; }
+
+    #loader, #global-loader {
+      text-align: center; color: var(--primary); padding: 20px; font-weight: 500;
+    }
+    #global-loader {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(255,255,255,0.8); z-index: 1000;
+      display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+    }
+
+    .dia-row {
+      display: flex; gap: 16px; align-items: flex-end; margin-bottom: 12px;
+      background: #f8f9fa; padding: 12px; border-radius: 4px; border: 1px solid var(--border);
+    }
+    .dias-container {
+      margin-top: 8px; margin-bottom: 16px;
+    }
+    
+    .tag {
+      background: #e8f0fe; color: #1967d2; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 500; margin-right: 4px; display: inline-block; margin-bottom: 4px;
+    }
+    .checkbox-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.85rem;
+      margin-bottom: 0;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="global-loader">Carregando interface...</div>
+
+  <div class="container">
+    <!-- Formulário -->
+    <div class="card">
+      <h2 id="formTitle">Nova Eletiva</h2>
+      
+      <!-- ID Oculto (Gerado pelo Backend) -->
+      <input type="hidden" id="idEletiva">
+      
+      <div class="row">
+        <div class="form-group">
+          <label>Nome da Eletiva</label>
+          <input type="text" id="nomeEletiva" placeholder="Ex: Robótica">
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="form-group">
+          <label>Nome do Professor</label>
+          <input type="text" id="nomeProfessor" placeholder="Ex: João Silva">
+        </div>
+        <div class="form-group">
+          <label>E-mail do Professor (Google)</label>
+          <input type="email" id="emailProfessor" placeholder="Ex: joao@escola.com">
+        </div>
+      </div>
+      
+      <div style="margin-top: 16px;">
+        <label>Dias e Períodos da Semana</label>
+        <div id="diasContainer" class="dias-container">
+          <!-- Linhas dinâmicas -->
+        </div>
+        <button class="secondary" onclick="addDiaRow()"><i class="material-icons" style="font-size:18px">add</i> Adicionar Dia</button>
+      </div>
+      
+      <div style="margin-top: 24px; border-top: 1px solid var(--border); padding-top: 16px; display: flex; gap: 12px;">
+        <button id="btnSalvar" class="primary" onclick="salvar()">Salvar Eletiva</button>
+        <button id="btnCancelar" class="secondary" style="display:none;" onclick="resetForm()">Cancelar Edição</button>
+      </div>
+    </div>
+
+    <!-- Tabela -->
+    <div class="card">
+      <div class="header-actions">
+        <h2>Eletivas Cadastradas</h2>
+        <div class="search-box">
+          <i class="material-icons">search</i>
+          <input type="text" id="searchInput" placeholder="Buscar..." onkeyup="filtrarTabela()">
+        </div>
+      </div>
+      
+      <div id="loader" style="display:none;">Sincronizando dados...</div>
+      
+      <div class="table-container">
+        <table id="tabelaEletivas">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome</th>
+              <th>Professor</th>
+              <th>Dias/Períodos</th>
+              <th style="width: 100px; text-align: center;">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyEletivas">
+            <!-- Renderizado dinamicamente -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let eletivas = [];
+    let editingId = null;
+
+    document.addEventListener("DOMContentLoaded", function() {
+      resetForm();
+      carregarEletivas();
+    });
+
+    function carregarEletivas() {
+      document.getElementById('loader').style.display = 'block';
+      document.getElementById('global-loader').style.display = 'block';
+      
+      google.script.run
+        .withSuccessHandler(dados => {
+          eletivas = dados;
+          renderTabela();
+          document.getElementById('loader').style.display = 'none';
+          document.getElementById('global-loader').style.display = 'none';
+        })
+        .withFailureHandler(err => {
+          alert("Erro ao buscar eletivas: " + err);
+          document.getElementById('global-loader').style.display = 'none';
+        })
+        .getConfigEletivas();
+    }
+
+    function renderTabela() {
+      const tbody = document.getElementById('tbodyEletivas');
+      tbody.innerHTML = '';
+      
+      if (eletivas.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 20px;">Nenhuma eletiva cadastrada.</td></tr>';
+        return;
+      }
+      
+      eletivas.forEach(e => {
+        let diasHtml = '';
+        e.dias.forEach(d => {
+          diasHtml += `<div class="tag">${d.dia}: ${d.periodos}</div>`;
+        });
+        
+        let tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${e.idEletiva}</strong></td>
+          <td>${e.nomeEletiva}</td>
+          <td>${e.nomeProfessor}<br><small style="color:var(--text-sec)">${e.emailProfessor}</small></td>
+          <td>${diasHtml}</td>
+          <td style="text-align:center;">
+            <button class="icon-btn" onclick="editar('${e.idEletiva}')" title="Editar"><i class="material-icons">edit</i></button>
+            <button class="icon-btn delete" onclick="excluir('${e.idEletiva}')" title="Excluir"><i class="material-icons">delete</i></button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function addDiaRow(diaStr = '', periodosStr = '') {
+      const container = document.getElementById('diasContainer');
+      const row = document.createElement('div');
+      row.className = 'dia-row';
+      
+      const selectedAulas = periodosStr.split(',').map(s => s.trim().replace('ªAULA', '')).filter(s => s);
+      let checkboxesHtml = '<div class="checkbox-grid">';
+      for(let i=1; i<=15; i++) {
+        const isChecked = selectedAulas.includes(i.toString()) ? 'checked' : '';
+        checkboxesHtml += `
+          <label class="checkbox-item">
+            <input type="checkbox" class="aula-cb" value="${i}" ${isChecked}> ${i}ª
+          </label>
+        `;
+      }
+      checkboxesHtml += '</div>';
+
+      row.innerHTML = `
+        <div class="form-group" style="flex:1;">
+          <label>Dia da Semana</label>
+          <select class="select-dia">
+            <option value="Segunda-feira" ${diaStr === 'Segunda-feira' ? 'selected' : ''}>Segunda-feira</option>
+            <option value="Terça-feira" ${diaStr === 'Terça-feira' ? 'selected' : ''}>Terça-feira</option>
+            <option value="Quarta-feira" ${diaStr === 'Quarta-feira' ? 'selected' : ''}>Quarta-feira</option>
+            <option value="Quinta-feira" ${diaStr === 'Quinta-feira' ? 'selected' : ''}>Quinta-feira</option>
+            <option value="Sexta-feira" ${diaStr === 'Sexta-feira' ? 'selected' : ''}>Sexta-feira</option>
+            <option value="Sábado" ${diaStr === 'Sábado' ? 'selected' : ''}>Sábado</option>
+          </select>
+        </div>
+        <div class="form-group" style="flex:2;">
+          <label>AULAS</label>
+          ${checkboxesHtml}
+        </div>
+        <button class="icon-btn delete" onclick="this.parentElement.remove()" style="margin-bottom:2px;"><i class="material-icons">close</i></button>
+      `;
+      container.appendChild(row);
+    }
+
+    function salvar() {
+      const idEl = document.getElementById('idEletiva').value.trim();
+      const nomeEl = document.getElementById('nomeEletiva').value.trim();
+      const nomeProf = document.getElementById('nomeProfessor').value.trim();
+      const emailProf = document.getElementById('emailProfessor').value.trim();
+      
+      if (!nomeEl || !nomeProf || !emailProf) {
+        alert("Preencha todos os campos principais!");
+        return;
+      }
+      
+      const diaRows = document.querySelectorAll('.dia-row');
+      let dias = [];
+      
+      diaRows.forEach(row => {
+        const dia = row.querySelector('.select-dia').value;
+        
+        const checkboxes = row.querySelectorAll('.aula-cb:checked');
+        const aulasArr = [];
+        checkboxes.forEach(cb => {
+          aulasArr.push(cb.value + "ªAULA");
+        });
+        const periodos = aulasArr.join(', ');
+        
+        if (periodos) {
+          dias.push({ dia: dia, periodos: periodos });
+        }
+      });
+      
+      if (dias.length === 0) {
+        alert("Adicione pelo menos 1 dia e marque pelo menos 1 AULA!");
+        return;
+      }
+      
+      const payload = {
+        idEletiva: idEl,
+        nomeEletiva: nomeEl,
+        nomeProfessor: nomeProf,
+        emailProfessor: emailProf,
+        dias: dias
+      };
+      
+      const btn = document.getElementById('btnSalvar');
+      btn.disabled = true;
+      btn.innerText = "Salvando...";
+      
+      google.script.run
+        .withSuccessHandler(msg => {
+          btn.disabled = false;
+          btn.innerText = "Salvar Eletiva";
+          alert(msg);
+          resetForm();
+          carregarEletivas();
+        })
+        .withFailureHandler(err => {
+          btn.disabled = false;
+          btn.innerText = "Salvar Eletiva";
+          alert("Erro: " + err);
+        })
+        .salvarConfigEletiva(payload);
+    }
+
+    function editar(idStr) {
+      const el = eletivas.find(e => e.idEletiva === idStr);
+      if (!el) return;
+      
+      editingId = idStr;
+      document.getElementById('formTitle').innerText = "Editar Eletiva: " + idStr;
+      
+      const idEletivaInput = document.getElementById('idEletiva');
+      idEletivaInput.value = el.idEletiva;
+      idEletivaInput.disabled = true; // Não deixa mudar o ID na edição
+      
+      document.getElementById('nomeEletiva').value = el.nomeEletiva;
+      document.getElementById('nomeProfessor').value = el.nomeProfessor;
+      document.getElementById('emailProfessor').value = el.emailProfessor;
+      
+      const container = document.getElementById('diasContainer');
+      container.innerHTML = '';
+      
+      el.dias.forEach(d => {
+        addDiaRow(d.dia, d.periodos);
+      });
+      
+      document.getElementById('btnCancelar').style.display = 'inline-flex';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    
+    function excluir(idStr) {
+      if (confirm(`Atenção: Você tem certeza que deseja remover a eletiva ${idStr} das configurações? (Isso NÃO apagará as abas de chamada já existentes)`)) {
+        document.getElementById('global-loader').style.display = 'block';
+        google.script.run
+          .withSuccessHandler(msg => {
+            alert(msg);
+            carregarEletivas();
+          })
+          .withFailureHandler(err => {
+            alert("Erro: " + err);
+            document.getElementById('global-loader').style.display = 'none';
+          })
+          .excluirConfigEletiva(idStr);
+      }
+    }
+
+    function resetForm() {
+      editingId = null;
+      document.getElementById('formTitle').innerText = "Nova Eletiva";
+      
+      const idEletivaInput = document.getElementById('idEletiva');
+      idEletivaInput.value = "";
+      
+      document.getElementById('nomeEletiva').value = "";
+      document.getElementById('nomeProfessor').value = "";
+      document.getElementById('emailProfessor').value = "";
+      
+      document.getElementById('diasContainer').innerHTML = '';
+      addDiaRow();
+      
+      document.getElementById('btnCancelar').style.display = 'none';
+    }
+
+    function filtrarTabela() {
+      const input = document.getElementById("searchInput").value.toUpperCase();
+      const table = document.getElementById("tabelaEletivas");
+      const tr = table.getElementsByTagName("tr");
+
+      for (let i = 1; i < tr.length; i++) {
+        let tds = tr[i].getElementsByTagName("td");
+        let found = false;
+        for (let j = 0; j < 3; j++) {
+          if (tds[j]) {
+            let txtValue = tds[j].textContent || tds[j].innerText;
+            if (txtValue.toUpperCase().indexOf(input) > -1) {
+              found = true;
+              break;
+            }
+          }
+        }
+        tr[i].style.display = found ? "" : "none";
+      }
+    }
+  </script>
+</body>
+</html>

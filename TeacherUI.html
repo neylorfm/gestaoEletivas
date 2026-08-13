@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <style>
+    /* 1. Variáveis CSS para Light Mode (Padrão) */
+    :root {
+      --bg-color: #f4f7f6;
+      --text-color: #333333;
+      --card-bg: #ffffff;
+      --border-color: #dddddd;
+      --primary-color: #2563eb;
+      --primary-hover: #1d4ed8;
+      --danger-color: #ef4444;
+      --header-bg: #ffffff;
+      --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+      --switch-bg: #e5e7eb;
+      --switch-checked-bg: #10b981; /* Verde para Presença */
+    }
+    
+    /* 1. Variáveis CSS para Dark Mode */
+    body.dark-mode {
+      --bg-color: #121212;
+      --text-color: #f3f4f6;
+      --card-bg: #1f2937;
+      --border-color: #374151;
+      --primary-color: #3b82f6;
+      --primary-hover: #60a5fa;
+      --danger-color: #f87171;
+      --header-bg: #111827;
+      --shadow: 0 4px 6px -1px rgba(0,0,0,0.5);
+      --switch-bg: #4b5563;
+      --switch-checked-bg: #10b981;
+    }
+    
+    /* Preferência do sistema para Dark Mode se nenhuma classe estiver forçada */
+    @media (prefers-color-scheme: dark) {
+      body:not(.light-mode) {
+        --bg-color: #121212;
+        --text-color: #f3f4f6;
+        --card-bg: #1f2937;
+        --border-color: #374151;
+        --primary-color: #3b82f6;
+        --primary-hover: #60a5fa;
+        --danger-color: #f87171;
+        --header-bg: #111827;
+        --shadow: 0 4px 6px -1px rgba(0,0,0,0.5);
+        --switch-bg: #4b5563;
+        --switch-checked-bg: #10b981;
+      }
+    }
+    
+    /* Reset & Tipografia */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+    
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      transition: background-color 0.3s, color 0.3s;
+      min-height: 100vh;
+    }
+    
+    /* Cabeçalho */
+    header {
+      background-color: var(--header-bg);
+      padding: 1.2rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    
+    header h1 {
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+    
+    /* 2. Toggle de Tema */
+    #theme-toggle {
+      background: none;
+      border: none;
+      color: var(--text-color);
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 50%;
+      transition: background-color 0.2s;
+    }
+    
+    #theme-toggle:hover {
+      background-color: rgba(128, 128, 128, 0.2);
+    }
+    
+    /* 3. Responsividade - Layout Flex/Grid */
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    
+    @media (min-width: 800px) {
+      .container {
+        flex-direction: row;
+        align-items: flex-start;
+      }
+      .panel-form {
+        flex: 1;
+        position: sticky;
+        top: 100px;
+      }
+      .panel-alunos {
+        flex: 2;
+      }
+    }
+    
+    /* Cards (Formulário e Lista) */
+    .card {
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      padding: 1.8rem;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border-color);
+    }
+    
+    .card h2 {
+      margin-bottom: 1.5rem;
+      font-size: 1.25rem;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 0.5rem;
+    }
+    
+    /* Formulário */
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+    
+    select, input[type="date"] {
+      width: 100%;
+      padding: 0.85rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-size: 1rem;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    select:focus, input[type="date"]:focus {
+      border-color: var(--primary-color);
+    }
+    
+    button.primary {
+      width: 100%;
+      padding: 1rem;
+      background-color: var(--primary-color);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    
+    button.primary:hover:not(:disabled) {
+      background-color: var(--primary-hover);
+    }
+    button.primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    
+    /* Lista de Alunos Grid */
+    .alunos-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    
+    @media (min-width: 1100px) {
+      .alunos-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    .aluno-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background-color 0.3s, border-color 0.3s;
+    }
+    
+    /* Estado visual para aluno que faltou */
+    .aluno-card.faltou {
+      background-color: rgba(239, 68, 68, 0.1);
+      border-color: var(--danger-color);
+    }
+    
+    .aluno-info h3 {
+      font-size: 1.05rem;
+      margin-bottom: 0.3rem;
+      font-weight: 600;
+    }
+    .aluno-info p {
+      font-size: 0.85rem;
+      opacity: 0.7;
+    }
+    
+    /* Switch (Toggle Presença) */
+    .switch-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .switch-label {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .periodo-btn {
+      cursor: pointer;
+      user-select: none;
+    }
+    .periodo-btn input {
+      display: none;
+    }
+    .periodo-btn span {
+      display: inline-block;
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      background-color: var(--danger-color); /* Fundo vermelho quando Desmarcado (Falta) */
+      color: white;
+      transition: 0.3s;
+      border: 1px solid transparent;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+    .periodo-btn input:checked + span {
+      background-color: var(--switch-checked-bg); /* Verde (Presença) */
+    }
+    
+    /* Loader e Estados vazios */
+    .loader {
+      border: 4px solid var(--border-color);
+      border-top: 4px solid var(--primary-color);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 3rem auto;
+      display: none;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      opacity: 0.7;
+      font-size: 1.1rem;
+    }
+    
+    /* Toast */
+    #toast {
+      visibility: hidden;
+      min-width: 280px;
+      background-color: var(--primary-color);
+      color: #fff;
+      text-align: center;
+      border-radius: 8px;
+      padding: 16px;
+      position: fixed;
+      z-index: 1000;
+      left: 50%;
+      bottom: 20px;
+      transform: translateX(-50%);
+      font-size: 1rem;
+      font-weight: 600;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      transition: opacity 0.5s, bottom 0.5s;
+    }
+    #toast.show {
+      visibility: visible;
+      opacity: 1;
+      bottom: 40px;
+    }
+    #toast.error {
+      background-color: var(--danger-color);
+    }
+    
+    /* Modal Moderno */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+    
+    .modal-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    .modal-content {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 24px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+      transform: scale(0.9);
+      transition: transform 0.3s;
+      border: 1px solid var(--border-color);
+      text-align: center;
+    }
+    
+    .modal-overlay.show .modal-content {
+      transform: scale(1);
+    }
+    
+    .modal-content h3 {
+      margin-bottom: 12px;
+      font-size: 1.2rem;
+      color: var(--primary-color);
+    }
+    
+    .modal-content p {
+      font-size: 0.95rem;
+      color: var(--text-color);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+    
+    .modal-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    
+    .modal-actions button {
+      flex: 1;
+      padding: 10px 0;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    
+    .btn-cancel {
+      background-color: transparent;
+      border: 1px solid var(--border-color) !important;
+      color: var(--text-color);
+    }
+    .btn-cancel:hover {
+      background-color: var(--switch-bg);
+    }
+    
+    .btn-confirm {
+      background-color: var(--primary-color);
+      color: #fff;
+    }
+    .btn-confirm:hover {
+      background-color: var(--primary-hover);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Gestão de Eletivas</h1>
+    <button id="theme-toggle" onclick="toggleTheme()" title="Alternar Tema">☀️</button>
+  </header>
+
+  <div class="container">
+    <!-- Formulário Lateral (Desktop) / Topo (Mobile) -->
+    <div class="card panel-form">
+      <h2>Dados da Aula</h2>
+      <div class="form-group">
+        <label for="eletiva">Eletiva</label>
+        <select id="eletiva" onchange="onEletivaChange()">
+          <option value="">Carregando...</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="data">Data</label>
+        <input type="date" id="data" onchange="onDataChange()">
+      </div>
+      <div class="form-group">
+      <div class="form-group">
+        <label>Períodos sendo registrados nesta aula:</label>
+        <div id="periodos-info" style="font-weight: bold; color: var(--primary-color);">
+          Selecione uma eletiva...
+        </div>
+      </div>
+      <button class="primary" id="btn-salvar" onclick="salvarChamada()">Salvar Chamada</button>
+    </div>
+
+    <!-- Lista de Alunos -->
+    <div class="card panel-alunos">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid var(--border-color); margin-bottom: 1.5rem; padding-bottom: 0.5rem;">
+        <h2 id="lista-alunos-title" style="margin-bottom: 0; border-bottom: none; padding-bottom: 0;">Lista de Alunos</h2>
+        <span id="contador-alunos" style="opacity:0.7; font-size:0.9rem; margin-top: 5px;"></span>
+      </div>
+      
+      <div id="loader" class="loader"></div>
+      
+      <div id="empty-state" class="empty-state">
+        <p>Selecione uma eletiva para carregar a lista de alunos.</p>
+      </div>
+      
+      <div id="alunos-container" class="alunos-grid">
+        <!-- Renderizado pelo JS -->
+      </div>
+    </div>
+  </div>
+
+  <div id="toast">Chamada salva com sucesso!</div>
+
+  <!-- Modal Customizado -->
+  <div id="confirmModal" class="modal-overlay">
+    <div class="modal-content">
+      <h3 id="modalTitle">Atenção!</h3>
+      <p id="modalMessage">Já existe uma chamada registrada para esta Data e Período(s) selecionados. Deseja sobrescrevê-la?</p>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeConfirmModal()">Cancelar</button>
+        <button class="btn-confirm" onclick="confirmModalAction()">Sim, Sobrescrever</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let eletivasCache = [];
+    let confirmActionCallback = null;
+    
+    // --- 1. Inicialização do Tema ---
+    function initTheme() {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        document.getElementById('theme-toggle').innerText = '🌙';
+      } else if (savedTheme === 'light') {
+        document.body.classList.add('light-mode');
+        document.getElementById('theme-toggle').innerText = '☀️';
+      } else {
+        // Fallback pro sistema
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.getElementById('theme-toggle').innerText = prefersDark ? '🌙' : '☀️';
+      }
+    }
+    
+    function toggleTheme() {
+      const isDark = document.body.classList.toggle('dark-mode');
+      if (isDark) {
+        document.body.classList.remove('light-mode');
+        localStorage.setItem('theme', 'dark');
+        document.getElementById('theme-toggle').innerText = '🌙';
+      } else {
+        document.body.classList.add('light-mode');
+        localStorage.setItem('theme', 'light');
+        document.getElementById('theme-toggle').innerText = '☀️';
+      }
+    }
+
+    // --- 2. Busca de Dados ---
+    document.addEventListener("DOMContentLoaded", function() {
+      initTheme();
+      // Setar data atual por padrão
+      document.getElementById('data').valueAsDate = new Date();
+      
+      // Chamar backend para obter Eletivas
+      google.script.run
+        .withSuccessHandler(populateEletivas)
+        .withFailureHandler(err => showToast("Erro ao carregar eletivas: " + err, true))
+        .getAulasDoProfessor();
+    });
+
+    function populateEletivas(eletivas) {
+      eletivasCache = eletivas;
+      const select = document.getElementById('eletiva');
+      select.innerHTML = '<option value="">Selecione uma Eletiva</option>';
+      
+      eletivas.forEach(e => {
+        const option = document.createElement('option');
+        option.value = e.idUnico;
+        option.textContent = e.nome + ' - ' + e.dia;
+        select.appendChild(option);
+      });
+    }
+
+    function onEletivaChange() {
+      const idStr = document.getElementById('eletiva').value;
+      const alunosContainer = document.getElementById('alunos-container');
+      const emptyState = document.getElementById('empty-state');
+      const contador = document.getElementById('contador-alunos');
+      
+      alunosContainer.innerHTML = '';
+      contador.innerText = '';
+      
+      if (!idStr) {
+        emptyState.style.display = 'block';
+        document.getElementById('periodos-info').innerHTML = '<span style="opacity: 0.7; font-size: 0.9rem;">Selecione uma eletiva...</span>';
+        return;
+      }
+      
+      emptyState.style.display = 'none';
+      
+      // Popular períodos da eletiva selecionada
+      const eletiva = eletivasCache.find(e => e.idUnico === idStr);
+      if (eletiva && eletiva.periodos) {
+        document.getElementById('periodos-info').innerText = eletiva.periodos.join(', ');
+      }
+      
+      // 3. Buscar Alunos (Usando o idEletiva base)
+      document.getElementById('loader').style.display = 'block';
+      google.script.run
+        .withSuccessHandler(renderAlunos)
+        .withFailureHandler(err => {
+          document.getElementById('loader').style.display = 'none';
+          showToast("Erro ao buscar alunos: " + err, true);
+        })
+        .getAlunosDaEletiva(eletiva.idEletiva);
+    }
+    
+    function renderAlunos(alunos) {
+      document.getElementById('loader').style.display = 'none';
+      const container = document.getElementById('alunos-container');
+      const contador = document.getElementById('contador-alunos');
+      
+      if (alunos.length === 0) {
+        container.innerHTML = '<div class="empty-state">Nenhum aluno matriculado nesta eletiva.</div>';
+        return;
+      }
+      
+      contador.innerText = alunos.length + ' aluno(s)';
+      
+      alunos.forEach((aluno, index) => {
+        // Criar Card do Aluno
+        const card = document.createElement('div');
+        card.className = 'aluno-card';
+        card.id = 'aluno-' + index;
+        
+        // Informações
+        const info = document.createElement('div');
+        info.className = 'aluno-info';
+        const turmaTexto = aluno.turma ? ` (${aluno.turma})` : '';
+        info.innerHTML = `<h3>${aluno.nome}</h3><p>Matrícula: ${aluno.matricula}<span style="color:var(--danger-color); font-weight:600;">${turmaTexto}</span></p>`;
+        
+        // Container dos Períodos
+        const switchContainer = document.createElement('div');
+        switchContainer.className = 'switch-container';
+        switchContainer.style.flexWrap = 'wrap';
+        
+        const idStr = document.getElementById('eletiva').value;
+        const eletiva = eletivasCache.find(e => e.idUnico === idStr);
+        const periodos = eletiva.periodos || [];
+        
+        periodos.forEach(p => {
+          const label = document.createElement('label');
+          label.className = 'periodo-btn';
+          
+          const input = document.createElement('input');
+          input.type = 'checkbox';
+          input.checked = true; 
+          input.className = 'chk-aluno-periodo';
+          input.dataset.matricula = aluno.matricula;
+          input.dataset.nome = aluno.nome;
+          input.dataset.periodo = p;
+          
+          const span = document.createElement('span');
+          span.innerText = p;
+          
+          input.onchange = function() {
+            const anyUnchecked = card.querySelectorAll('input:not(:checked)').length > 0;
+            if (anyUnchecked) card.classList.add('faltou');
+            else card.classList.remove('faltou');
+          };
+          
+          label.appendChild(input);
+          label.appendChild(span);
+          switchContainer.appendChild(label);
+        });
+        
+        card.appendChild(info);
+        card.appendChild(switchContainer);
+        container.appendChild(card);
+      });
+      
+      // Ao terminar de renderizar os alunos, busca se já tem faltas para a data atual
+      onDataChange();
+    }
+    
+    function onDataChange() {
+      const idStr = document.getElementById('eletiva').value;
+      const data = document.getElementById('data').value;
+      const titleEl = document.getElementById('lista-alunos-title');
+      
+      if (!idStr || !data) {
+        titleEl.innerHTML = 'Lista de Alunos';
+        return;
+      }
+      
+      const eletiva = eletivasCache.find(e => e.idUnico === idStr);
+      if (!eletiva) return;
+      
+      // Atualiza o Título Dinamicamente
+      const parts = data.split('-');
+      if (parts.length === 3) {
+        const formattedDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
+        const dayOfWeek = eletiva.dia ? eletiva.dia.toUpperCase() : '';
+        titleEl.innerHTML = `Frequência: ${formattedDate} [${dayOfWeek}]<br><span style="font-size: 1.05rem; opacity: 0.8; font-weight: normal; display: inline-block; margin-top: 6px;">${eletiva.nome}</span>`;
+      }
+      
+      // Validação do Dia da Semana
+      const dateObj = new Date(parts[0], parts[1] - 1, parts[2]);
+      const dayOfWeekIndex = dateObj.getDay();
+      const dayMap = { 0:'Domingo', 1:'Segunda-feira', 2:'Terça-feira', 3:'Quarta-feira', 4:'Quinta-feira', 5:'Sexta-feira', 6:'Sábado' };
+      const expectedDayStr = eletiva.dia ? eletiva.dia.trim().toLowerCase() : '';
+      const actualDayStr = dayMap[dayOfWeekIndex].toLowerCase();
+      
+      if (expectedDayStr && expectedDayStr !== actualDayStr) {
+        document.getElementById('btn-salvar').disabled = true;
+        showToast(`A Eletiva ocorre na ${eletiva.dia}. Por favor, escolha a data correta.`, true);
+      } else {
+        document.getElementById('btn-salvar').disabled = false;
+      }
+      
+      // Reseta todos os alunos para Presença antes de buscar
+      resetVisualFaltas();
+      
+      document.getElementById('loader').style.display = 'block';
+      google.script.run
+        .withSuccessHandler(aplicarFaltasExistentes)
+        .withFailureHandler(err => {
+          document.getElementById('loader').style.display = 'none';
+          console.error("Erro ao buscar faltas:", err);
+        })
+        .getFaltasDaChamada(eletiva.idEletiva, data);
+    }
+    
+    function resetVisualFaltas() {
+      const checkboxes = document.querySelectorAll('.chk-aluno-periodo');
+      checkboxes.forEach(chk => {
+        chk.checked = true; // Presença
+      });
+      const cards = document.querySelectorAll('.aluno-card');
+      cards.forEach(card => card.classList.remove('faltou'));
+    }
+    
+    function aplicarFaltasExistentes(faltasObj) {
+      document.getElementById('loader').style.display = 'none';
+      
+      const checkboxes = document.querySelectorAll('.chk-aluno-periodo');
+      checkboxes.forEach(chk => {
+        const p = chk.dataset.periodo;
+        const mat = chk.dataset.matricula;
+        
+        if (faltasObj[p] && faltasObj[p].includes(mat)) {
+          chk.checked = false; // Desmarca (Falta)
+        }
+      });
+      
+      // Atualiza visual dos cards
+      const cards = document.querySelectorAll('.aluno-card');
+      cards.forEach(card => {
+        const anyUnchecked = card.querySelectorAll('input:not(:checked)').length > 0;
+        if (anyUnchecked) card.classList.add('faltou');
+        else card.classList.remove('faltou');
+      });
+    }
+
+    // --- 4. Salvar Chamada ---
+    function salvarChamada(forceOverwrite = false) {
+      const btn = document.getElementById('btn-salvar');
+      const idStr = document.getElementById('eletiva').value;
+      const data = document.getElementById('data').value;
+      
+      if (!idStr || !data) {
+        showToast("Selecione a eletiva e a data.", true);
+        return;
+      }
+      
+      const eletiva = eletivasCache.find(e => e.idUnico === idStr);
+      if (!eletiva) return;
+      
+      // Validação do dia da semana no cliente (Double Check)
+      const parts = data.split('-');
+      const dateObj = new Date(parts[0], parts[1] - 1, parts[2]);
+      const dayOfWeekIndex = dateObj.getDay();
+      const dayMap = { 0:'Domingo', 1:'Segunda-feira', 2:'Terça-feira', 3:'Quarta-feira', 4:'Quinta-feira', 5:'Sexta-feira', 6:'Sábado' };
+      const expectedDayStr = eletiva.dia ? eletiva.dia.trim().toLowerCase() : '';
+      const actualDayStr = dayMap[dayOfWeekIndex].toLowerCase();
+      
+      if (expectedDayStr && expectedDayStr !== actualDayStr) {
+        showToast(`Operação bloqueada! A Eletiva ocorre em: ${eletiva.dia}.`, true);
+        return;
+      }
+      
+      btn.disabled = true;
+      btn.innerText = 'Salvando...';
+      
+      const faltasPorPeriodo = {};
+      eletiva.periodos.forEach(p => faltasPorPeriodo[p] = []);
+      
+      const unchecked = document.querySelectorAll('.chk-aluno-periodo:not(:checked)');
+      unchecked.forEach(chk => {
+        const p = chk.dataset.periodo;
+        if(faltasPorPeriodo[p]) {
+          faltasPorPeriodo[p].push({
+            matricula: chk.dataset.matricula,
+            nome: chk.dataset.nome
+          });
+        }
+      });
+      
+      const payload = {
+        idEletiva: eletiva.idEletiva,
+        data: data,
+        periodosTotais: eletiva.periodos,
+        faltasPorPeriodo: faltasPorPeriodo,
+        forceOverwrite: forceOverwrite
+      };
+      
+      google.script.run
+        .withSuccessHandler((res) => {
+          btn.disabled = false;
+          btn.innerText = 'Salvar Chamada';
+          if (res && res.status === 'CONFIRM_OVERWRITE') {
+            showConfirmModal(res.message, function() {
+              salvarChamada(true);
+            });
+          } else {
+            showToast("Chamada salva com sucesso!");
+          }
+        })
+        .withFailureHandler(err => {
+          btn.disabled = false;
+          btn.innerText = 'Salvar Chamada';
+          showToast("Erro ao salvar: " + err, true);
+        })
+        .salvarChamada(payload);
+    }
+    
+    // Funções do Modal Customizado
+    function showConfirmModal(message, callback) {
+      document.getElementById('modalMessage').innerText = message;
+      confirmActionCallback = callback;
+      document.getElementById('confirmModal').classList.add('show');
+    }
+    
+    function closeConfirmModal() {
+      document.getElementById('confirmModal').classList.remove('show');
+      confirmActionCallback = null;
+    }
+    
+    function confirmModalAction() {
+      if (confirmActionCallback) {
+        confirmActionCallback();
+      }
+      closeConfirmModal();
+    }
+    
+    // Função para Toast
+    function showToast(message, isError = false) {
+      const toast = document.getElementById("toast");
+      toast.innerText = message;
+      if (isError) {
+        toast.classList.add("error");
+      } else {
+        toast.classList.remove("error");
+      }
+      toast.classList.add("show");
+      setTimeout(() => { toast.classList.remove("show"); }, 3000);
+    }
+  </script>
+</body>
+</html>

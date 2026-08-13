@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <!-- Ícones Material -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1a73e8;
+      --primary-hover: #174ea6;
+      --surface: #ffffff;
+      --bg: #f8f9fa;
+      --text: #202124;
+      --text-sec: #5f6368;
+      --border: #dadce0;
+      --danger: #d93025;
+      --danger-bg: #fce8e6;
+    }
+
+    body {
+      font-family: 'Google Sans', Roboto, Arial, sans-serif;
+      margin: 0;
+      padding: 24px;
+      background-color: var(--bg);
+      color: var(--text);
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--surface);
+      border-radius: 8px;
+      box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+      padding: 24px;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      margin-top: 0;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+      color: var(--primary);
+      margin-bottom: 20px;
+    }
+
+    .row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .form-group {
+      flex: 1;
+      min-width: 200px;
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    select, input[type="text"] {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    select:focus, input[type="text"]:focus {
+      border-color: var(--primary);
+    }
+
+    select:disabled {
+      background-color: #f1f3f4;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    button.primary {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      align-self: flex-start;
+    }
+
+    button.primary:hover:not(:disabled) {
+      background-color: var(--primary-hover);
+    }
+
+    button.primary:disabled {
+      background-color: #a8c7fa;
+      cursor: not-allowed;
+    }
+
+    button.icon-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-sec);
+      border-radius: 50%;
+      padding: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    button.icon-btn:hover {
+      background-color: #f1f3f4;
+      color: var(--text);
+    }
+
+    button.icon-btn.delete:hover {
+      color: var(--danger);
+      background-color: var(--danger-bg);
+    }
+
+    .header-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+      margin-bottom: 20px;
+    }
+    
+    .header-actions h2 {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .search-box {
+      width: 300px;
+      position: relative;
+    }
+    
+    .search-box i {
+      position: absolute;
+      left: 10px;
+      top: 10px;
+      color: var(--text-sec);
+      font-size: 18px;
+    }
+    
+    .search-box input {
+      padding-left: 36px;
+    }
+
+    /* Tabela */
+    .table-container {
+      max-height: 350px;
+      overflow-y: auto;
+    }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      color: var(--text-sec);
+      font-weight: 500;
+      position: sticky;
+      top: 0;
+      background-color: var(--surface);
+      z-index: 1;
+    }
+
+    tr:hover {
+      background-color: #f1f3f4;
+    }
+
+    #loader, #global-loader {
+      text-align: center;
+      color: var(--primary);
+      padding: 20px;
+      font-weight: 500;
+    }
+    
+    #global-loader {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(255,255,255,0.8);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="global-loader">Carregando interface...</div>
+
+  <div class="container">
+    <!-- Seção 1: Formulário -->
+    <div class="card">
+      <h2>Nova Enturmação</h2>
+      <div class="row">
+        <div class="form-group">
+          <label for="eletivaSelect">1. Selecione a Eletiva</label>
+          <select id="eletivaSelect" onchange="checkForm()">
+            <option value="">Carregando...</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label for="turmaSelect">2. Filtre pela Turma Regular</label>
+          <select id="turmaSelect" disabled onchange="loadAlunos()">
+            <option value="">Selecione a Eletiva primeiro</option>
+          </select>
+        </div>
+        
+        <div class="form-group" style="flex: 1.5;">
+          <label for="alunoSelect">3. Selecione o Aluno</label>
+          <select id="alunoSelect" disabled onchange="checkForm()">
+            <option value="">Selecione a Turma primeiro</option>
+          </select>
+        </div>
+      </div>
+      <button id="btnSalvar" class="primary" disabled onclick="salvarEnturmacao()">Enturmar Aluno</button>
+    </div>
+
+    <!-- Seção 2: Dataset -->
+    <div class="card">
+      <div class="header-actions">
+        <h2>Visualização de Enturmações</h2>
+        <div class="search-box">
+          <i class="material-icons">search</i>
+          <input type="text" id="searchInput" placeholder="Buscar por nome, turma ou eletiva..." onkeyup="filtrarTabela()">
+        </div>
+      </div>
+      
+      <div id="loader" style="display:none;">Sincronizando dados...</div>
+      
+      <div class="table-container">
+        <table id="tabelaDataset">
+          <thead>
+            <tr>
+              <th>Matrícula</th>
+              <th>Nome do Aluno</th>
+              <th>Turma Original</th>
+              <th>Eletiva Atual</th>
+              <th style="width: 100px; text-align: center;">Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyDataset">
+            <!-- Renderizado dinamicamente -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Variável para armazenar as listas do backend
+    let cacheDados = {};
+    let currentEditOldEletiva = null;
+    let currentEditMatricula = null;
+
+    document.addEventListener("DOMContentLoaded", function() {
+      // Busca dados dos selects
+      google.script.run
+        .withSuccessHandler(initUI)
+        .withFailureHandler(err => { alert("Erro de comunicação: " + err); document.getElementById('global-loader').style.display='none'; })
+        .getDadosEnturmacaoUI();
+    });
+
+    function initUI(dados) {
+      cacheDados = dados;
+      
+      // Popula Eletivas
+      const elSelect = document.getElementById('eletivaSelect');
+      elSelect.innerHTML = '<option value="">-- Selecione uma Eletiva --</option>';
+      dados.eletivas.forEach(e => {
+        elSelect.innerHTML += `<option value="${e.id}">${e.nome} (ID: ${e.id})</option>`;
+      });
+
+      // Popula Turmas
+      const tuSelect = document.getElementById('turmaSelect');
+      tuSelect.innerHTML = '<option value="">-- Todas as Turmas --</option>';
+      dados.turmas.forEach(t => {
+        tuSelect.innerHTML += `<option value="${t}">${t}</option>`;
+      });
+      
+      elSelect.disabled = false;
+      document.getElementById('global-loader').style.display = 'none';
+      
+      // Carrega tabela de enturmações atuais
+      atualizarTabela();
+    }
+
+    function checkForm() {
+      const eletiva = document.getElementById('eletivaSelect').value;
+      const turmaSelect = document.getElementById('turmaSelect');
+      const alunoSelect = document.getElementById('alunoSelect');
+      const btn = document.getElementById('btnSalvar');
+
+      if (eletiva) {
+        turmaSelect.disabled = false;
+      } else {
+        turmaSelect.disabled = true;
+        alunoSelect.disabled = true;
+      }
+
+      if (eletiva && alunoSelect.value) {
+        btn.disabled = false;
+      } else {
+        btn.disabled = true;
+      }
+    }
+
+    function loadAlunos() {
+      const turma = document.getElementById('turmaSelect').value;
+      const alunoSelect = document.getElementById('alunoSelect');
+      
+      if (!turma) {
+        alunoSelect.innerHTML = '<option value="">Selecione uma turma</option>';
+        alunoSelect.disabled = true;
+        checkForm();
+        return;
+      }
+
+      alunoSelect.disabled = false;
+      alunoSelect.innerHTML = '<option value="">-- Selecione o Aluno --</option>';
+      
+      const filtrados = cacheDados.alunos.filter(a => a.turma === turma);
+      filtrados.forEach(a => {
+        alunoSelect.innerHTML += `<option value="${a.matricula}">${a.nome} (${a.matricula})</option>`;
+      });
+      checkForm();
+    }
+
+    function atualizarTabela() {
+      document.getElementById('loader').style.display = 'block';
+      document.getElementById('tbodyDataset').innerHTML = '';
+      
+      google.script.run
+        .withSuccessHandler(enturmacoes => {
+          document.getElementById('loader').style.display = 'none';
+          renderizarLinhas(enturmacoes);
+        })
+        .getAlunosEnturmados();
+    }
+
+    function renderizarLinhas(enturmacoes) {
+      const tbody = document.getElementById('tbodyDataset');
+      
+      if (enturmacoes.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 20px;">Nenhum aluno enturmado.</td></tr>';
+        return;
+      }
+      
+      enturmacoes.forEach(e => {
+        let tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${e.matricula}</td>
+          <td>${e.nome || '<i>Carregando PROCV...</i>'}</td>
+          <td>${e.turma || '-'}</td>
+          <td><span style="background:#e8f0fe; color:#1967d2; padding:4px 8px; border-radius:4px; font-weight:500;">${e.idEletiva}</span></td>
+          <td style="text-align:center;">
+            <button class="icon-btn" onclick="editar('${e.matricula}', '${e.turma}', '${e.idEletiva}')" title="Trocar Eletiva"><i class="material-icons">edit</i></button>
+            <button class="icon-btn delete" onclick="remover('${e.matricula}', '${e.idEletiva}')" title="Desmatricular"><i class="material-icons">delete</i></button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function salvarEnturmacao() {
+      const matricula = document.getElementById('alunoSelect').value;
+      const eletiva = document.getElementById('eletivaSelect').value;
+      const btn = document.getElementById('btnSalvar');
+      
+      let oldEletivaToPass = null;
+      if (matricula === currentEditMatricula && currentEditOldEletiva) {
+        oldEletivaToPass = currentEditOldEletiva;
+      }
+
+      btn.disabled = true;
+      btn.innerText = "Processando...";
+
+      google.script.run
+        .withSuccessHandler(msg => {
+          btn.innerText = "Enturmar Aluno";
+          document.getElementById('alunoSelect').value = ""; // Reseta aluno
+          currentEditOldEletiva = null;
+          currentEditMatricula = null;
+          checkForm();
+          atualizarTabela();
+        })
+        .withFailureHandler(err => {
+          btn.disabled = false;
+          btn.innerText = "Enturmar Aluno";
+          alert(err);
+        })
+        .salvarEnturmacao(matricula, eletiva, oldEletivaToPass);
+    }
+
+    function editar(matricula, turma, idEletiva) {
+      currentEditOldEletiva = idEletiva;
+      currentEditMatricula = matricula;
+      // Joga dados para o topo
+      document.getElementById('eletivaSelect').value = idEletiva;
+      
+      const turmaSel = document.getElementById('turmaSelect');
+      if (turma) {
+        turmaSel.value = turma;
+        turmaSel.disabled = false;
+        loadAlunos();
+        setTimeout(() => {
+          document.getElementById('alunoSelect').value = matricula;
+          checkForm();
+        }, 50); // Delay suave pro dom renderizar os alunos
+      }
+      
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function remover(matricula, idEletiva) {
+      if (confirm(`Tem certeza que deseja DESMATRICULAR o aluno da eletiva atual? (Matrícula: ${matricula})`)) {
+        document.getElementById('loader').style.display = 'block';
+        google.script.run
+          .withSuccessHandler(msg => {
+             atualizarTabela();
+          })
+          .withFailureHandler(err => {
+             document.getElementById('loader').style.display = 'none';
+             alert("Falha ao desmatricular: " + err);
+          })
+          .removerEnturmacao(matricula, idEletiva);
+      }
+    }
+
+    function filtrarTabela() {
+      const input = document.getElementById("searchInput").value.toUpperCase();
+      const table = document.getElementById("tabelaDataset");
+      const tr = table.getElementsByTagName("tr");
+
+      for (let i = 1; i < tr.length; i++) {
+        let tds = tr[i].getElementsByTagName("td");
+        let found = false;
+        // Filtra nas 4 primeiras colunas
+        for (let j = 0; j < 4; j++) {
+          if (tds[j]) {
+            let txtValue = tds[j].textContent || tds[j].innerText;
+            if (txtValue.toUpperCase().indexOf(input) > -1) {
+              found = true;
+              break;
+            }
+          }
+        }
+        tr[i].style.display = found ? "" : "none";
+      }
+    }
+  </script>
+</body>
+</html>

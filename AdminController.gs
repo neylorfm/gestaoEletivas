@@ -250,3 +250,138 @@ function gerarRelatorioSecretaria(payload) {
   
   return "Relatório gerado com sucesso (" + (pivot.length - 1) + " alunos)!";
 }
+
+/**
+ * Coleta os dados consolidados de faltas de uma Eletiva específica para exportação ao SIGE.
+ * @param {Object} payload { idEletiva: string, dataInicio: string, dataFim: string }
+ * @returns {Object} Dados formatados { idEletiva, nomeEletiva, aulasDadas, totalAlunos, faltas: { [matricula]: qtdFaltas }, resumoAlunos: [{matricula, nome, turma, faltas}] }
+ */
+function obterDadosExportacaoSIGE(payload) {
+  var idEletiva = payload.idEletiva;
+  if (!idEletiva) {
+    throw new Error("Selecione uma Eletiva válida.");
+  }
+  
+  function parseLocalDate(dateStr) {
+    if (!dateStr) return new Date();
+    var parts = dateStr.split('-');
+    return new Date(parts[0], parseInt(parts[1], 10) - 1, parts[2]);
+  }
+  
+  var dtInicio = parseLocalDate(payload.dataInicio);
+  var dtFim = parseLocalDate(payload.dataFim);
+  dtInicio.setHours(0,0,0,0);
+  dtFim.setHours(23,59,59,999);
+  
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  
+  // 1. Obter Nome da Eletiva
+  var configSheet = getPlanilha('CONFIG_GERAL');
+  var nomeEletiva = idEletiva;
+  if (configSheet) {
+    var configData = configSheet.getDataRange().getValues();
+    for (var i = 1; i < configData.length; i++) {
+      if (configData[i][1] == idEletiva) {
+        nomeEletiva = configData[i][2] || idEletiva;
+        break;
+      }
+    }
+  }
+  
+  // 2. Obter Alunos Enturmados nesta Eletiva e suas Notas Finais
+  var entSheet = getPlanilha('ENTURMACAO');
+  if (!entSheet) throw new Error("Aba ENTURMACAO não encontrada.");
+  var entData = entSheet.getDataRange().getValues();
+  
+  var alunosMap = {}; // matricula -> { matricula, nome, turma, faltas: 0, nota: '' }
+  for (var i = 1; i < entData.length; i++) {
+    var mat = entData[i][0] ? entData[i][0].toString().trim() : null;
+    var elId = entData[i][3];
+    if (mat && elId == idEletiva) {
+      var rawNota = (entData[i][4] !== undefined && entData[i][4] !== null) ? entData[i][4].toString().trim() : '';
+      alunosMap[mat] = {
+        matricula: mat,
+        nome: entData[i][1] || '',
+        turma: entData[i][2] || '',
+        faltas: 0,
+        nota: rawNota
+      };
+    }
+  }
+  
+  // 3. Processar Aba Dinâmica da Eletiva
+  var abaEletiva = ss.getSheetByName(idEletiva.toString());
+  var aulasDadas = 0;
+  var aulasProcessadas = {};
+  
+  if (abaEletiva && abaEletiva.getLastRow() >= 2) {
+    var maxRow = abaEletiva.getLastRow();
+    var dataRows = abaEletiva.getRange(2, 1, maxRow - 1, 9).getValues();
+    
+    for (var i = 0; i < dataRows.length; i++) {
+      var row = dataRows[i];
+      var rawDate = row[1];
+      if (!rawDate) continue;
+      
+      var rowData = new Date(rawDate);
+      if (isNaN(rowData.getTime())) continue;
+      
+      if (rowData >= dtInicio && rowData <= dtFim) {
+        var idAula = row[0];
+        if (!aulasProcessadas[idAula]) {
+          aulasProcessadas[idAula] = true;
+          aulasDadas++;
+        }
+        
+        var tipoOcorrencia = row[8];
+        if (tipoOcorrencia === "F") {
+          var mat = row[6] ? row[6].toString().trim() : null;
+          if (mat && alunosMap[mat]) {
+            alunosMap[mat].faltas++;
+          }
+        }
+      }
+    }
+  }
+  
+  var faltasMap = {};
+  var notasMap = {};
+  var totalComNota = 0;
+  var listaResumo = [];
+  var chavesMat = Object.keys(alunosMap).sort(function(a, b) {
+    return alunosMap[a].nome.localeCompare(alunosMap[b].nome);
+  });
+  
+  for (var i = 0; i < chavesMat.length; i++) {
+    var m = chavesMat[i];
+    faltasMap[m] = alunosMap[m].faltas;
+    
+    var notaStr = alunosMap[m].nota;
+    if (notaStr !== '') {
+      // Formata a nota para o padrão SIGE (com vírgula, ex: 7,5 ou 10,0)
+      var numNota = parseFloat(notaStr.replace(',', '.'));
+      if (!isNaN(numNota)) {
+        var notaFmt = (Math.round(numNota * 10) / 10).toFixed(1).replace('.', ',');
+        notasMap[m] = notaFmt;
+        alunosMap[m].nota = notaFmt;
+        totalComNota++;
+      } else {
+        notasMap[m] = notaStr;
+      }
+    }
+    
+    listaResumo.push(alunosMap[m]);
+  }
+  
+  return {
+    idEletiva: idEletiva,
+    nomeEletiva: nomeEletiva,
+    aulasDadas: aulasDadas,
+    totalAlunos: listaResumo.length,
+    totalComNota: totalComNota,
+    faltas: faltasMap,
+    notas: notasMap,
+    resumoAlunos: listaResumo
+  };
+}
+

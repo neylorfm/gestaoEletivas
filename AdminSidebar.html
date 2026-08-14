@@ -3,176 +3,805 @@
 <head>
   <base target="_top">
   <style>
-    /* Estilização inspirada no Material Design / Google Workspace */
-    body {
-      font-family: 'Google Sans', Roboto, Helvetica, Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-      color: #3c4043;
-      background-color: #f8f9fa;
+    /* Design System inspirado no Material 3 / Google Workspace */
+    :root {
+      --primary: #1a73e8;
+      --primary-hover: #1557b0;
+      --primary-light: #e8f0fe;
+      --success: #1e8e3e;
+      --success-light: #e6f4ea;
+      --danger: #d93025;
+      --danger-light: #fce8e6;
+      --warning: #f29900;
+      --warning-light: #fef7e0;
+      --surface: #ffffff;
+      --bg: #f8f9fa;
+      --text: #202124;
+      --text-secondary: #5f6368;
+      --border: #dadce0;
+      --radius: 8px;
     }
-    h2 {
-      font-size: 1.3rem;
-      font-weight: 500;
-      margin-top: 0;
-      margin-bottom: 20px;
-      color: #202124;
-      border-bottom: 2px solid #e8eaed;
-      padding-bottom: 10px;
-    }
-    .form-group {
-      margin-bottom: 15px;
-    }
-    label {
-      display: block;
-      font-size: 0.95rem;
-      font-weight: 500;
-      margin-bottom: 5px;
-    }
-    input[type="date"], select {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #dadce0;
-      border-radius: 4px;
+
+    * {
       box-sizing: border-box;
-      font-size: 14px;
-      outline: none;
-      transition: border-color 0.2s;
+      margin: 0;
+      padding: 0;
     }
-    input[type="date"]:focus, select:focus {
-      border-color: #1a73e8;
-    }
-    button {
-      background-color: #1a73e8;
-      color: white;
-      border: none;
-      padding: 12px 16px;
-      border-radius: 4px;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      width: 100%;
-      transition: background-color 0.2s;
-      box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
-      margin-top: 10px;
-    }
-    button:hover {
-      background-color: #1765cc;
-      box-shadow: 0 1px 3px 0 rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15);
-    }
-    button:disabled {
-      background-color: #a8c7fa;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
-    #status {
-      margin-top: 20px;
-      font-size: 0.9rem;
-      padding: 14px;
-      border-radius: 4px;
-      display: none;
+
+    body {
+      font-family: 'Google Sans', Roboto, -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      padding: 16px;
+      font-size: 13.5px;
       line-height: 1.4;
     }
-    .status-info {
-      background-color: #e8f0fe;
-      color: #1967d2;
-      border: 1px solid #d2e3fc;
-    }
-    .status-success {
-      background-color: #e6f4ea;
-      color: #137333;
-      border: 1px solid #ceead6;
-    }
-    .status-error {
-      background-color: #fce8e6;
-      color: #c5221f;
-      border: 1px solid #fad2cf;
-    }
-    .radio-group {
+
+    /* Header e Navegação por Abas */
+    .header-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 12px;
       display: flex;
-      gap: 15px;
-      margin-top: 5px;
+      align-items: center;
+      gap: 8px;
     }
-    .radio-group label {
-      display: inline;
-      font-weight: normal;
+
+    .tabs-nav {
+      display: flex;
+      background: #e8eaed;
+      padding: 3px;
+      border-radius: var(--radius);
+      margin-bottom: 16px;
+      gap: 3px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 8px 4px;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 500;
+      border-radius: 6px;
       cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .tab-btn.active {
+      background: var(--surface);
+      color: var(--primary);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+      font-weight: 600;
+    }
+
+    .tab-pane {
+      display: none;
+    }
+
+    .tab-pane.active {
+      display: block;
+    }
+
+    /* Cards e Formulários */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 14px;
+      border: 1px solid var(--border);
+      margin-bottom: 14px;
+      box-shadow: 0 1px 2px rgba(60,64,67,0.06);
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-group:last-child {
+      margin-bottom: 0;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 5px;
+    }
+
+    input[type="date"], input[type="text"], input[type="number"], select {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 13px;
+      background-color: var(--surface);
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(26,115,232,0.2);
+    }
+
+    .radio-pill-group {
+      display: flex;
+      background: #f1f3f4;
+      padding: 2px;
+      border-radius: 6px;
+      gap: 2px;
+      margin-bottom: 10px;
+    }
+
+    .radio-pill {
+      flex: 1;
+      text-align: center;
+      position: relative;
+    }
+
+    .radio-pill input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      height: 0;
+      width: 0;
+    }
+
+    .radio-pill span {
+      display: block;
+      padding: 6px 4px;
+      font-size: 11.5px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .radio-pill input:checked + span {
+      background: var(--surface);
+      color: var(--primary);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+      font-weight: 600;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    /* Botões */
+    .btn {
+      width: 100%;
+      padding: 10px 14px;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: white;
+      box-shadow: 0 1px 3px rgba(26,115,232,0.3);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .btn-success {
+      background-color: var(--success);
+      color: white;
+      box-shadow: 0 1px 3px rgba(30,142,62,0.3);
+    }
+
+    .btn-success:hover {
+      background-color: #177332;
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .btn-outline:hover {
+      background: #f1f3f4;
+    }
+
+    .btn:disabled {
+      background-color: #dadce0 !important;
+      color: #80868b !important;
+      cursor: not-allowed;
+      box-shadow: none !important;
+    }
+
+    /* Badges e Resumos */
+    .preview-box {
+      background: #f8fafd;
+      border: 1px dashed #c2e7ff;
+      border-radius: 6px;
+      padding: 10px;
+      margin-top: 12px;
+      font-size: 12px;
+    }
+
+    .stat-badge {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 11.5px;
+    }
+
+    .badge-blue { background: #e8f0fe; color: #1967d2; }
+    .badge-green { background: #e6f4ea; color: #137333; }
+    .badge-red { background: #fce8e6; color: #c5221f; }
+    .badge-purple { background: #f3e8fd; color: #7b1fa2; }
+    .badge-gray { background: #f1f3f4; color: #5f6368; }
+
+    .students-scroll {
+      max-height: 140px;
+      overflow-y: auto;
+      margin-top: 8px;
+      border: 1px solid #e8eaed;
+      border-radius: 4px;
+      background: white;
+    }
+
+    .student-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 8px;
+      border-bottom: 1px solid #f1f3f4;
+      font-size: 11px;
+    }
+
+    .student-row:last-child {
+      border-bottom: none;
+    }
+
+    /* Status Notifications */
+    .status-box {
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      line-height: 1.35;
+      display: none;
+      animation: fadeIn 0.2s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .status-info { background-color: var(--primary-light); color: #1967d2; border: 1px solid #d2e3fc; }
+    .status-success { background-color: var(--success-light); color: #137333; border: 1px solid #ceead6; }
+    .status-error { background-color: var(--danger-light); color: #c5221f; border: 1px solid #fad2cf; }
+
+    /* Seção de Ajuda / Bookmarklet */
+    .help-card {
+      background: #fdfefe;
+      border: 1px solid #e0e0e0;
+      border-left: 4px solid #1a73e8;
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      font-size: 12px;
+    }
+
+    .code-box {
+      background: #202124;
+      color: #8ab4f8;
+      padding: 8px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 10.5px;
+      word-break: break-all;
+      max-height: 80px;
+      overflow-y: auto;
+      margin: 6px 0;
     }
   </style>
 </head>
 <body>
 
-  <h2>Gerador de Relatórios</h2>
-  
-  <div class="form-group">
-    <label>Filtrar por:</label>
-    <div class="radio-group">
-      <div>
-        <input type="radio" id="rdoTurma" name="filtroTipo" value="TURMA" checked onchange="trocarFiltro()">
-        <label for="rdoTurma">Turma Regular</label>
+  <div class="header-title">
+    <span>🏫</span> Painel da Secretaria
+  </div>
+
+  <!-- Abas de Navegação -->
+  <div class="tabs-nav">
+    <button class="tab-btn active" onclick="switchTab('relatorio')">📊 Relatório Pivot</button>
+    <button class="tab-btn" onclick="switchTab('sige')">⚡ Exportar SIGE</button>
+    <button class="tab-btn" onclick="switchTab('ajuda')">💡 Botão SIGE</button>
+  </div>
+
+  <!-- ABA 1: RELATÓRIO CONSOLIDADO (PIVOT) -->
+  <div id="tab-relatorio" class="tab-pane active">
+    <div class="card">
+      <div class="form-group">
+        <label>Agrupar Relatório por:</label>
+        <div class="radio-pill-group">
+          <label class="radio-pill">
+            <input type="radio" name="relFiltroTipo" value="TURMA" checked onchange="atualizarSelectRelatorio()">
+            <span>Turma Regular</span>
+          </label>
+          <label class="radio-pill">
+            <input type="radio" name="relFiltroTipo" value="ELETIVA" onchange="atualizarSelectRelatorio()">
+            <span>Eletiva</span>
+          </label>
+        </div>
       </div>
-      <div>
-        <input type="radio" id="rdoEletiva" name="filtroTipo" value="ELETIVA" onchange="trocarFiltro()">
-        <label for="rdoEletiva">Eletiva</label>
+
+      <div class="form-group">
+        <label id="lblRelFiltro">Selecione:</label>
+        <select id="selRelValor">
+          <option value="">Carregando opções...</option>
+        </select>
+      </div>
+
+      <!-- Seletor de Período: Mês vs Intervalo -->
+      <div class="form-group">
+        <label>Período do Relatório:</label>
+        <div class="radio-pill-group">
+          <label class="radio-pill">
+            <input type="radio" name="relModoPeriodo" value="MES" checked onchange="alternarModoPeriodo('rel')">
+            <span>📅 Por Mês</span>
+          </label>
+          <label class="radio-pill">
+            <input type="radio" name="relModoPeriodo" value="INTERVALO" onchange="alternarModoPeriodo('rel')">
+            <span>📆 Intervalo</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Bloco Mês -->
+      <div id="relBlocoMes" class="grid-2 form-group">
+        <div>
+          <label for="relMes">Mês:</label>
+          <select id="relMes" onchange="sincronizarDatasPorMes('rel')">
+            <option value="0">Janeiro</option>
+            <option value="1">Fevereiro</option>
+            <option value="2">Março</option>
+            <option value="3">Abril</option>
+            <option value="4">Maio</option>
+            <option value="5">Junho</option>
+            <option value="6">Julho</option>
+            <option value="7">Agosto</option>
+            <option value="8">Setembro</option>
+            <option value="9">Outubro</option>
+            <option value="10">Novembro</option>
+            <option value="11">Dezembro</option>
+          </select>
+        </div>
+        <div>
+          <label for="relAno">Ano:</label>
+          <input type="number" id="relAno" value="2026" onchange="sincronizarDatasPorMes('rel')">
+        </div>
+      </div>
+
+      <!-- Bloco Intervalo Personalizado -->
+      <div id="relBlocoIntervalo" class="grid-2 form-group" style="display:none;">
+        <div>
+          <label for="relDataInicio">Data Inicial:</label>
+          <input type="date" id="relDataInicio">
+        </div>
+        <div>
+          <label for="relDataFim">Data Final:</label>
+          <input type="date" id="relDataFim">
+        </div>
+      </div>
+
+      <button id="btnGerarRelatorio" class="btn btn-primary" onclick="executarGerarRelatorio()">
+        📊 Gerar Relatório (Pivot)
+      </button>
+    </div>
+  </div>
+
+  <!-- ABA 2: EXPORTAR PARA O SIGE -->
+  <div id="tab-sige" class="tab-pane">
+    <div class="card">
+      <div class="form-group">
+        <label for="selSigeEletiva">Selecione a Eletiva:</label>
+        <select id="selSigeEletiva" onchange="resetarPreviewSige()">
+          <option value="">Carregando eletivas...</option>
+        </select>
+      </div>
+
+      <!-- Seletor de Período SIGE -->
+      <div class="form-group">
+        <label>Período de Referência:</label>
+        <div class="radio-pill-group">
+          <label class="radio-pill">
+            <input type="radio" name="sigeModoPeriodo" value="MES" checked onchange="alternarModoPeriodo('sige')">
+            <span>📅 Por Mês</span>
+          </label>
+          <label class="radio-pill">
+            <input type="radio" name="sigeModoPeriodo" value="INTERVALO" onchange="alternarModoPeriodo('sige')">
+            <span>📆 Intervalo</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Bloco Mês SIGE -->
+      <div id="sigeBlocoMes" class="grid-2 form-group">
+        <div>
+          <label for="sigeMes">Mês do SIGE:</label>
+          <select id="sigeMes" onchange="sincronizarDatasPorMes('sige')">
+            <option value="0">JANEIRO</option>
+            <option value="1" selected>FEVEREIRO</option>
+            <option value="2">MARÇO</option>
+            <option value="3">ABRIL</option>
+            <option value="4">MAIO</option>
+            <option value="5">JUNHO</option>
+            <option value="6">JULHO</option>
+            <option value="7">AGOSTO</option>
+            <option value="8">SETEMBRO</option>
+            <option value="9">OUTUBRO</option>
+            <option value="10">NOVEMBRO</option>
+            <option value="11">DEZEMBRO</option>
+          </select>
+        </div>
+        <div>
+          <label for="sigeAno">Ano:</label>
+          <input type="number" id="sigeAno" value="2026" onchange="sincronizarDatasPorMes('sige')">
+        </div>
+      </div>
+
+      <!-- Bloco Intervalo SIGE -->
+      <div id="sigeBlocoIntervalo" class="grid-2 form-group" style="display:none;">
+        <div>
+          <label for="sigeDataInicio">Data Inicial:</label>
+          <input type="date" id="sigeDataInicio">
+        </div>
+        <div>
+          <label for="sigeDataFim">Data Final:</label>
+          <input type="date" id="sigeDataFim">
+        </div>
+      </div>
+
+      <button id="btnConsultarSige" class="btn btn-outline" style="margin-bottom:8px;" onclick="consultarDadosSige()">
+        🔍 1. Carregar Dados para o SIGE
+      </button>
+
+      <!-- Preview dos Dados Carregados -->
+      <div id="sigePreview" class="preview-box" style="display:none;">
+        <div style="font-weight:600; margin-bottom:6px; color:#1a73e8;" id="sigePreviewTitle">
+          Eletiva Selecionada
+        </div>
+        <div style="display:flex; gap:6px; margin-bottom:8px; flex-wrap:wrap;">
+          <span class="stat-badge badge-blue" id="badgeAulas">📚 0 Aulas Dadas</span>
+          <span class="stat-badge badge-green" id="badgeAlunos">👥 0 Alunos</span>
+          <span class="stat-badge badge-red" id="badgeFaltosos">⚠️ 0 c/ Falta</span>
+          <span class="stat-badge badge-purple" id="badgeNotas">📝 0 c/ Nota</span>
+        </div>
+
+        <div class="students-scroll" id="sigeListaAlunos"></div>
+
+        <button id="btnCopiarSige" class="btn btn-success" style="margin-top:10px;" onclick="copiarDadosParaSige()">
+          📋 2. Copiar Dados para o SIGE (Faltas e Notas)
+        </button>
       </div>
     </div>
   </div>
-  
-  <div class="form-group">
-    <label id="lblValorFiltro">Selecione a Turma:</label>
-    <select id="valorFiltro">
-      <option value="">Carregando...</option>
-    </select>
+
+  <!-- ABA 3: COMO USAR NO SIGE (BOOKMARKLET) -->
+  <div id="tab-ajuda" class="tab-pane">
+    <div class="card">
+      <div class="help-card">
+        <strong>⚡ Como funciona a automação no SIGE:</strong>
+        <p style="margin-top:4px; color:#5f6368;">
+          Preencha <b>Faltas e Notas Finais</b> de todos os alunos no SIGE em 1 clique, sem precisar digitar individualmente!
+        </p>
+      </div>
+
+      <label>Passo 1: Instalar o Botão Favorito</label>
+      <p style="font-size:11.5px; color:#5f6368; margin-bottom:6px;">
+        Clique no botão abaixo para copiar o código atualizado do Favorito:
+      </p>
+      <button class="btn btn-outline" style="margin-bottom:10px;" onclick="copiarCodigoBookmarklet()">
+        📋 Copiar Código do Favorito (JS)
+      </button>
+
+      <div style="font-size:11.5px; color:#3c4043; line-height:1.4; background:#f1f3f4; padding:8px; border-radius:6px; margin-bottom:12px;">
+        1. No Chrome ou Edge, pressione <b>Ctrl + Shift + O</b> (Gerenciador de Favoritos).<br>
+        2. Clique em <b>Adicionar novo favorito</b>.<br>
+        3. Nome: <b>⚡ Preencher SIGE</b>.<br>
+        4. No campo <b>URL</b>: cole o código copiado e Salve.
+      </div>
+
+      <label>Passo 2: No dia a dia</label>
+      <div style="font-size:11.5px; color:#3c4043; line-height:1.4;">
+        1. Na Planilha: Na aba <b>Exportar SIGE</b>, clique em <i>Copiar Dados para o SIGE</i>.<br>
+        2. No SIGE: Abra a tela de <b>Frequência</b> ou <b>Notas Finais</b> da eletiva e clique em <i>Buscar</i>.<br>
+        3. Clique no favorito <b>⚡ Preencher SIGE</b> na barra do navegador.<br>
+        4. O sistema preenche as aulas dadas, faltas e/ou notas finais instantaneamente em verde e calcula os resultados! Clique em <b>Gravar</b> no SIGE.
+      </div>
+    </div>
   </div>
-  
-  <div class="form-group">
-    <label for="dataInicio">Data Inicial:</label>
-    <input type="date" id="dataInicio">
-  </div>
-  
-  <div class="form-group">
-    <label for="dataFim">Data Final:</label>
-    <input type="date" id="dataFim">
-  </div>
-  
-  <button id="btnGerar" onclick="gerar()">Gerar Relatório (Pivot)</button>
-  
-  <div id="status"></div>
+
+  <!-- Caixa de Status / Alerta -->
+  <div id="status" class="status-box"></div>
 
   <script>
+    // Cache de dados
     let cacheTurmas = [];
     let cacheEletivas = [];
+    let dadosSigeCarregados = null;
+
+    // Código oficial do Bookmarklet para o SIGE (Suporta IFrames e Framesets do SIGE)
+    const BOOKMARKLET_CODE = `javascript:(async function(){
+  try {
+    let texto = "";
+    try {
+      texto = await navigator.clipboard.readText();
+    } catch(err) {
+      texto = prompt("Cole aqui os dados copiados da Planilha Google:");
+    }
     
+    if(!texto || !texto.includes('{')) {
+      alert("⚠️ Nenhum dado válido encontrado. Copie os dados na Planilha antes de clicar aqui!");
+      return;
+    }
+    
+    const dados = JSON.parse(texto);
+    if(!dados || (!dados.faltas && !dados.notas)) {
+      alert("⚠️ Formato de dados inválido! Não foram encontradas faltas ou notas.");
+      return;
+    }
+    
+    /* Função para coletar todos os Documents em páginas com IFRAMEs/Framesets */
+    function coletarDocs(win) {
+      let docs = [];
+      let visitados = new Set();
+      function explorar(w) {
+        if (!w || visitados.has(w)) return;
+        visitados.add(w);
+        try {
+          if (w.document) {
+            docs.push(w.document);
+            const iframes = w.document.querySelectorAll('iframe, frame');
+            for (let ifr of iframes) {
+              try {
+                if (ifr.contentWindow) explorar(ifr.contentWindow);
+              } catch(e) {}
+            }
+          }
+        } catch(e) {}
+        try {
+          for (let i = 0; i < w.frames.length; i++) {
+            explorar(w.frames[i]);
+          }
+        } catch(e) {}
+      }
+      explorar(win);
+      return docs;
+    }
+
+    const docs = coletarDocs(window);
+    
+    /* 1. Preenche a quantidade de aulas dadas no cabeçalho se existir */
+    if(dados.aulasDadas !== undefined) {
+      for(let doc of docs) {
+        const inputs = doc.querySelectorAll('input[type="text"], input[type="number"]');
+        for(let inp of inputs) {
+          if(inp.id && (inp.id.startsWith('freqAluno_') || inp.id.startsWith('avalia_') || inp.id.toLowerCase().includes('aluno'))) continue;
+          if(inp.className && (inp.className.includes('freqAluno') || inp.className.includes('notaAluno'))) continue;
+          // Campo do cabeçalho de aulas dadas
+          if(inp.maxLength == 3 || inp.size == 4 || (inp.name && inp.name.toLowerCase().includes('aula')) || (inp.id && inp.id.toLowerCase().includes('aula'))) {
+            inp.value = dados.aulasDadas;
+            inp.style.backgroundColor = '#e6f4ea';
+            inp.style.fontWeight = 'bold';
+            inp.dispatchEvent(new Event('input', { bubbles: true }));
+            inp.dispatchEvent(new Event('change', { bubbles: true }));
+            inp.dispatchEvent(new Event('blur', { bubbles: true }));
+            break;
+          }
+        }
+      }
+    }
+    
+    let preenchidosFaltas = 0;
+    let preenchidosNotas = 0;
+    
+    /* 2. Preenche os campos de falta de cada matrícula */
+    if(dados.faltas) {
+      for(const [mat, faltas] of Object.entries(dados.faltas)) {
+        let inp = null;
+        for(let doc of docs) {
+          inp = doc.getElementById('freqAluno_' + mat) || 
+                doc.querySelector('input.freqAluno[data-aluno="' + mat + '"]') ||
+                doc.querySelector('input[name="freqAluno_' + mat + '"]') ||
+                doc.querySelector('input[id="freqAluno_' + mat + '"]') ||
+                doc.querySelector('input.freqAluno[id*="' + mat + '"]');
+          if(inp) break;
+        }
+        
+        if(inp) {
+          inp.value = faltas;
+          inp.style.backgroundColor = '#e6f4ea';
+          inp.style.fontWeight = 'bold';
+          inp.style.color = faltas > 0 ? '#c5221f' : '#137333';
+          inp.dispatchEvent(new Event('input', { bubbles: true }));
+          inp.dispatchEvent(new Event('change', { bubbles: true }));
+          inp.dispatchEvent(new Event('blur', { bubbles: true }));
+          preenchidosFaltas++;
+        }
+      }
+    }
+
+    /* 3. Preenche os campos de Nota Final de cada matrícula */
+    if(dados.notas) {
+      for(const [mat, nota] of Object.entries(dados.notas)) {
+        if(nota === undefined || nota === null || nota === '') continue;
+        let inp = null;
+        for(let doc of docs) {
+          inp = doc.getElementById('avalia_' + mat) || 
+                doc.querySelector('input.notaAluno[data-aluno="' + mat + '"]') ||
+                doc.querySelector('input[data-aluno="' + mat + '"].notaAluno') ||
+                doc.querySelector('input[id="avalia_' + mat + '"]') ||
+                doc.querySelector('input.notaAluno[id*="' + mat + '"]');
+          if(inp) break;
+        }
+        
+        if(inp) {
+          inp.value = nota.toString().replace('.', ',');
+          inp.style.backgroundColor = '#e6f4ea';
+          inp.style.fontWeight = 'bold';
+          inp.style.color = '#000099';
+          inp.dispatchEvent(new Event('input', { bubbles: true }));
+          inp.dispatchEvent(new Event('change', { bubbles: true }));
+          inp.dispatchEvent(new Event('blur', { bubbles: true }));
+          preenchidosNotas++;
+        }
+      }
+    }
+    
+    // Verificação de matrículas não encontradas
+    let naoEncontrados = [];
+    const todasMatriculas = new Set([
+      ...Object.keys(dados.faltas || {}),
+      ...Object.keys(dados.notas || {})
+    ]);
+    
+    for(const mat of todasMatriculas) {
+      let achou = false;
+      for(let doc of docs) {
+        if(doc.getElementById('freqAluno_' + mat) || doc.getElementById('avalia_' + mat) || doc.querySelector('[data-aluno="' + mat + '"]')) {
+          achou = true;
+          break;
+        }
+      }
+      if(!achou) naoEncontrados.push(mat);
+    }
+    
+    let msg = "🎉 Sucesso no Preenchimento do SIGE!\\n";
+    if(dados.eletiva) msg += "\\n📘 Eletiva: " + dados.eletiva;
+    if(dados.aulasDadas !== undefined && preenchidosFaltas > 0) msg += "\\n📚 Aulas Dadas: " + dados.aulasDadas;
+    if(preenchidosFaltas > 0) msg += "\\n📅 Frequências/Faltas preenchidas: " + preenchidosFaltas;
+    if(preenchidosNotas > 0) msg += "\\n📝 Notas Finais preenchidas: " + preenchidosNotas;
+    
+    if(preenchidosFaltas === 0 && preenchidosNotas === 0) {
+      msg = "⚠️ Nenhum campo de aluno foi localizado nesta tela do SIGE. Verifique se você está na tela de Frequência ou Notas e se clicou em 'Buscar'.";
+    } else {
+      if(naoEncontrados.length > 0) {
+        msg += "\\n\\n⚠️ " + naoEncontrados.length + " matrículas da planilha não estavam visíveis nesta tela: " + naoEncontrados.join(', ');
+      }
+      msg += "\\n\\n👉 Agora confira os valores e clique em GRAVAR no SIGE!";
+    }
+    alert(msg);
+  } catch(e) {
+    alert("Erro ao processar: " + e.message);
+  }
+})();`;
+
     document.addEventListener("DOMContentLoaded", function() {
-      // Configurar datas (últimos 30 dias por padrão)
+      // Configurar datas padrão (mês atual)
       let hj = new Date();
-      document.getElementById('dataFim').valueAsDate = hj;
-      let mesPassado = new Date();
-      mesPassado.setDate(hj.getDate() - 30);
-      document.getElementById('dataInicio').valueAsDate = mesPassado;
+      let mesAtual = hj.getMonth();
+      let anoAtual = hj.getFullYear();
+      
+      document.getElementById('relMes').value = mesAtual;
+      document.getElementById('relAno').value = anoAtual;
+      document.getElementById('sigeMes').value = mesAtual;
+      document.getElementById('sigeAno').value = anoAtual;
+      
+      sincronizarDatasPorMes('rel');
+      sincronizarDatasPorMes('sige');
       
       // Carregar listas do backend
       google.script.run
         .withSuccessHandler(function(dados) {
-          cacheTurmas = dados.turmas;
-          cacheEletivas = dados.eletivas;
-          trocarFiltro();
+          cacheTurmas = dados.turmas || [];
+          cacheEletivas = dados.eletivas || [];
+          atualizarSelectRelatorio();
+          atualizarSelectSige();
         })
         .withFailureHandler(function(err) {
-          mostrarStatus("Erro ao carregar dados: " + err, "error");
+          mostrarStatus("Erro ao carregar dados da planilha: " + err, "error");
         })
         .getDadosEnturmacaoUI();
     });
 
-    function trocarFiltro() {
-      let tipo = document.querySelector('input[name="filtroTipo"]:checked').value;
-      let select = document.getElementById('valorFiltro');
-      let lbl = document.getElementById('lblValorFiltro');
+    // Controle de Abas
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+      
+      if(tabId === 'relatorio') {
+        document.querySelector('.tab-btn:nth-child(1)').classList.add('active');
+        document.getElementById('tab-relatorio').classList.add('active');
+      } else if(tabId === 'sige') {
+        document.querySelector('.tab-btn:nth-child(2)').classList.add('active');
+        document.getElementById('tab-sige').classList.add('active');
+      } else {
+        document.querySelector('.tab-btn:nth-child(3)').classList.add('active');
+        document.getElementById('tab-ajuda').classList.add('active');
+      }
+      esconderStatus();
+    }
+
+    // Alternar entre modo "Por Mês" e "Intervalo Personalizado"
+    function alternarModoPeriodo(prefix) {
+      let modo = document.querySelector('input[name="' + prefix + 'ModoPeriodo"]:checked').value;
+      let blocoMes = document.getElementById(prefix + 'BlocoMes');
+      let blocoIntervalo = document.getElementById(prefix + 'BlocoIntervalo');
+      
+      if(modo === 'MES') {
+        blocoMes.style.display = 'grid';
+        blocoIntervalo.style.display = 'none';
+        sincronizarDatasPorMes(prefix);
+      } else {
+        blocoMes.style.display = 'none';
+        blocoIntervalo.style.display = 'grid';
+      }
+    }
+
+    // Calcula data de início e fim com base no mês e ano selecionados
+    function sincronizarDatasPorMes(prefix) {
+      let mes = parseInt(document.getElementById(prefix + 'Mes').value, 10);
+      let ano = parseInt(document.getElementById(prefix + 'Ano').value, 10);
+      
+      let primeiroDia = new Date(ano, mes, 1);
+      let ultimoDia = new Date(ano, mes + 1, 0); // Último dia do mês
+      
+      function formatYMD(d) {
+        let dd = String(d.getDate()).padStart(2, '0');
+        let mm = String(d.getMonth() + 1).padStart(2, '0');
+        return d.getFullYear() + '-' + mm + '-' + dd;
+      }
+      
+      document.getElementById(prefix + 'DataInicio').value = formatYMD(primeiroDia);
+      document.getElementById(prefix + 'DataFim').value = formatYMD(ultimoDia);
+    }
+
+    // Atualiza o Select do Relatório Pivot (Turma / Eletiva)
+    function atualizarSelectRelatorio() {
+      let tipo = document.querySelector('input[name="relFiltroTipo"]:checked').value;
+      let select = document.getElementById('selRelValor');
+      let lbl = document.getElementById('lblRelFiltro');
       
       select.innerHTML = '<option value="">Selecione...</option>';
       
       if (tipo === 'TURMA') {
-        lbl.innerText = 'Selecione a Turma:';
+        lbl.innerText = 'Selecione a Turma Regular:';
         cacheTurmas.forEach(t => {
           let opt = document.createElement('option');
           opt.value = t; opt.innerText = t;
@@ -180,7 +809,6 @@
         });
       } else {
         lbl.innerText = 'Selecione a Eletiva:';
-        // Agrupar eletivas únicas por ID para não repetir (caso configurada em dias múltiplos)
         let unicos = {};
         cacheEletivas.forEach(e => {
           if(!unicos[e.id]) {
@@ -193,16 +821,31 @@
       }
     }
 
-    function gerar() {
-      var tipo = document.querySelector('input[name="filtroTipo"]:checked').value;
-      var valor = document.getElementById('valorFiltro').value;
-      var dtInicio = document.getElementById('dataInicio').value;
-      var dtFim = document.getElementById('dataFim').value;
-      
-      var btn = document.getElementById('btnGerar');
+    // Atualiza o Select de Eletivas da aba SIGE
+    function atualizarSelectSige() {
+      let select = document.getElementById('selSigeEletiva');
+      select.innerHTML = '<option value="">Selecione a Eletiva...</option>';
+      let unicos = {};
+      cacheEletivas.forEach(e => {
+        if(!unicos[e.id]) {
+          unicos[e.id] = e.nome;
+          let opt = document.createElement('option');
+          opt.value = e.id; opt.innerText = e.nome;
+          select.appendChild(opt);
+        }
+      });
+    }
+
+    // Executa a geração do Relatório Pivot
+    function executarGerarRelatorio() {
+      var tipo = document.querySelector('input[name="relFiltroTipo"]:checked').value;
+      var valor = document.getElementById('selRelValor').value;
+      var dtInicio = document.getElementById('relDataInicio').value;
+      var dtFim = document.getElementById('relDataFim').value;
+      var btn = document.getElementById('btnGerarRelatorio');
       
       if (!valor || !dtInicio || !dtFim) {
-        mostrarStatus("Por favor, preencha todos os campos.", "error");
+        mostrarStatus("Por favor, preencha todos os campos do relatório.", "error");
         return;
       }
       
@@ -211,44 +854,152 @@
         return;
       }
       
-      var payload = {
-        tipo: tipo,
-        valor: valor,
-        dataInicio: dtInicio,
-        dataFim: dtFim
-      };
-      
-      // Estado de loading
       btn.disabled = true;
       btn.innerText = "Processando Dados...";
-      mostrarStatus("Construindo tabela pivot, aguarde...", "info");
+      mostrarStatus("Construindo tabela pivot na planilha, aguarde...", "info");
       
       google.script.run
         .withSuccessHandler(function(resposta) {
           btn.disabled = false;
-          btn.innerText = "Gerar Relatório (Pivot)";
+          btn.innerText = "📊 Gerar Relatório (Pivot)";
           mostrarStatus(resposta, "success");
         })
         .withFailureHandler(function(erro) {
           btn.disabled = false;
-          btn.innerText = "Gerar Relatório (Pivot)";
+          btn.innerText = "📊 Gerar Relatório (Pivot)";
           mostrarStatus("Erro ao gerar: " + erro, "error");
         })
-        .gerarRelatorioSecretaria(payload);
+        .gerarRelatorioSecretaria({
+          tipo: tipo,
+          valor: valor,
+          dataInicio: dtInicio,
+          dataFim: dtFim
+        });
     }
-    
-    // Função utilitária para os balões de alerta
+
+    // Consulta os dados para o SIGE
+    function consultarDadosSige() {
+      var idEletiva = document.getElementById('selSigeEletiva').value;
+      var dtInicio = document.getElementById('sigeDataInicio').value;
+      var dtFim = document.getElementById('sigeDataFim').value;
+      var btn = document.getElementById('btnConsultarSige');
+      
+      if(!idEletiva) {
+        mostrarStatus("Selecione uma Eletiva.", "error");
+        return;
+      }
+      
+      btn.disabled = true;
+      btn.innerText = "Carregando Dados...";
+      mostrarStatus("Buscando frequências e notas finais da eletiva...", "info");
+      
+      google.script.run
+        .withSuccessHandler(function(dados) {
+          btn.disabled = false;
+          btn.innerText = "🔍 1. Carregar Dados para o SIGE";
+          dadosSigeCarregados = dados;
+          renderizarPreviewSige(dados);
+          mostrarStatus("Dados carregados com sucesso! Clique no botão verde abaixo para copiar.", "success");
+        })
+        .withFailureHandler(function(erro) {
+          btn.disabled = false;
+          btn.innerText = "🔍 1. Carregar Dados para o SIGE";
+          mostrarStatus("Erro: " + erro, "error");
+        })
+        .obterDadosExportacaoSIGE({
+          idEletiva: idEletiva,
+          dataInicio: dtInicio,
+          dataFim: dtFim
+        });
+    }
+
+    function renderizarPreviewSige(dados) {
+      document.getElementById('sigePreview').style.display = 'block';
+      document.getElementById('sigePreviewTitle').innerText = dados.nomeEletiva;
+      document.getElementById('badgeAulas').innerText = '📚 ' + dados.aulasDadas + ' Aulas Dadas';
+      document.getElementById('badgeAlunos').innerText = '👥 ' + dados.totalAlunos + ' Alunos';
+      
+      let faltosos = dados.resumoAlunos.filter(a => a.faltas > 0).length;
+      document.getElementById('badgeFaltosos').innerText = '⚠️ ' + faltosos + ' c/ Falta';
+      
+      let comNota = dados.resumoAlunos.filter(a => a.nota && a.nota !== '').length;
+      document.getElementById('badgeNotas').innerText = '📝 ' + comNota + ' c/ Nota';
+      
+      let listaDiv = document.getElementById('sigeListaAlunos');
+      listaDiv.innerHTML = '';
+      
+      dados.resumoAlunos.forEach(al => {
+        let row = document.createElement('div');
+        row.className = 'student-row';
+        let notaBadge = al.nota ? `<span class="stat-badge badge-purple" title="Nota Final">📝 ${al.nota}</span>` : `<span class="stat-badge badge-gray" title="Sem Nota">📝 -</span>`;
+        row.innerHTML = `
+          <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:150px;" title="${al.nome}">
+            <b>${al.matricula}</b> - ${al.nome}
+          </span>
+          <div style="display:flex; gap:4px; align-items:center;">
+            <span class="stat-badge ${al.faltas > 0 ? 'badge-red' : 'badge-green'}" title="Faltas">
+              ${al.faltas} F
+            </span>
+            ${notaBadge}
+          </div>
+        `;
+        listaDiv.appendChild(row);
+      });
+    }
+
+    function resetarPreviewSige() {
+      dadosSigeCarregados = null;
+      document.getElementById('sigePreview').style.display = 'none';
+      esconderStatus();
+    }
+
+    // Copia o JSON formatado para a área de transferência
+    function copiarDadosParaSige() {
+      if(!dadosSigeCarregados) {
+        mostrarStatus("Carregue os dados primeiro.", "error");
+        return;
+      }
+      
+      let payloadJson = JSON.stringify({
+        eletiva: dadosSigeCarregados.nomeEletiva,
+        aulasDadas: dadosSigeCarregados.aulasDadas,
+        faltas: dadosSigeCarregados.faltas,
+        notas: dadosSigeCarregados.notas
+      });
+      
+      navigator.clipboard.writeText(payloadJson).then(function() {
+        mostrarStatus("✅ Dados copiados (Faltas e Notas)! Abra a tela do SIGE e clique no Favorito '⚡ Preencher SIGE'.", "success");
+      }).catch(function(err) {
+        // Fallback
+        prompt("Copie manualmente o texto abaixo (Ctrl+C):", payloadJson);
+      });
+    }
+
+    // Copia o código do Bookmarklet
+    function copiarCodigoBookmarklet() {
+      navigator.clipboard.writeText(BOOKMARKLET_CODE).then(function() {
+        mostrarStatus("✅ Código do Favorito copiado! Crie um favorito no navegador e cole este código na URL.", "success");
+      }).catch(function() {
+        prompt("Copie o código abaixo (Ctrl+C):", BOOKMARKLET_CODE);
+      });
+    }
+
     function mostrarStatus(mensagem, tipo) {
       var statusDiv = document.getElementById('status');
       statusDiv.style.display = 'block';
       statusDiv.innerText = mensagem;
-      
-      statusDiv.className = ''; // limpa estilos velhos
+      statusDiv.className = 'status-box';
       
       if (tipo === 'info') statusDiv.classList.add('status-info');
       else if (tipo === 'success') statusDiv.classList.add('status-success');
       else if (tipo === 'error') statusDiv.classList.add('status-error');
     }
+
+    function esconderStatus() {
+      var statusDiv = document.getElementById('status');
+      statusDiv.style.display = 'none';
+    }
   </script>
 </body>
 </html>
+

@@ -171,12 +171,47 @@ A Secretaria possui duas ferramentas principais operando direto da planilha: **G
 
 ### Gerar Relatório Cruzado (Pivot)
 1. Clique em **Gestão Eletivas > Abrir Painel Diário**.
-2. Uma barra lateral muito elegante aparecerá do lado direito da planilha. 
-3. Escolha o filtro principal: **Por Turma Regular** ou **Por Eletiva**.
+2. Uma barra lateral moderna aparecerá do lado direito da planilha. 
+3. Escolha o agrupamento principal: **Turma Regular** ou **Eletiva**.
 4. Selecione a Turma ou Eletiva desejada.
-5. Insira a **Data Inicial** e a **Data Final** (as buscas agora são rigorosamente inclusivas para estes limites).
+5. Selecione o período:
+   - **📅 Por Mês:** Escolha o mês (ex: Fevereiro) e o ano. O sistema calcula automaticamente o primeiro e o último dia!
+   - **📆 Intervalo:** Insira a **Data Inicial** e a **Data Final** personalizadas.
 6. Clique em **Gerar Relatório (Pivot)**.
-7. O script fará um processamento massivo em background e criará uma Tabela Cruzada achatada na aba **`RELATORIO_SECRETARIA`**, com as datas em colunas, mostrando presenças (`0`) e faltas (ex: `2 F`).
+7. O script fará o processamento e criará uma Tabela Cruzada na aba **`RELATORIO_SECRETARIA`**, com as datas em colunas, mostrando presenças (`0`) e faltas (ex: `2 F`).
 8. Passe o mouse sobre as células com registros para ver anotações detalhadas de qual Eletiva a presença ou falta se refere!
 
+---
+
+## 5. Exportação Automática para o SIGE (Faltas e Notas Finais em 1 Clique)
+
+A Secretaria agora pode transferir todas as **faltas** do mês e as **notas finais** do semestre diretamente para o sistema estadual (**SIGE**) sem precisar digitar aluno por aluno!
+
+### Passo 1: Instalar o Botão Favorito no Navegador (Apenas uma vez)
+1. No seu navegador (Google Chrome ou Microsoft Edge), pressione o atalho **`Ctrl + Shift + O`** para abrir o Gerenciador de Favoritos.
+2. Clique nos 3 pontinhos no canto superior direito e selecione **"Adicionar novo favorito"** (ou clique com o botão direito na Barra de Favoritos).
+3. No campo **Nome**, digite: `⚡ Preencher SIGE`.
+4. No campo **URL**, cole o código JavaScript fornecido na aba **"💡 Botão SIGE"** do painel da planilha.
+5. Clique em **Salvar**. O botão `⚡ Preencher SIGE` aparecerá na barra superior de favoritos!
+
+### Passo 2: Exportar da Planilha
+1. Na Planilha, clique em **Gestão Eletivas > Abrir Painel Diário** e acesse a aba **"⚡ Exportar SIGE"**.
+2. Selecione a **Eletiva** e o **Mês/Período** desejado.
+3. Clique em **"🔍 1. Carregar Dados para o SIGE"** para visualizar a prévia dos alunos, faltas acumuladas e notas finais lançadas.
+4. Clique em **"📋 2. Copiar Dados para o SIGE (Faltas e Notas)"**.
+
+### Passo 3: Preencher no SIGE Instantaneamente
+1. Acesse o site do SIGE (`sige.seduc.ce.gov.br`), faça seu login normalmente e vá na tela desejada:
+   - **Para Frequência:** *Acadêmico > Frequência Eletiva > Pesquisar*.
+   - **Para Notas Finais:** *Acadêmico > Avaliações/Notas > Pesquisar*.
+2. Selecione a Eletiva e clique em **Buscar**.
+3. Com a lista de alunos na tela, clique no favorito **`⚡ Preencher SIGE`** na sua barra de favoritos do navegador.
+4. **Mágica:** 
+   - Se estiver na tela de frequência: preenche as **aulas dadas** no topo e as **faltas** de todos os alunos (`freqAluno_XXXXXX`);
+   - Se estiver na tela de notas: preenche as **notas finais** de cada aluno (`avalia_XXXXXX`), formatadas com vírgula e disparando a validação e o cálculo automático do **Resultado** (Aprovado / Reprovado);
+   - Todos os campos preenchidos ganham destaque visual em verde;
+   - Uma mensagem confirma quantos alunos e registros foram preenchidos com sucesso.
+5. Confira os valores e clique no botão **Gravar/Salvar** do SIGE.
+
 Pronto! Seu Sistema de Gestão de Eletivas está completo e operando de ponta a ponta. Parabéns pela implementação! 🚀
+

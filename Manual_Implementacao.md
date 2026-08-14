@@ -19,9 +19,9 @@ O "coração" do nosso sistema é uma planilha do Google Sheets. É nela que os 
 No rodapé da planilha, você verá uma aba chamada `Página1`. Dê um duplo clique nela para renomeá-la. Você vai precisar criar as seguintes abas (use exatamente estes nomes, respeitando as letras maiúsculas):
 1. **`BASE_ALUNOS`** (Cadastro mestre de todos os alunos da escola)
 2. **`ENTURMACAO`** (Tabela de Enturmação: onde vinculamos a matrícula do aluno à sua Eletiva)
-3. **`CONFIG_GERAL`** (Onde configuramos as turmas e professores)
-3. **`RELATORIO_SECRETARIA`** (Onde o consolidado de faltas será gerado)
-4. **Abas Dinâmicas** (ex: `12345`...): Você **NÃO** precisa criar as abas dinâmicas manualmente! O sistema as criará automaticamente (usando o `ID_Eletiva` como nome) quando o professor fizer a primeira chamada.
+3. **`CONFIG_GERAL`** (Onde configuramos as turmas, status ativo/inativo e professores)
+4. **`RELATORIO_SECRETARIA`** (Onde o consolidado de faltas e notas será gerado)
+5. **Abas Dinâmicas** (ex: `ELET10001`...): Você **NÃO** precisa criar as abas dinâmicas manualmente! O sistema as criará automaticamente (usando o `ID_Eletiva` como nome) quando o professor fizer a primeira chamada.
 
 ### Configurando os Cabeçalhos de Cada Aba
 Na primeira linha de cada aba (Linha 1), preencha os cabeçalhos exatamente na ordem a seguir:
@@ -41,13 +41,14 @@ Na primeira linha de cada aba (Linha 1), preencha os cabeçalhos exatamente na o
 > *(Atenção: Você não precisa digitar os alunos manualmente aqui! Utilize o menu superior "Gestão Eletivas > Enturmar Alunos" para abrir o formulário interativo. O script escreverá nesta aba de forma segura. Um mesmo aluno pode aparecer em várias linhas caso esteja matriculado em mais de uma eletiva).*
 
 #### Aba: `CONFIG_GERAL`
+- **Coluna A:** Status (`"ATIVA"` para disciplinas em andamento no semestre atual, ou `"INATIVA"` para disciplinas guardadas no catálogo permanente de semestres anteriores)
 - **Coluna B:** ID_Eletiva
 - **Coluna C:** Nome_Eletiva
-- **Coluna D:** Nome_Professor *(Permite múltiplos nomes de professores separados por vírgula)*
-- **Coluna E:** Email_Professor *(Permite múltiplos e-mails Google separados por vírgula - todos terão acesso à chamada)*
+- **Coluna D:** Nome_Professor *(Permite múltiplos nomes de professores separados por vírgula. Se a eletiva for inativa, fica vazio)*
+- **Coluna E:** Email_Professor *(Permite múltiplos e-mails Google separados por vírgula. Se a eletiva for inativa, fica vazio)*
 - **Coluna F:** Qtd_Dias_Semana
-- **Colunas Seguintes:** Pares de Dia da Semana e Períodos/Aulas
-> *(Atenção: A aba `CONFIG_GERAL` **NÃO DEVE** ser preenchida manualmente! Utilize o menu superior "Gestão Eletivas > Registrar Eletivas" para abrir o gerenciador interativo. O sistema cadastrará e formatará as eletivas com seus professores, dias e períodos de forma automatizada e à prova de erros).*
+- **Colunas Seguintes:** Pares de Dia da Semana e Períodos/Aulas (preservados mesmo quando inativa para fácil reativação e reuso)
+> *(Atenção: A aba `CONFIG_GERAL` **NÃO DEVE** ser preenchida manualmente! Utilize o menu superior "Gestão Eletivas > Registrar Eletivas" para abrir o gerenciador interativo. O sistema cadastrará, ativará, desativará e formatará as eletivas com seus professores, dias e períodos de forma automatizada e à prova de erros).*
 
 #### Abas Dinâmicas de Chamada (ex: `ELET1`, `ELET2`, etc.)
 > [!WARNING]
@@ -89,7 +90,7 @@ Agora, vamos transformar essa planilha simples em um sistema inteligente.
 2. Uma nova guia do navegador será aberta. Este é o editor de códigos.
 3. No painel esquerdo, você verá um arquivo chamado `Código.gs`. Renomeie-o e crie os outros arquivos necessários. Para criar novos arquivos, clique no botão de **"+" (Adicionar arquivo)** ao lado da palavra "Arquivos".
 
-Você deve criar e colar os códigos gerados anteriormente **exatamente** nestes 9 arquivos:
+Você deve criar e colar os códigos do projeto **exatamente** nestes 11 arquivos:
 1. `Utils.gs` (Arquivo do tipo Script)
 2. `TeacherController.gs` (Arquivo do tipo Script)
 3. `Main.gs` (Arquivo do tipo Script)
@@ -156,11 +157,22 @@ A Secretaria possui duas ferramentas principais operando direto da planilha: **G
 2. Aguarde alguns segundos. Você notará que surgiu um novo menu na barra superior, chamado **"🏫 Gestão Eletivas"**.
 3. *(Se for o primeiro acesso da secretaria, talvez o Google peça a autorização de segurança explicada no passo anterior. Basta permitir).*
 
-### Registrar Eletivas (Modal Interativo)
+### Registrar e Gerenciar Eletivas (Catálogo Permanente e Backup Automático)
 1. Clique em **Gestão Eletivas > Registrar Eletivas**.
-2. Uma janela vai se abrir. Aqui você insere o ID da Eletiva (ex: ELET1), o Nome, os dados do(s) Professor(es) responsável(is) (se houver mais de um professor ou mais de um e-mail com acesso à chamada, insira-os separados por vírgula), e os dias de aula.
-3. Clique em **Adicionar Dia** para colocar as configurações, como "Segunda-feira", marcando as aulas correspondentes.
-4. Salve e a eletiva já estará perfeitamente formatada na aba `CONFIG_GERAL`. Você também pode editar e excluir eletivas existentes por essa mesma tela.
+2. Um painel interativo exibirá o resumo das eletivas: **Total**, **🟢 Ativas no Semestre** e **⏸️ Catálogo / Inativas**.
+3. **Criar Nova Eletiva:** Insira o Nome, escolha o Status (Ativa ou Inativa/Catálogo), defina o(s) professor(es) e configure os dias e horários de aula.
+4. **Guardar no Catálogo / Desativar com Backup:** Quando o semestre terminar ou uma eletiva não for ofertada, clique no botão **⏸️ Desativar**. Uma janela de segurança solicitará o **Ano Letivo** (ex: `2026`), o **Semestre** (ex: `2`) e a digitação da palavra de confirmação **`DESATIVAR`** para liberar a operação. Ao confirmar, o sistema:
+   - Move automaticamente a aba de chamadas para a planilha de backup externa no Google Drive, renomeando a aba no padrão `ID_Ano.Semestre` (ex: `ELET99536_2026.2`);
+   - Na aba movida para o backup, gera automaticamente um cabeçalho e quadro de consolidação nas colunas **K a N**:
+     - **Linha 1:** Célula **L1** com o *Nome da Eletiva*, célula **M1** com o texto *`Professor: `* e células **N1, O1, P1...** com os nomes dos professores responsáveis (um por célula);
+     - **K2:L2:** `Total de aulas` e a quantidade total de aulas ministradas;
+     - **K3:N3:** Cabeçalhos `MATRICULA`, `ALUNO`, `% de FALTAS` e `Quantidade de Faltas`;
+     - **Linha 4 em diante:** Listagem de todos os alunos com suas faltas e cálculo dinâmico da porcentagem de faltas (fórmula com `;`);
+   - Exclui a aba da planilha principal para mantê-la sempre leve, rápida e limpa;
+   - Guarda a eletiva no catálogo permanente como `INATIVA` com seus horários prontos para o futuro;
+   - Remove as enturmações de alunos na aba `ENTURMACAO` 100% automaticamente para liberar a turma para o novo semestre.
+   > **📁 Como escolher ou trocar a Planilha de Backup:** No painel de eletivas, clique no botão **"📁 Planilha de Backup"** (ou no link dentro do próprio modal de desativação). Por padrão, o sistema cria automaticamente uma planilha chamada *"Backup - Histórico de Eletivas"* na mesma pasta do Google Drive. Se você preferir direcionar os backups para qualquer outra planilha existente, basta colar o link (URL) ou o ID dela e clicar em Salvar!
+5. **Reativar para um Novo Semestre:** Ao ofertar novamente uma eletiva de semestres anteriores, localize-a no catálogo e clique no botão **🚀 Reativar**. Os horários e o nome já virão carregados, bastando informar o(s) novo(s) professor(es) do semestre! Uma nova aba limpa será criada para o novo ciclo.
 
 ### Enturmar Alunos (Modal Interativo)
 1. Clique em **Gestão Eletivas > Enturmar Alunos**.

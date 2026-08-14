@@ -17,12 +17,16 @@
       --danger-bg: #fce8e6;
       --success: #1e8e3e;
       --success-bg: #e6f4ea;
+      --warning: #b06000;
+      --warning-bg: #fef7e0;
+      --purple: #7b1fa2;
+      --purple-bg: #f3e8fd;
     }
 
     body {
       font-family: 'Google Sans', Roboto, Arial, sans-serif;
       margin: 0;
-      padding: 24px;
+      padding: 20px;
       background-color: var(--bg);
       color: var(--text);
     }
@@ -30,30 +34,84 @@
     .container {
       display: flex;
       flex-direction: column;
-      gap: 24px;
+      gap: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
     }
 
     .card {
       background: var(--surface);
       border-radius: 8px;
       box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
-      padding: 24px;
+      padding: 20px 24px;
+    }
+
+    /* Métricas / Cards de Resumo */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .metric-card {
+      background: var(--surface);
+      border-radius: 8px;
+      padding: 14px 18px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .metric-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    }
+
+    .metric-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+
+    .metric-info h3 {
+      margin: 0;
+      font-size: 1.35rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .metric-info p {
+      margin: 0;
+      font-size: 0.8rem;
+      color: var(--text-sec);
+      font-weight: 500;
     }
 
     h2 {
-      font-size: 1.25rem;
+      font-size: 1.15rem;
       margin-top: 0;
       border-bottom: 1px solid var(--border);
-      padding-bottom: 12px;
+      padding-bottom: 10px;
       color: var(--primary);
-      margin-bottom: 20px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
     .row {
       display: flex;
       gap: 16px;
       flex-wrap: wrap;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .form-group {
@@ -63,19 +121,19 @@
 
     label {
       display: block;
-      font-size: 0.9rem;
-      font-weight: 500;
-      margin-bottom: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 6px;
       color: var(--text);
     }
 
     select, input[type="text"], input[type="email"] {
       width: 100%;
-      padding: 10px 12px;
+      padding: 9px 12px;
       border: 1px solid var(--border);
       border-radius: 4px;
       box-sizing: border-box;
-      font-size: 14px;
+      font-size: 13.5px;
       outline: none;
       transition: border-color 0.2s;
     }
@@ -84,18 +142,68 @@
       border-color: var(--primary);
     }
 
-    button.primary, button.secondary {
-      border: none;
-      padding: 10px 24px;
-      border-radius: 4px;
-      font-size: 14px;
-      font-weight: 500;
+    /* Radio Pills para Status */
+    .status-pill-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .status-pill {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 6px;
       cursor: pointer;
-      transition: background-color 0.2s;
-      align-self: flex-start;
+      transition: all 0.2s;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-sec);
+      background: #fafafa;
+      user-select: none;
+    }
+
+    .status-pill input {
+      display: none;
+    }
+
+    .status-pill.active-pill-green {
+      border-color: var(--success);
+      background-color: var(--success-bg);
+      color: var(--success);
+    }
+
+    .status-pill.active-pill-gray {
+      border-color: var(--warning);
+      background-color: var(--warning-bg);
+      color: var(--warning);
+    }
+
+    .info-box {
+      background-color: #f1f3f4;
+      border-left: 4px solid var(--primary);
+      padding: 10px 14px;
+      border-radius: 4px;
+      font-size: 12.5px;
+      color: #3c4043;
+      margin-bottom: 14px;
+      line-height: 1.4;
+    }
+
+    button.primary, button.secondary, button.success {
+      border: none;
+      padding: 9px 20px;
+      border-radius: 4px;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
       display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
 
     button.primary {
@@ -105,12 +213,18 @@
     button.primary:hover:not(:disabled) { background-color: var(--primary-hover); }
     button.primary:disabled { background-color: #a8c7fa; cursor: not-allowed; }
 
+    button.success {
+      background-color: var(--success);
+      color: white;
+    }
+    button.success:hover { background-color: #177332; }
+
     button.secondary {
       background-color: white;
-      color: var(--primary);
-      border: 1px solid var(--primary);
+      color: var(--text);
+      border: 1px solid var(--border);
     }
-    button.secondary:hover { background-color: #f8f9fa; }
+    button.secondary:hover { background-color: #f1f3f4; }
 
     button.icon-btn {
       background: none;
@@ -118,14 +232,42 @@
       cursor: pointer;
       color: var(--text-sec);
       border-radius: 50%;
-      padding: 8px;
+      padding: 6px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       transition: background 0.2s;
     }
     button.icon-btn:hover { background-color: #f1f3f4; color: var(--text); }
+    button.icon-btn.reactivate { color: var(--success); }
+    button.icon-btn.reactivate:hover { background-color: var(--success-bg); }
+    button.icon-btn.deactivate { color: var(--warning); }
+    button.icon-btn.deactivate:hover { background-color: var(--warning-bg); }
     button.icon-btn.delete:hover { color: var(--danger); background-color: var(--danger-bg); }
+
+    /* Filtros da Tabela */
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+    }
+
+    .filter-tab {
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--text-sec);
+      transition: all 0.2s;
+    }
+
+    .filter-tab.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
 
     .header-actions {
       display: flex;
@@ -133,82 +275,139 @@
       align-items: center;
       border-bottom: 1px solid var(--border);
       padding-bottom: 12px;
-      margin-bottom: 20px;
-    }
-    
-    .header-actions h2 {
-      border-bottom: none; margin-bottom: 0; padding-bottom: 0;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
     }
 
     .search-box {
-      width: 300px;
+      width: 260px;
       position: relative;
     }
     .search-box i {
-      position: absolute; left: 10px; top: 10px; color: var(--text-sec); font-size: 18px;
+      position: absolute; left: 10px; top: 8px; color: var(--text-sec); font-size: 18px;
     }
     .search-box input {
-      padding-left: 36px;
+      padding-left: 34px;
+      padding-top: 7px;
+      padding-bottom: 7px;
     }
 
     /* Tabela */
     .table-container {
-      max-height: 350px;
+      max-height: 380px;
       overflow-y: auto;
+      border: 1px solid var(--border);
+      border-radius: 6px;
     }
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 14px;
+      font-size: 13px;
     }
     th, td {
       text-align: left;
-      padding: 12px 16px;
+      padding: 10px 14px;
       border-bottom: 1px solid var(--border);
     }
     th {
       color: var(--text-sec);
-      font-weight: 500;
+      font-weight: 600;
       position: sticky;
       top: 0;
-      background-color: var(--surface);
+      background-color: #f8f9fa;
       z-index: 1;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
-    tr:hover { background-color: #f1f3f4; }
+    tr:hover { background-color: #f8fafd; }
 
     #loader, #global-loader {
       text-align: center; color: var(--primary); padding: 20px; font-weight: 500;
     }
     #global-loader {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(255,255,255,0.8); z-index: 1000;
+      background: rgba(255,255,255,0.85); z-index: 1000;
       display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
     }
 
     .dia-row {
-      display: flex; gap: 16px; align-items: flex-end; margin-bottom: 12px;
-      background: #f8f9fa; padding: 12px; border-radius: 4px; border: 1px solid var(--border);
+      display: flex; gap: 14px; align-items: flex-end; margin-bottom: 10px;
+      background: #f8f9fa; padding: 10px 14px; border-radius: 6px; border: 1px solid var(--border);
     }
     .dias-container {
-      margin-top: 8px; margin-bottom: 16px;
+      margin-top: 6px; margin-bottom: 12px;
     }
     
     .tag {
-      background: #e8f0fe; color: #1967d2; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 500; margin-right: 4px; display: inline-block; margin-bottom: 4px;
+      background: #e8f0fe; color: #1967d2; padding: 3px 6px; border-radius: 4px; font-size: 11.5px; font-weight: 500; margin-right: 4px; display: inline-block; margin-bottom: 3px;
     }
     .checkbox-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      gap: 8px;
+      gap: 6px;
       margin-top: 4px;
     }
     .checkbox-item {
       display: flex;
       align-items: center;
-      gap: 4px;
-      font-size: 0.85rem;
+      gap: 3px;
+      font-size: 0.8rem;
       margin-bottom: 0;
       cursor: pointer;
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+    .badge-ativa {
+      background-color: var(--success-bg);
+      color: var(--success);
+    }
+    .badge-inativa {
+      background-color: var(--warning-bg);
+      color: var(--warning);
+    }
+
+    /* Modal de Desativação */
+    .modal-backdrop {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-box {
+      background: white;
+      border-radius: 8px;
+      padding: 24px;
+      max-width: 460px;
+      width: 90%;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .modal-box h3 {
+      margin-top: 0;
+      color: var(--warning);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
     }
   </style>
 </head>
@@ -217,54 +416,115 @@
   <div id="global-loader">Carregando interface...</div>
 
   <div class="container">
+    
+    <!-- Cards de Resumo / Métricas -->
+    <div class="metrics-grid">
+      <div class="metric-card" onclick="setFiltro('TODAS')">
+        <div class="metric-icon" style="background:#e8f0fe; color:#1a73e8;">📚</div>
+        <div class="metric-info">
+          <h3 id="metricTotal">0</h3>
+          <p>Total de Eletivas</p>
+        </div>
+      </div>
+      <div class="metric-card" onclick="setFiltro('ATIVA')">
+        <div class="metric-icon" style="background:#e6f4ea; color:#1e8e3e;">🟢</div>
+        <div class="metric-info">
+          <h3 id="metricAtivas" style="color:#1e8e3e;">0</h3>
+          <p>Ativas no Semestre</p>
+        </div>
+      </div>
+      <div class="metric-card" onclick="setFiltro('INATIVA')">
+        <div class="metric-icon" style="background:#fef7e0; color:#b06000;">⏸️</div>
+        <div class="metric-info">
+          <h3 id="metricInativas" style="color:#b06000;">0</h3>
+          <p>Catálogo / Inativas</p>
+        </div>
+      </div>
+    </div>
+
     <!-- Formulário -->
     <div class="card">
-      <h2 id="formTitle">Nova Eletiva</h2>
+      <h2 id="formTitle">
+        <span>Nova Eletiva</span>
+        <span id="badgeModo" style="font-size:12px; font-weight:normal; color:var(--text-sec);"></span>
+      </h2>
       
       <!-- ID Oculto (Gerado pelo Backend) -->
       <input type="hidden" id="idEletiva">
       
-      <div class="row">
-        <div class="form-group">
-          <label>Nome da Eletiva</label>
-          <input type="text" id="nomeEletiva" placeholder="Ex: Robótica">
+      <!-- Seletor de Status (Ativa vs Inativa) -->
+      <label>Status da Eletiva:</label>
+      <div class="status-pill-group">
+        <div class="status-pill active-pill-green" id="pillAtiva" onclick="selecionarStatus('ATIVA')">
+          <input type="radio" name="statusEletiva" value="ATIVA" checked>
+          <span>🟢 Ativa no Semestre (Com Professor e Chamada)</span>
         </div>
+        <div class="status-pill" id="pillInativa" onclick="selecionarStatus('INATIVA')">
+          <input type="radio" name="statusEletiva" value="INATIVA">
+          <span>⏸️ Inativa (Guardada no Catálogo p/ Futuro)</span>
+        </div>
+      </div>
+
+      <div id="boxInativaInfo" class="info-box" style="display:none;">
+        💡 <b>Eletiva Inativa / Catálogo:</b> O nome e os horários/aulas ficam salvos para semestres futuros. Não é necessário preencher professor nem alunos agora. Você poderá reativá-la com 1 clique quando for ofertada novamente.
       </div>
       
       <div class="row">
         <div class="form-group">
-          <label>Nome do(s) Professor(es)</label>
+          <label>Nome da Eletiva *</label>
+          <input type="text" id="nomeEletiva" placeholder="Ex: Robótica e Automação">
+        </div>
+      </div>
+      
+      <div class="row" id="rowProfessores">
+        <div class="form-group">
+          <label>Nome do(s) Professor(es) <span id="reqProf">*</span></label>
           <input type="text" id="nomeProfessor" placeholder="Ex: João Silva ou João Silva, Maria Santos">
-          <small style="color:var(--text-sec); font-size:12px; margin-top:4px; display:block;">Para múltiplos professores, separe por vírgula.</small>
+          <small style="color:var(--text-sec); font-size:11.5px; margin-top:3px; display:block;">Para múltiplos professores, separe por vírgula.</small>
         </div>
         <div class="form-group">
-          <label>E-mail(s) do(s) Professor(es) (Google)</label>
+          <label>E-mail(s) do(s) Professor(es) (Google) <span id="reqEmail">*</span></label>
           <input type="text" id="emailProfessor" placeholder="Ex: joao@escola.com ou joao@escola.com, maria@escola.com">
-          <small style="color:var(--text-sec); font-size:12px; margin-top:4px; display:block;">Separe os e-mails que terão acesso à chamada por vírgula.</small>
+          <small style="color:var(--text-sec); font-size:11.5px; margin-top:3px; display:block;">Separe os e-mails com acesso à chamada por vírgula.</small>
         </div>
       </div>
       
-      <div style="margin-top: 16px;">
-        <label>Dias e Períodos da Semana</label>
+      <div style="margin-top: 10px;">
+        <label>Dias da Semana e Quantidade de Aulas</label>
         <div id="diasContainer" class="dias-container">
-          <!-- Linhas dinâmicas -->
+          <!-- Linhas dinâmicas de dias -->
         </div>
         <button class="secondary" onclick="addDiaRow()"><i class="material-icons" style="font-size:18px">add</i> Adicionar Dia</button>
       </div>
       
-      <div style="margin-top: 24px; border-top: 1px solid var(--border); padding-top: 16px; display: flex; gap: 12px;">
-        <button id="btnSalvar" class="primary" onclick="salvar()">Salvar Eletiva</button>
-        <button id="btnCancelar" class="secondary" style="display:none;" onclick="resetForm()">Cancelar Edição</button>
+      <div style="margin-top: 20px; border-top: 1px solid var(--border); padding-top: 14px; display: flex; gap: 10px;">
+        <button id="btnSalvar" class="primary" onclick="salvar()">
+          <i class="material-icons" style="font-size:18px">save</i> Salvar Eletiva
+        </button>
+        <button id="btnCancelar" class="secondary" style="display:none;" onclick="resetForm()">
+          Cancelar
+        </button>
       </div>
     </div>
 
-    <!-- Tabela -->
+    <!-- Tabela de Eletivas -->
     <div class="card">
       <div class="header-actions">
-        <h2>Eletivas Cadastradas</h2>
+        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+          <h2 style="border-bottom:none; margin-bottom:0; padding-bottom:0;">Catálogo de Eletivas</h2>
+          <div class="filter-tabs">
+            <button class="filter-tab active" id="tabTodas" onclick="setFiltro('TODAS')">Todas</button>
+            <button class="filter-tab" id="tabAtivas" onclick="setFiltro('ATIVA')">🟢 Ativas</button>
+            <button class="filter-tab" id="tabInativas" onclick="setFiltro('INATIVA')">⏸️ Inativas</button>
+          </div>
+          <button class="secondary" style="padding:4px 10px; font-size:12px; height:32px; display:inline-flex; align-items:center; gap:4px;" onclick="abrirModalConfigBackup()" title="Ver ou alterar a planilha onde os backups são salvos">
+            <i class="material-icons" style="font-size:16px; color:#1a73e8;">folder_shared</i> Planilha de Backup
+          </button>
+        </div>
+
         <div class="search-box">
           <i class="material-icons">search</i>
-          <input type="text" id="searchInput" placeholder="Buscar..." onkeyup="filtrarTabela()">
+          <input type="text" id="searchInput" placeholder="Buscar por nome, ID ou prof..." onkeyup="filtrarTabela()">
         </div>
       </div>
       
@@ -274,11 +534,12 @@
         <table id="tabelaEletivas">
           <thead>
             <tr>
-              <th>ID</th>
-              <th>Nome</th>
+              <th style="width: 85px;">Status</th>
+              <th style="width: 80px;">ID</th>
+              <th>Nome da Eletiva</th>
               <th>Professor(es)</th>
-              <th>Dias/Períodos</th>
-              <th style="width: 100px; text-align: center;">Ações</th>
+              <th>Dias e Horários</th>
+              <th style="width: 120px; text-align: center;">Ações</th>
             </tr>
           </thead>
           <tbody id="tbodyEletivas">
@@ -289,14 +550,178 @@
     </div>
   </div>
 
+  <!-- Modal de Confirmação para Desativação -->
+  <div id="modalDesativar" class="modal-backdrop">
+    <div class="modal-box" style="max-width:500px;">
+      <h3><i class="material-icons">archive</i> Desativar e Arquivar Eletiva</h3>
+      <p style="font-size:13.5px; color:#3c4043; line-height:1.4; margin-bottom:12px;">
+        Você está desativando a eletiva <b id="nomeEletivaDesativar"></b> (<span id="idEletivaDesativar"></span>).
+      </p>
+
+      <!-- Período Letivo em que foi usada -->
+      <div style="background:#f8fafd; border:1px solid #c2e7ff; border-radius:6px; padding:12px; margin-bottom:12px;">
+        <label style="color:#1967d2; font-size:12.5px; margin-bottom:8px;">Período em que a Eletiva foi ministrada:</label>
+        <div style="display:flex; gap:10px;">
+          <div style="flex:1;">
+            <label style="font-size:11.5px; margin-bottom:3px;">Ano Letivo:</label>
+            <input type="number" id="desativarAnoLetivo" value="2026" min="2020" max="2050" onchange="atualizarPreviewBackup()" onkeyup="atualizarPreviewBackup()">
+          </div>
+          <div style="flex:1;">
+            <label style="font-size:11.5px; margin-bottom:3px;">Semestre:</label>
+            <select id="desativarSemestre" onchange="atualizarPreviewBackup()">
+              <option value="1">1º Semestre (.1)</option>
+              <option value="2" selected>2º Semestre (.2)</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="margin-top:10px; font-size:12px; color:#3c4043;">
+          📁 Nome da aba no Backup: 
+          <span class="tag" id="previewNomeBackup" style="background:#e8f0fe; color:#1967d2; font-weight:bold; font-size:12px;">ELET...</span>
+        </div>
+      </div>
+
+      <!-- Informações da Planilha de Backup de Destino -->
+      <div style="background:#f8f9fa; border:1px solid #e0e0e0; border-radius:6px; padding:10px 12px; margin-bottom:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px; margin-bottom:4px;">
+          <span style="color:#5f6368; font-weight:600;">Planilha de Destino do Backup:</span>
+          <a href="javascript:void(0)" onclick="abrirModalConfigBackup()" style="color:#1a73e8; text-decoration:none; font-weight:600;">✏️ Alterar Planilha</a>
+        </div>
+        <div style="font-size:12.5px; font-weight:bold; color:#1a73e8; display:flex; align-items:center; gap:6px;">
+          <i class="material-icons" style="font-size:16px;">description</i>
+          <a id="linkUrlBackupModal" href="#" target="_blank" style="color:#1a73e8; text-decoration:none;">Carregando planilha de backup...</a>
+        </div>
+      </div>
+
+      <!-- Ações Automáticas do Sistema -->
+      <div style="background:#e8f0fe; padding:10px; border-radius:6px; border:1px solid #d2e3fc; font-size:12px; color:#174ea6; line-height:1.4;">
+        • <b>Aba de Chamadas:</b> Será movida para a planilha de backup externa (sem scripts).<br>
+        • <b>Alunos:</b> As enturmações serão limpas da aba ENTURMACAO 100% automaticamente.<br>
+        • <b>Catálogo:</b> A disciplina ficará como INATIVA com horários preservados para o futuro.
+      </div>
+
+      <!-- Campo de Confirmação de Segurança -->
+      <div style="margin-top:12px; background:#fff3e0; border:1px solid #ffe0b2; padding:10px 12px; border-radius:6px;">
+        <label for="inputFraseConfirmacao" style="font-size:12px; color:#b06000; font-weight:700; margin-bottom:5px; display:block;">
+          ⚠️ Digite a palavra <span style="background:#b06000; color:white; padding:1px 6px; border-radius:4px; letter-spacing:1px;">DESATIVAR</span> para liberar:
+        </label>
+        <input type="text" id="inputFraseConfirmacao" placeholder="Digite DESATIVAR aqui" autocomplete="off" onkeyup="verificarFraseConfirmacao()" oninput="verificarFraseConfirmacao()" style="border:1.5px solid #ffb74d; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">
+      </div>
+
+      <div class="modal-actions">
+        <button class="secondary" onclick="fecharModalDesativar()">Cancelar</button>
+        <button class="primary" id="btnConfirmarDesativacao" style="background:#b06000; opacity:0.5; cursor:not-allowed;" disabled onclick="confirmarDesativacao()">
+          Guardar e Mover Backup
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para Configurar Planilha de Backup Customizada -->
+  <div id="modalConfigBackup" class="modal-backdrop">
+    <div class="modal-box" style="max-width:520px;">
+      <h3><i class="material-icons">folder_shared</i> Planilha de Backup Histórico</h3>
+      <p style="font-size:13px; color:#3c4043; line-height:1.4; margin-bottom:12px;">
+        O sistema move as abas de chamadas das disciplinas arquivadas para uma planilha externa sem scripts.
+      </p>
+
+      <div style="background:#f8f9fa; border:1px solid #e0e0e0; border-radius:6px; padding:12px; margin-bottom:14px;">
+        <label style="font-size:12px; color:#5f6368; font-weight:600; margin-bottom:4px;">Planilha Atual:</label>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <i class="material-icons" style="color:#1a73e8; font-size:20px;">table_chart</i>
+          <a id="linkPlanilhaBackupAtual" href="#" target="_blank" style="color:#1a73e8; font-weight:bold; font-size:13px; text-decoration:none;">
+            Carregando...
+          </a>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-bottom:14px;">
+        <label style="font-size:12.5px; font-weight:600;">Deseja usar outra planilha do Google Sheets?</label>
+        <input type="text" id="inputNovaUrlBackup" placeholder="Cole aqui o link (URL) ou ID da nova planilha de backup..." style="font-size:12px;">
+        <small style="color:var(--text-sec); font-size:11.5px; margin-top:4px; display:block;">
+          💡 Basta abrir a planilha desejada no Google Sheets, copiar o link da barra de navegação e colar acima.
+        </small>
+      </div>
+
+      <div class="modal-actions">
+        <button class="secondary" onclick="fecharModalConfigBackup()">Fechar</button>
+        <button class="primary" onclick="salvarPlanilhaBackupCustomizada()">
+          Salvar Nova Planilha de Backup
+        </button>
+      </div>
+    </div>
+  </div>
+
   <script>
     let eletivas = [];
     let editingId = null;
+    let currentFiltro = 'TODAS';
+    let currentStatusForm = 'ATIVA';
+    let eletivaParaDesativar = null;
+    let infoBackup = { id: '', nome: 'Backup - Histórico de Eletivas', url: '#' };
 
     document.addEventListener("DOMContentLoaded", function() {
       resetForm();
       carregarEletivas();
+      carregarInfoBackup();
     });
+
+    function carregarInfoBackup() {
+      google.script.run
+        .withSuccessHandler(res => {
+          if (res && res.status === 'SUCCESS') {
+            infoBackup = res;
+            atualizarDisplaysBackup();
+          }
+        })
+        .getInfoPlanilhaBackup();
+    }
+
+    function atualizarDisplaysBackup() {
+      const linkModal = document.getElementById('linkUrlBackupModal');
+      if (linkModal) {
+        linkModal.innerText = (infoBackup.nome || 'Backup - Histórico de Eletivas') + ' ↗';
+        linkModal.href = infoBackup.url || '#';
+      }
+      const linkConfig = document.getElementById('linkPlanilhaBackupAtual');
+      if (linkConfig) {
+        linkConfig.innerText = (infoBackup.nome || 'Backup - Histórico de Eletivas') + ' ↗';
+        linkConfig.href = infoBackup.url || '#';
+      }
+    }
+
+    function abrirModalConfigBackup() {
+      document.getElementById('inputNovaUrlBackup').value = '';
+      atualizarDisplaysBackup();
+      document.getElementById('modalConfigBackup').style.display = 'flex';
+    }
+
+    function fecharModalConfigBackup() {
+      document.getElementById('modalConfigBackup').style.display = 'none';
+    }
+
+    function salvarPlanilhaBackupCustomizada() {
+      const novaUrl = document.getElementById('inputNovaUrlBackup').value.trim();
+      if (!novaUrl) {
+        alert("Por favor, cole a URL ou ID da planilha do Google Sheets.");
+        return;
+      }
+
+      document.getElementById('global-loader').style.display = 'flex';
+      google.script.run
+        .withSuccessHandler(res => {
+          document.getElementById('global-loader').style.display = 'none';
+          alert(res.message || "Planilha de backup configurada com sucesso!");
+          infoBackup = res;
+          atualizarDisplaysBackup();
+          fecharModalConfigBackup();
+        })
+        .withFailureHandler(err => {
+          document.getElementById('global-loader').style.display = 'none';
+          alert("Erro ao configurar planilha de backup: " + err);
+        })
+        .definirPlanilhaBackupCustomizada(novaUrl);
+    }
 
     function carregarEletivas() {
       document.getElementById('loader').style.display = 'block';
@@ -304,7 +729,8 @@
       
       google.script.run
         .withSuccessHandler(dados => {
-          eletivas = dados;
+          eletivas = dados || [];
+          atualizarMetricas();
           renderTabela();
           document.getElementById('loader').style.display = 'none';
           document.getElementById('global-loader').style.display = 'none';
@@ -316,30 +742,113 @@
         .getConfigEletivas();
     }
 
+    function atualizarMetricas() {
+      const total = eletivas.length;
+      const ativas = eletivas.filter(e => e.status === 'ATIVA').length;
+      const inativas = eletivas.filter(e => e.status === 'INATIVA').length;
+
+      document.getElementById('metricTotal').innerText = total;
+      document.getElementById('metricAtivas').innerText = ativas;
+      document.getElementById('metricInativas').innerText = inativas;
+    }
+
+    function setFiltro(tipo) {
+      currentFiltro = tipo;
+      document.getElementById('tabTodas').classList.toggle('active', tipo === 'TODAS');
+      document.getElementById('tabAtivas').classList.toggle('active', tipo === 'ATIVA');
+      document.getElementById('tabInativas').classList.toggle('active', tipo === 'INATIVA');
+      renderTabela();
+    }
+
+    function selecionarStatus(status) {
+      currentStatusForm = status;
+      const pillAtiva = document.getElementById('pillAtiva');
+      const pillInativa = document.getElementById('pillInativa');
+      const boxInfo = document.getElementById('boxInativaInfo');
+      const reqProf = document.getElementById('reqProf');
+      const reqEmail = document.getElementById('reqEmail');
+
+      if (status === 'ATIVA') {
+        pillAtiva.className = 'status-pill active-pill-green';
+        pillInativa.className = 'status-pill';
+        boxInfo.style.display = 'none';
+        reqProf.style.display = 'inline';
+        reqEmail.style.display = 'inline';
+      } else {
+        pillAtiva.className = 'status-pill';
+        pillInativa.className = 'status-pill active-pill-gray';
+        boxInfo.style.display = 'block';
+        reqProf.style.display = 'none';
+        reqEmail.style.display = 'none';
+      }
+    }
+
     function renderTabela() {
       const tbody = document.getElementById('tbodyEletivas');
       tbody.innerHTML = '';
       
-      if (eletivas.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding: 20px;">Nenhuma eletiva cadastrada.</td></tr>';
+      const termoBusca = document.getElementById("searchInput").value.toUpperCase();
+      
+      const filtradas = eletivas.filter(e => {
+        // Filtro por status
+        if (currentFiltro === 'ATIVA' && e.status !== 'ATIVA') return false;
+        if (currentFiltro === 'INATIVA' && e.status !== 'INATIVA') return false;
+
+        // Filtro por busca
+        if (termoBusca) {
+          const matchId = (e.idEletiva || '').toUpperCase().includes(termoBusca);
+          const matchNome = (e.nomeEletiva || '').toUpperCase().includes(termoBusca);
+          const matchProf = (e.nomeProfessor || '').toUpperCase().includes(termoBusca);
+          if (!matchId && !matchNome && !matchProf) return false;
+        }
+        return true;
+      });
+
+      if (filtradas.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 24px; color:#5f6368;">Nenhuma eletiva encontrada com os filtros selecionados.</td></tr>';
         return;
       }
       
-      eletivas.forEach(e => {
+      filtradas.forEach(e => {
         let diasHtml = '';
-        e.dias.forEach(d => {
+        (e.dias || []).forEach(d => {
           diasHtml += `<div class="tag">${d.dia}: ${d.periodos}</div>`;
         });
         
+        const isAtiva = e.status === 'ATIVA';
+        const badgeStatus = isAtiva 
+          ? '<span class="badge badge-ativa">🟢 ATIVA</span>' 
+          : '<span class="badge badge-inativa">⏸️ INATIVA</span>';
+
+        const professorHtml = isAtiva && e.nomeProfessor
+          ? `<b>${e.nomeProfessor}</b><br><small style="color:var(--text-sec);">${e.emailProfessor}</small>`
+          : `<span style="color:#80868b; font-style:italic; font-size:12px;">Sem professor (Guardada no Catálogo)</span>`;
+
+        let botoesAcao = '';
+        if (isAtiva) {
+          botoesAcao = `
+            <button class="icon-btn" onclick="editar('${e.idEletiva}')" title="Editar Eletiva"><i class="material-icons">edit</i></button>
+            <button class="icon-btn deactivate" onclick="abrirModalDesativar('${e.idEletiva}')" title="Desativar / Guardar para Próximos Semestres"><i class="material-icons">pause_circle_outline</i></button>
+            <button class="icon-btn delete" onclick="excluir('${e.idEletiva}')" title="Excluir Permanentemente"><i class="material-icons">delete</i></button>
+          `;
+        } else {
+          botoesAcao = `
+            <button class="icon-btn reactivate" onclick="prepararReativacao('${e.idEletiva}')" title="🚀 Reativar para o Semestre Atual"><i class="material-icons">play_circle_filled</i></button>
+            <button class="icon-btn" onclick="editar('${e.idEletiva}')" title="Editar Informações"><i class="material-icons">edit</i></button>
+            <button class="icon-btn delete" onclick="excluir('${e.idEletiva}')" title="Excluir Permanentemente"><i class="material-icons">delete</i></button>
+          `;
+        }
+
         let tr = document.createElement('tr');
+        if (!isAtiva) tr.style.backgroundColor = '#fafafa';
         tr.innerHTML = `
+          <td>${badgeStatus}</td>
           <td><strong>${e.idEletiva}</strong></td>
-          <td>${e.nomeEletiva}</td>
-          <td>${e.nomeProfessor}<br><small style="color:var(--text-sec)">${e.emailProfessor}</small></td>
-          <td>${diasHtml}</td>
-          <td style="text-align:center;">
-            <button class="icon-btn" onclick="editar('${e.idEletiva}')" title="Editar"><i class="material-icons">edit</i></button>
-            <button class="icon-btn delete" onclick="excluir('${e.idEletiva}')" title="Excluir"><i class="material-icons">delete</i></button>
+          <td><b>${e.nomeEletiva}</b></td>
+          <td>${professorHtml}</td>
+          <td>${diasHtml || '<span style="color:#999;">-</span>'}</td>
+          <td style="text-align:center; white-space:nowrap;">
+            ${botoesAcao}
           </td>
         `;
         tbody.appendChild(tr);
@@ -376,7 +885,7 @@
           </select>
         </div>
         <div class="form-group" style="flex:2;">
-          <label>AULAS</label>
+          <label>AULAS NO DIA</label>
           ${checkboxesHtml}
         </div>
         <button class="icon-btn delete" onclick="this.parentElement.remove()" style="margin-bottom:2px;"><i class="material-icons">close</i></button>
@@ -390,8 +899,16 @@
       const nomeProf = document.getElementById('nomeProfessor').value.trim();
       const emailProf = document.getElementById('emailProfessor').value.trim();
       
-      if (!nomeEl || !nomeProf || !emailProf) {
-        alert("Preencha todos os campos principais!");
+      if (!nomeEl) {
+        alert("Preencha o Nome da Eletiva!");
+        document.getElementById('nomeEletiva').focus();
+        return;
+      }
+
+      if (currentStatusForm === 'ATIVA' && (!nomeProf || !emailProf)) {
+        alert("Para eletivas ativas, é obrigatório preencher o Nome e o E-mail Google do Professor!");
+        if (!nomeProf) document.getElementById('nomeProfessor').focus();
+        else document.getElementById('emailProfessor').focus();
         return;
       }
       
@@ -400,7 +917,6 @@
       
       diaRows.forEach(row => {
         const dia = row.querySelector('.select-dia').value;
-        
         const checkboxes = row.querySelectorAll('.aula-cb:checked');
         const aulasArr = [];
         checkboxes.forEach(cb => {
@@ -419,28 +935,29 @@
       }
       
       const payload = {
+        status: currentStatusForm,
         idEletiva: idEl,
         nomeEletiva: nomeEl,
-        nomeProfessor: nomeProf,
-        emailProfessor: emailProf,
+        nomeProfessor: currentStatusForm === 'ATIVA' ? nomeProf : '',
+        emailProfessor: currentStatusForm === 'ATIVA' ? emailProf : '',
         dias: dias
       };
       
       const btn = document.getElementById('btnSalvar');
       btn.disabled = true;
-      btn.innerText = "Salvando...";
+      btn.innerHTML = `<i class="material-icons" style="font-size:18px">hourglass_empty</i> Salvando...`;
       
       google.script.run
         .withSuccessHandler(msg => {
           btn.disabled = false;
-          btn.innerText = "Salvar Eletiva";
+          btn.innerHTML = `<i class="material-icons" style="font-size:18px">save</i> Salvar Eletiva`;
           alert(msg);
           resetForm();
           carregarEletivas();
         })
         .withFailureHandler(err => {
           btn.disabled = false;
-          btn.innerText = "Salvar Eletiva";
+          btn.innerHTML = `<i class="material-icons" style="font-size:18px">save</i> Salvar Eletiva`;
           alert("Erro: " + err);
         })
         .salvarConfigEletiva(payload);
@@ -451,30 +968,160 @@
       if (!el) return;
       
       editingId = idStr;
-      document.getElementById('formTitle').innerText = "Editar Eletiva: " + idStr;
+      document.getElementById('formTitle').querySelector('span:first-child').innerText = "Editar Eletiva: " + el.nomeEletiva;
+      document.getElementById('badgeModo').innerText = `[ID: ${idStr}]`;
       
       const idEletivaInput = document.getElementById('idEletiva');
       idEletivaInput.value = el.idEletiva;
-      idEletivaInput.disabled = true; // Não deixa mudar o ID na edição
       
+      selecionarStatus(el.status || 'ATIVA');
       document.getElementById('nomeEletiva').value = el.nomeEletiva;
-      document.getElementById('nomeProfessor').value = el.nomeProfessor;
-      document.getElementById('emailProfessor').value = el.emailProfessor;
+      document.getElementById('nomeProfessor').value = el.nomeProfessor || '';
+      document.getElementById('emailProfessor').value = el.emailProfessor || '';
       
       const container = document.getElementById('diasContainer');
       container.innerHTML = '';
       
-      el.dias.forEach(d => {
-        addDiaRow(d.dia, d.periodos);
-      });
+      if (el.dias && el.dias.length > 0) {
+        el.dias.forEach(d => {
+          addDiaRow(d.dia, d.periodos);
+        });
+      } else {
+        addDiaRow();
+      }
       
       document.getElementById('btnCancelar').style.display = 'inline-flex';
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+
+    // Reativa uma eletiva guardada no catálogo
+    function prepararReativacao(idStr) {
+      const el = eletivas.find(e => e.idEletiva === idStr);
+      if (!el) return;
+
+      editingId = idStr;
+      document.getElementById('formTitle').querySelector('span:first-child').innerText = "🚀 Reativar Eletiva: " + el.nomeEletiva;
+      document.getElementById('badgeModo').innerText = `[Reativando para o Semestre Atual]`;
+
+      const idEletivaInput = document.getElementById('idEletiva');
+      idEletivaInput.value = el.idEletiva;
+
+      // Força status como ATIVA
+      selecionarStatus('ATIVA');
+      document.getElementById('nomeEletiva').value = el.nomeEletiva;
+      document.getElementById('nomeProfessor').value = '';
+      document.getElementById('emailProfessor').value = '';
+
+      const container = document.getElementById('diasContainer');
+      container.innerHTML = '';
+
+      if (el.dias && el.dias.length > 0) {
+        el.dias.forEach(d => {
+          addDiaRow(d.dia, d.periodos);
+        });
+      } else {
+        addDiaRow();
+      }
+
+      document.getElementById('btnCancelar').style.display = 'inline-flex';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      document.getElementById('nomeProfessor').focus();
+    }
+
+    // Modal de Desativação
+    function abrirModalDesativar(idStr) {
+      const el = eletivas.find(e => e.idEletiva === idStr);
+      if (!el) return;
+
+      eletivaParaDesativar = el;
+      document.getElementById('nomeEletivaDesativar').innerText = el.nomeEletiva;
+      document.getElementById('idEletivaDesativar').innerText = el.idEletiva;
+      
+      // Define ano e semestre atuais como padrão
+      const hj = new Date();
+      document.getElementById('desativarAnoLetivo').value = hj.getFullYear();
+      document.getElementById('desativarSemestre').value = (hj.getMonth() >= 6) ? "2" : "1";
+      
+      // Reseta campo e botão de confirmação
+      const inputConfirm = document.getElementById('inputFraseConfirmacao');
+      inputConfirm.value = '';
+      verificarFraseConfirmacao();
+      
+      atualizarDisplaysBackup();
+      atualizarPreviewBackup();
+      document.getElementById('modalDesativar').style.display = 'flex';
+      setTimeout(() => inputConfirm.focus(), 150);
+    }
+
+    function verificarFraseConfirmacao() {
+      const input = document.getElementById('inputFraseConfirmacao');
+      const btn = document.getElementById('btnConfirmarDesativacao');
+      const digitado = (input.value || '').trim().toUpperCase();
+      
+      if (digitado === 'DESATIVAR') {
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        btn.style.cursor = 'pointer';
+        input.style.borderColor = '#1e8e3e';
+        input.style.backgroundColor = '#e6f4ea';
+      } else {
+        btn.disabled = true;
+        btn.style.opacity = '0.5';
+        btn.style.cursor = 'not-allowed';
+        input.style.borderColor = '#ffb74d';
+        input.style.backgroundColor = 'white';
+      }
+    }
+
+    function atualizarPreviewBackup() {
+      if (!eletivaParaDesativar) return;
+      const ano = document.getElementById('desativarAnoLetivo').value || new Date().getFullYear();
+      const sem = document.getElementById('desativarSemestre').value || "1";
+      const nomeBackup = `${eletivaParaDesativar.idEletiva}_${ano}.${sem}`;
+      document.getElementById('previewNomeBackup').innerText = nomeBackup;
+    }
+
+    function fecharModalDesativar() {
+      eletivaParaDesativar = null;
+      document.getElementById('modalDesativar').style.display = 'none';
+    }
+
+    function confirmarDesativacao() {
+      if (!eletivaParaDesativar) return;
+
+      const inputConfirm = document.getElementById('inputFraseConfirmacao');
+      if ((inputConfirm.value || '').trim().toUpperCase() !== 'DESATIVAR') {
+        alert("Por favor, digite a palavra DESATIVAR para confirmar.");
+        inputConfirm.focus();
+        return;
+      }
+
+      const payload = {
+        idEletiva: eletivaParaDesativar.idEletiva,
+        anoLetivo: document.getElementById('desativarAnoLetivo').value || new Date().getFullYear(),
+        semestre: document.getElementById('desativarSemestre').value || "1",
+        moverBackup: true
+      };
+
+      fecharModalDesativar();
+
+      document.getElementById('global-loader').style.display = 'flex';
+      google.script.run
+        .withSuccessHandler(res => {
+          const msg = (typeof res === 'object' && res.message) ? res.message : res;
+          alert(msg);
+          carregarEletivas();
+        })
+        .withFailureHandler(err => {
+          alert("Erro ao desativar eletiva: " + err);
+          document.getElementById('global-loader').style.display = 'none';
+        })
+        .desativarConfigEletiva(payload);
+    }
     
     function excluir(idStr) {
-      if (confirm(`Atenção: Você tem certeza que deseja remover a eletiva ${idStr} das configurações? (Isso NÃO apagará as abas de chamada já existentes)`)) {
-        document.getElementById('global-loader').style.display = 'block';
+      if (confirm(`Atenção: Você tem certeza que deseja excluir PERMANENTEMENTE a eletiva ${idStr} das configurações?\n\n(Dica: Se quiser apenas guardar para o próximo semestre, use a opção 'Desativar / Guardar no Catálogo').`)) {
+        document.getElementById('global-loader').style.display = 'flex';
         google.script.run
           .withSuccessHandler(msg => {
             alert(msg);
@@ -490,11 +1137,13 @@
 
     function resetForm() {
       editingId = null;
-      document.getElementById('formTitle').innerText = "Nova Eletiva";
+      document.getElementById('formTitle').querySelector('span:first-child').innerText = "Nova Eletiva";
+      document.getElementById('badgeModo').innerText = "";
       
       const idEletivaInput = document.getElementById('idEletiva');
       idEletivaInput.value = "";
       
+      selecionarStatus('ATIVA');
       document.getElementById('nomeEletiva').value = "";
       document.getElementById('nomeProfessor').value = "";
       document.getElementById('emailProfessor').value = "";
@@ -506,24 +1155,7 @@
     }
 
     function filtrarTabela() {
-      const input = document.getElementById("searchInput").value.toUpperCase();
-      const table = document.getElementById("tabelaEletivas");
-      const tr = table.getElementsByTagName("tr");
-
-      for (let i = 1; i < tr.length; i++) {
-        let tds = tr[i].getElementsByTagName("td");
-        let found = false;
-        for (let j = 0; j < 3; j++) {
-          if (tds[j]) {
-            let txtValue = tds[j].textContent || tds[j].innerText;
-            if (txtValue.toUpperCase().indexOf(input) > -1) {
-              found = true;
-              break;
-            }
-          }
-        }
-        tr[i].style.display = found ? "" : "none";
-      }
+      renderTabela();
     }
   </script>
 </body>

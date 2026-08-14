@@ -25,6 +25,9 @@ function getAulasDoProfessor() {
   
   for (var i = 1; i < data.length; i++) {
     var row = data[i];
+    var status = row[0] ? row[0].toString().trim().toUpperCase() : 'ATIVA';
+    if (status === 'INATIVA') continue; // Eletivas inativas não possuem professor nem chamada ativa
+    
     var nomeProfessorCell = row[3] ? row[3].toString() : '';
     var emailProfessorCell = row[4] ? row[4].toString() : ''; 
     var emailsList = emailProfessorCell.split(',').map(function(e) {
@@ -162,7 +165,12 @@ function salvarNotasFinais(idEletiva, listaNotas) {
       var configData = configSheet.getDataRange().getValues();
       var temPermissao = false;
       for (var c = 1; c < configData.length; c++) {
-        if (configData[c][1] == idEletiva) {
+        if (configData[c][1] && configData[c][1].toString().trim().toUpperCase() === idEletiva.toString().trim().toUpperCase()) {
+          var status = configData[c][0] ? configData[c][0].toString().trim().toUpperCase() : 'ATIVA';
+          if (status === 'INATIVA') {
+            throw new Error("Esta eletiva está inativa no catálogo e não aceita lançamento de notas.");
+          }
+          
           var emailsList = (configData[c][4] || '').toString().toLowerCase().split(',').map(function(e) { 
             return e.trim(); 
           });

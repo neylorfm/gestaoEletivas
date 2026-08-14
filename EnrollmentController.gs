@@ -15,13 +15,14 @@ function getDadosEnturmacaoUI() {
     throw new Error("Planilhas de configuração (CONFIG_GERAL) ou base de alunos (BASE_ALUNOS) não encontradas.");
   }
   
-  // 1. Coleta Eletivas
+  // 1. Coleta Eletivas (Apenas eletivas ativas no semestre atual)
   var configData = configSheet.getDataRange().getValues();
   var eletivas = [];
   for (var i = 1; i < configData.length; i++) {
+    var status = configData[i][0] ? configData[i][0].toString().trim().toUpperCase() : 'ATIVA';
     var idEletiva = configData[i][1]; // Coluna B
     var nomeEletiva = configData[i][2]; // Coluna C
-    if (idEletiva) {
+    if (idEletiva && status !== 'INATIVA') {
       eletivas.push({
         id: idEletiva,
         nome: nomeEletiva

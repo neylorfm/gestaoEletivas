@@ -23,6 +23,7 @@ function onOpen() {
     .addItem('Registrar Eletivas', 'abrirModalConfigEletivas')
     .addItem('Enturmar Alunos', 'abrirModalEnturmacao')
     .addItem('Abrir Painel Diário', 'abrirSidebar')
+    .addItem('Monitorar Frequências por Mês', 'abrirModalMonitoramentoFrequencias')
     .addToUi();
 }
 
@@ -58,3 +59,15 @@ function abrirModalConfigEletivas() {
       
   SpreadsheetApp.getUi().showModalDialog(html, 'Gerenciador de Eletivas');
 }
+
+/**
+ * Abre o Modal HTML para monitoramento mensal de frequências registradas por eletiva ativa.
+ */
+function abrirModalMonitoramentoFrequencias() {
+  var html = HtmlService.createHtmlOutputFromFile('MonitoramentoFrequenciasUI')
+      .setWidth(960)
+      .setHeight(680);
+      
+  SpreadsheetApp.getUi().showModalDialog(html, 'Monitoramento de Frequências - Eletivas Ativas');
+}
+

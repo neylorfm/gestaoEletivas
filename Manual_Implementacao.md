@@ -90,7 +90,7 @@ Agora, vamos transformar essa planilha simples em um sistema inteligente.
 2. Uma nova guia do navegador será aberta. Este é o editor de códigos.
 3. No painel esquerdo, você verá um arquivo chamado `Código.gs`. Renomeie-o e crie os outros arquivos necessários. Para criar novos arquivos, clique no botão de **"+" (Adicionar arquivo)** ao lado da palavra "Arquivos".
 
-Você deve criar e colar os códigos do projeto **exatamente** nestes 11 arquivos:
+Você deve criar e colar os códigos do projeto **exatamente** nestes 12 arquivos:
 1. `Utils.gs` (Arquivo do tipo Script)
 2. `TeacherController.gs` (Arquivo do tipo Script)
 3. `Main.gs` (Arquivo do tipo Script)
@@ -102,6 +102,7 @@ Você deve criar e colar os códigos do projeto **exatamente** nestes 11 arquivo
 9. `EnrollmentUI.html` (Arquivo do tipo HTML)
 10. `ConfigEletivaController.gs` (Arquivo do tipo Script)
 11. `ConfigEletivaUI.html` (Arquivo do tipo HTML)
+12. `MonitoramentoFrequenciasUI.html` (Arquivo do tipo HTML)
 
 *Atenção: Apenas copie e cole os códigos previamente elaborados dentro de seus respectivos arquivos. Salve tudo clicando no ícone de disquete (Salvar projeto) ou usando o atalho `Ctrl + S`.*
 
@@ -134,7 +135,7 @@ Copie a **URL do App da Web** que será gerada. Este é o link que os professore
 3. Se um aluno faltar apenas no `M1`, basta o professor clicar no botão `M1` para desmarcá-lo (ele ficará vermelho indicando **Falta**). O botão `M2` continua verde (**Presente**).
 4. Se o aluno faltar o dia todo, o professor desmarca todos os botões.
 5. Ao clicar em **Salvar Chamada**, o sistema registrará no Google Sheets de forma inteligente as faltas apenas para os períodos que o professor deixou vermelhos!
-6. **Validação de Data:** O Web App do professor garante a consistência dos dados bloqueando o registro de frequência em dias da semana em que a eletiva não ocorre. Se a eletiva for de Segunda-feira e o professor selecionar uma data de Terça, o botão de Salvar será desabilitado com um aviso.
+6. **Validação de Data e Mudança de Horários:** O Web App do professor garante a consistência dos dados bloqueando o registro de frequência em dias da semana em que a eletiva não ocorre. Se a eletiva for de Segunda-feira e o professor selecionar uma data de Terça, o botão de Salvar será desabilitado com um aviso. *Em caso de alteração no cronograma da escola, certifique-se de registrar as chamadas atrasadas antes que a coordenação altere os dias da disciplina no sistema.*
 7. **Controle de Duplicidade:** Caso o professor tente salvar uma chamada para uma Eletiva, Data e Período que já foram registrados, o sistema emitirá um alerta perguntando se ele deseja sobrescrever a chamada anterior. Ao confirmar, a chamada antiga será substituída pela nova de forma segura.
 
 ### Como o Professor Lança ou Altera as Notas Finais
@@ -173,6 +174,10 @@ A Secretaria possui duas ferramentas principais operando direto da planilha: **G
    - Remove as enturmações de alunos na aba `ENTURMACAO` 100% automaticamente para liberar a turma para o novo semestre.
    > **📁 Como escolher ou trocar a Planilha de Backup:** No painel de eletivas, clique no botão **"📁 Planilha de Backup"** (ou no link dentro do próprio modal de desativação). Por padrão, o sistema cria automaticamente uma planilha chamada *"Backup - Histórico de Eletivas"* na mesma pasta do Google Drive. Se você preferir direcionar os backups para qualquer outra planilha existente, basta colar o link (URL) ou o ID dela e clicar em Salvar!
 5. **Reativar para um Novo Semestre:** Ao ofertar novamente uma eletiva de semestres anteriores, localize-a no catálogo e clique no botão **🚀 Reativar**. Os horários e o nome já virão carregados, bastando informar o(s) novo(s) professor(es) do semestre! Uma nova aba limpa será criada para o novo ciclo.
+6. **Alteração de Dias/Horários de Eletivas com Aulas em Andamento:**
+   - **Aviso Obrigatório ao Professor:** Se houver necessidade de alterar os dias ou períodos de uma eletiva em andamento, **avise o professor previamente** para que ele registre todas as **frequências pendentes/atrasadas** que ocorreram no dia antigo. Como o Web App valida o dia da semana no calendário, após a alteração na `CONFIG_GERAL`, o professor não conseguirá salvar chamadas em datas do dia anterior.
+   - **💡 Dica de Ouro do Administrador (Transição Suave):** Durante o período de mudança ou enquanto o professor coloca os lançamentos em dia, o administrador pode **adicionar o novo dia mantendo temporariamente o dia antigo** na configuração da eletiva (ex: *Dia 1: Segunda-feira* e *Dia 2: Quarta-feira*). Dessa forma, o professor consegue lançar as chamadas atrasadas no dia antigo e já realizar as novas chamadas no novo cronograma. Quando todas as pendências forem registradas, basta o administrador editar a eletiva e remover o dia antigo.
+   - *Nota de Integridade:* A alteração de dias/horários **não apaga** nenhuma chamada já registrada. O histórico passado permanece 100% preservado na aba da eletiva e nos relatórios da secretaria.
 
 ### Enturmar Alunos (Modal Interativo)
 1. Clique em **Gestão Eletivas > Enturmar Alunos**.
@@ -192,6 +197,17 @@ A Secretaria possui duas ferramentas principais operando direto da planilha: **G
 6. Clique em **Gerar Relatório (Pivot)**.
 7. O script fará o processamento e criará uma Tabela Cruzada na aba **`RELATORIO_SECRETARIA`**, com as datas em colunas, mostrando presenças (`0`) e faltas (ex: `2 F`).
 8. Passe o mouse sobre as células com registros para ver anotações detalhadas de qual Eletiva a presença ou falta se refere!
+
+### Monitorar Frequências por Mês (Eletivas Ativas)
+1. Clique em **Gestão Eletivas > Monitorar Frequências por Mês**.
+2. Uma janela modal moderna será aberta exibindo a listagem consolidada de todas as disciplinas/eletivas ativas do catálogo.
+3. Escolha o **Mês** (ex: Fevereiro) e o **Ano** desejados e clique em **Atualizar**.
+4. O painel exibirá imediatamente:
+   - **Cards com Indicadores (KPIs):** Total de eletivas ativas, quantidade e porcentagem de eletivas com chamadas registradas no mês, eletivas pendentes e total geral de aulas registradas.
+   - **Filtros Rápidos:** Botões para filtrar entre *Todas*, *Com Frequência* e *Pendentes*, além de uma barra de pesquisa por nome da disciplina, código ID ou professor.
+   - **Tabela com Contagem de Aulas:** Quantidade exata de aulas com frequência realizada por disciplina.
+   - **Detalhamento das Datas:** Botão *"Ver datas"* para abrir o calendário com as datas e períodos exatos em que cada professor realizou a chamada.
+   - **Botão de Impressão:** Permite gerar um relatório limpo e formatado em PDF ou papel para a coordenação pedagógica.
 
 ---
 

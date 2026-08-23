@@ -385,3 +385,192 @@ function obterDadosExportacaoSIGE(payload) {
   };
 }
 
+/**
+ * Coleta o monitoramento mensal de todas as eletivas ativas e a quantidade de aulas com frequências registradas.
+ * @param {number|string} mes Mês (0 a 11, sendo 0 = Janeiro)
+ * @param {number|string} ano Ano (ex: 2026)
+ * @returns {Object} { ano, mes, resumo: { totalEletivasAtivas, comFrequencia, semFrequencia, totalAulasRegistradas }, eletivas: Array }
+ */
+function obterMonitoramentoFrequenciasEletivas(mes, ano) {
+  var mesInt = parseInt(mes, 10);
+  if (isNaN(mesInt) || mesInt < 0 || mesInt > 11) {
+    mesInt = (new Date()).getMonth();
+  }
+  
+  var anoInt = parseInt(ano, 10);
+  if (isNaN(anoInt) || anoInt < 2000) {
+    anoInt = (new Date()).getFullYear();
+  }
+  
+  var dtInicio = new Date(anoInt, mesInt, 1, 0, 0, 0, 0);
+  var dtFim = new Date(anoInt, mesInt + 1, 0, 23, 59, 59, 999);
+  
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  
+  // 1. Mapear contagem de alunos enturmados por Eletiva
+  var entSheet = getPlanilha('ENTURMACAO');
+  var totalAlunosMap = {};
+  if (entSheet && entSheet.getLastRow() >= 2) {
+    var entData = entSheet.getDataRange().getValues();
+    for (var e = 1; e < entData.length; e++) {
+      var mat = entData[e][0];
+      var idEletivaEnt = entData[e][3] ? entData[e][3].toString().trim() : '';
+      if (mat && idEletivaEnt) {
+        totalAlunosMap[idEletivaEnt] = (totalAlunosMap[idEletivaEnt] || 0) + 1;
+      }
+    }
+  }
+  
+  // 2. Mapear Eletivas Ativas na CONFIG_GERAL
+  var configSheet = getPlanilha('CONFIG_GERAL');
+  if (!configSheet || configSheet.getLastRow() < 2) {
+    return {
+      ano: anoInt,
+      mes: mesInt,
+      resumo: {
+        totalEletivasAtivas: 0,
+        comFrequencia: 0,
+        semFrequencia: 0,
+        totalAulasRegistradas: 0
+      },
+      eletivas: []
+    };
+  }
+  
+  var configData = configSheet.getDataRange().getValues();
+  var eletivasAtivas = [];
+  
+  for (var i = 1; i < configData.length; i++) {
+    var row = configData[i];
+    var rawStatus = row[0] ? row[0].toString().trim().toUpperCase() : 'ATIVA';
+    if (rawStatus === 'INATIVA') continue; // Apenas ativas
+    
+    var idEletiva = row[1] ? row[1].toString().trim() : '';
+    if (!idEletiva) continue;
+    
+    var nomeEletiva = row[2] ? row[2].toString().trim() : ('Eletiva ' + idEletiva);
+    var nomeProfessor = row[3] ? row[3].toString().trim() : '';
+    var emailProfessor = row[4] ? row[4].toString().trim() : '';
+    
+    // Processar dias e períodos cadastrados
+    var qtdDias = parseInt(row[5], 10) || 0;
+    var diasInfoArr = [];
+    var idx = 6;
+    for (var d = 0; d < qtdDias; d++) {
+      var diaNome = row[idx] ? row[idx].toString().trim() : '';
+      var periodosStr = row[idx + 1] ? row[idx + 1].toString().trim() : '';
+      if (diaNome) {
+        var periodosFormatados = periodosStr ? periodosStr.toUpperCase().replace(/\s+/g, '') : '';
+        diasInfoArr.push(diaNome + (periodosFormatados ? '(' + periodosFormatados + ')' : ''));
+      }
+      idx += 2;
+    }
+    var diasFormatadosStr = diasInfoArr.join(' | ') || 'A definir';
+    
+    // 3. Processar Aba Dinâmica de Chamadas da Eletiva
+    var abaEletiva = ss.getSheetByName(idEletiva);
+    var aulasUnicasMap = {}; // idAula -> { dataStr, periodo, rowData, qtdFaltas, presencaTotal }
+    var datasAgrupadasMap = {}; // dataStr -> [periodo1, periodo2...]
+    
+    if (abaEletiva && abaEletiva.getLastRow() >= 2) {
+      var maxRows = abaEletiva.getLastRow();
+      var sheetValues = abaEletiva.getRange(2, 1, maxRows - 1, 9).getValues();
+      
+      for (var r = 0; r < sheetValues.length; r++) {
+        var rowChamada = sheetValues[r];
+        var rawData = rowChamada[1];
+        if (!rawData) continue;
+        
+        var dateObj = (rawData instanceof Date) ? rawData : new Date(rawData);
+        if (isNaN(dateObj.getTime())) continue;
+        
+        if (dateObj >= dtInicio && dateObj <= dtFim) {
+          var idAula = rowChamada[0] ? rowChamada[0].toString().trim() : ('AULA_' + r);
+          var periodo = rowChamada[2] ? rowChamada[2].toString().trim() : '';
+          var ocorrencia = rowChamada[8] ? rowChamada[8].toString().trim().toUpperCase() : '';
+          
+          var diaFormatado = String(dateObj.getDate()).padStart(2, '0');
+          var mesFormatado = String(dateObj.getMonth() + 1).padStart(2, '0');
+          var dataStr = diaFormatado + '/' + mesFormatado;
+          
+          if (!aulasUnicasMap[idAula]) {
+            aulasUnicasMap[idAula] = {
+              idAula: idAula,
+              data: dateObj,
+              dataStr: dataStr,
+              periodo: periodo,
+              presencaTotal: (ocorrencia === 'PRESENÇA TOTAL'),
+              qtdFaltas: (typeof rowChamada[3] === 'number') ? rowChamada[3] : 0
+            };
+            
+            if (!datasAgrupadasMap[dataStr]) {
+              datasAgrupadasMap[dataStr] = [];
+            }
+            if (periodo && datasAgrupadasMap[dataStr].indexOf(periodo) === -1) {
+              datasAgrupadasMap[dataStr].push(periodo);
+            }
+          }
+        }
+      }
+    }
+    
+    var idsAulas = Object.keys(aulasUnicasMap);
+    var qtdAulasRegistradas = idsAulas.length;
+    
+    // Lista ordenada das datas registradas com períodos
+    var datasRegistradas = [];
+    var chavesDatas = Object.keys(datasAgrupadasMap);
+    for (var dt = 0; dt < chavesDatas.length; dt++) {
+      var dStr = chavesDatas[dt];
+      var pers = datasAgrupadasMap[dStr];
+      datasRegistradas.push(dStr + (pers.length > 0 ? ' (' + pers.join(', ') + ')' : ''));
+    }
+    
+    var statusRegistro = (qtdAulasRegistradas > 0) ? 'REGISTRADA' : 'PENDENTE';
+    
+    eletivasAtivas.push({
+      idEletiva: idEletiva,
+      nomeEletiva: nomeEletiva,
+      nomeProfessor: nomeProfessor || 'Não informado',
+      emailProfessor: emailProfessor,
+      diasInfo: diasFormatadosStr,
+      totalAlunos: totalAlunosMap[idEletiva] || 0,
+      qtdAulasRegistradas: qtdAulasRegistradas,
+      datasRegistradas: datasRegistradas,
+      statusRegistro: statusRegistro
+    });
+  }
+  
+  // Ordenar eletivas por Nome da Eletiva
+  eletivasAtivas.sort(function(a, b) {
+    return a.nomeEletiva.localeCompare(b.nomeEletiva);
+  });
+  
+  // Calcular métricas de resumo
+  var totalAtivas = eletivasAtivas.length;
+  var comFrequencia = 0;
+  var totalAulasMes = 0;
+  
+  for (var k = 0; k < eletivasAtivas.length; k++) {
+    if (eletivasAtivas[k].qtdAulasRegistradas > 0) {
+      comFrequencia++;
+      totalAulasMes += eletivasAtivas[k].qtdAulasRegistradas;
+    }
+  }
+  
+  var semFrequencia = totalAtivas - comFrequencia;
+  
+  return {
+    ano: anoInt,
+    mes: mesInt,
+    resumo: {
+      totalEletivasAtivas: totalAtivas,
+      comFrequencia: comFrequencia,
+      semFrequencia: semFrequencia,
+      totalAulasRegistradas: totalAulasMes
+    },
+    eletivas: eletivasAtivas
+  };
+}
+
+

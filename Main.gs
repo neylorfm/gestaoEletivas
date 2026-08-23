@@ -43,8 +43,8 @@ function abrirSidebar() {
  */
 function abrirModalEnturmacao() {
   var html = HtmlService.createHtmlOutputFromFile('EnrollmentUI')
-      .setWidth(850)
-      .setHeight(650);
+      .setWidth(1150)
+      .setHeight(720);
       
   SpreadsheetApp.getUi().showModalDialog(html, 'Gerenciador de Enturmação');
 }

@@ -282,3 +282,99 @@ function salvarEnturmacaoTurma(turma, idEletiva) {
   }
   return msg;
 }
+
+/**
+ * Enturma múltiplos alunos selecionados (por array de matrículas) em uma eletiva em lote.
+ * Ignora alunos que já estejam matriculados nesta mesma eletiva para evitar duplicações.
+ * @param {Array<string>} matriculas Lista de matrículas selecionadas
+ * @param {string} idEletiva ID da Eletiva
+ * @returns {string} Mensagem com o resultado
+ */
+function salvarEnturmacaoMultiplos(matriculas, idEletiva) {
+  if (!matriculas || !Array.isArray(matriculas) || matriculas.length === 0) {
+    throw new Error("Nenhum aluno foi selecionado para enturmar.");
+  }
+  if (!idEletiva) {
+    throw new Error("Selecione uma eletiva válida.");
+  }
+
+  var sheet = getPlanilha('ENTURMACAO');
+  if (!sheet) throw new Error("Aba ENTURMACAO não encontrada.");
+  
+  var baseSheet = getPlanilha('BASE_ALUNOS');
+  if (!baseSheet) throw new Error("Aba BASE_ALUNOS não encontrada.");
+  
+  // Garante cabeçalho na coluna E se não existir
+  if (!sheet.getRange(1, 5).getValue()) {
+    sheet.getRange(1, 5).setValue("Nota_Final");
+  }
+
+  // 1. Mapeia dados da BASE_ALUNOS por matrícula
+  var baseData = baseSheet.getDataRange().getValues();
+  var alunosBaseMap = {};
+  for (var j = 1; j < baseData.length; j++) {
+    var mat = baseData[j][0] ? baseData[j][0].toString().trim() : '';
+    if (mat) {
+      alunosBaseMap[mat] = {
+        nome: baseData[j][1],
+        turma: baseData[j][2]
+      };
+    }
+  }
+
+  // 2. Mapeia matrículas já enturmadas nesta eletiva
+  var entData = sheet.getDataRange().getValues();
+  var jaMatriculadosMap = {};
+  for (var i = 1; i < entData.length; i++) {
+    var m = entData[i][0] ? entData[i][0].toString().trim() : '';
+    var el = entData[i][3];
+    if (m && el == idEletiva) {
+      jaMatriculadosMap[m] = true;
+    }
+  }
+
+  // 3. Monta novas linhas para batch write
+  var novasLinhas = [];
+  var qtdIgnorados = 0;
+
+  for (var k = 0; k < matriculas.length; k++) {
+    var matStr = matriculas[k] ? matriculas[k].toString().trim() : '';
+    if (!matStr) continue;
+
+    if (jaMatriculadosMap[matStr]) {
+      qtdIgnorados++;
+    } else {
+      var dadosAluno = alunosBaseMap[matStr] || { nome: "", turma: "" };
+      novasLinhas.push([matStr, dadosAluno.nome, dadosAluno.turma, idEletiva, ""]);
+      jaMatriculadosMap[matStr] = true;
+    }
+  }
+
+  if (novasLinhas.length === 0) {
+    return "Todos os " + matriculas.length + " aluno(s) selecionados já estão matriculados nesta eletiva.";
+  }
+
+  // 4. Descobre primeira linha livre na coluna A
+  var columnA = sheet.getRange("A:A").getValues();
+  var startRow = 1;
+  for (var r = 0; r < columnA.length; r++) {
+    if (columnA[r][0] === "") {
+      startRow = r + 1;
+      break;
+    }
+  }
+  if (startRow === 1) startRow = columnA.length + 1;
+
+  // 5. Escreve em lote
+  sheet.getRange(startRow, 1, novasLinhas.length, 5).setValues(novasLinhas);
+
+  if (typeof atualizarControleTurmas === 'function') {
+    atualizarControleTurmas(idEletiva);
+  }
+
+  var msg = novasLinhas.length + " aluno(s) enturmado(s) com sucesso na eletiva!";
+  if (qtdIgnorados > 0) {
+    msg += " (" + qtdIgnorados + " já estavam matriculados).";
+  }
+  return msg;
+}

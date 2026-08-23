@@ -6,19 +6,20 @@ Guia operacional passo a passo para **Professores, Coordenadores e Equipe da Sec
 
 ## 🧭 Sumário
 1. [Módulo do Professor (Web App)](#1-módulo-do-professor-web-app)
-   - [Acesso ao Aplicativo](#11-acesso-ao-aplicativo)
-   - [Registro de Frequência Diária](#12-registro-de-frequência-diária)
-   - [Lançamento e Edição de Notas Finais](#13-lançamento-e-edição-de-notas-finais)
+   - [1.1. Acesso ao Aplicativo](#11-acesso-ao-aplicativo)
+   - [1.2. Registro de Frequência Diária](#12-registro-de-frequência-diária)
+   - [1.3. Lançamento e Edição de Notas Finais](#13-lançamento-e-edição-de-notas-finais)
 2. [Módulo da Secretaria e Coordenação (Planilha Google)](#2-módulo-da-secretaria-e-coordenação)
-   - [Menu Gestão Eletivas](#21-menu-gestão-eletivas)
-   - [Cadastro e Gestão de Eletivas (Catálogo Permanente)](#22-cadastro-e-gestão-de-eletivas)
-   - [Enturmação de Alunos (Modal Inteligente)](#23-enturmação-de-alunos)
-   - [Geração de Relatórios Cruzados (Pivot-Table)](#24-geração-de-relatórios-cruzados-pivot)
-   - [Monitoramento Mensal de Frequências (KPIs)](#25-monitoramento-mensal-de-frequências)
+   - [2.1. Menu Gestão Eletivas](#21-menu-gestão-eletivas)
+   - [2.2. Cadastro e Gestão de Eletivas](#22-cadastro-e-gestão-de-eletivas)
+   - [2.3. 📁 Arquivamento de Eletivas e Backup Automático (Frequências e Notas)](#23-arquivamento-de-eletivas-e-backup-automático-frequências-e-notas)
+   - [2.4. Enturmação de Alunos (Modal Inteligente)](#24-enturmação-de-alunos)
+   - [2.5. Geração de Relatórios Cruzados (Pivot-Table)](#25-geração-de-relatórios-cruzados-pivot)
+   - [2.6. Monitoramento Mensal de Frequências (KPIs)](#26-monitoramento-mensal-de-frequências)
 3. [Exportação Automática para o SIGE](#3-exportação-automática-para-o-sige)
-   - [Instalação do Botão Favorito no Navegador](#31-instalação-do-botão-favorito-no-navegador)
-   - [Copiando os Dados da Planilha](#32-copiando-os-dados-da-planilha)
-   - [Preenchimento em 1 Clique no SIGE](#33-preenchimento-em-1-clique-no-sige)
+   - [3.1. Instalação do Botão Favorito no Navegador](#31-instalação-do-botão-favorito-no-navegador)
+   - [3.2. Copiando os Dados da Planilha](#32-copiando-os-dados-da-planilha)
+   - [3.3. Preenchimento em 1 Clique no SIGE](#33-preenchimento-em-1-clique-no-sige)
 
 ---
 
@@ -66,15 +67,42 @@ Ao abrir a planilha no Google Sheets, localize o menu superior **"🏫 Gestão E
 Clique em **Gestão Eletivas > Registrar Eletivas**:
 1. **Painel de Indicadores:** Mostra o total de eletivas, ativas no semestre e inativas no catálogo.
 2. **Criar Nova Eletiva:** Insira o nome, professores responsáveis (e-mails), dias da semana e horários/períodos.
-3. **Desativar e Arquivar com Backup:** Ao término do semestre, clique em **⏸️ Desativar**:
-   - O sistema move automaticamente a aba de chamadas para a planilha de backup com resumo consolidado (total de aulas, faltas e percentual);
-   - Limpa a aba de enturmação para o próximo ciclo;
-   - Guarda a eletiva no catálogo permanente pronta para ser reativada no futuro.
-4. **Reativar Eletiva:** No catálogo, clique em **🚀 Reativar**, atualize os professores responsáveis e uma nova aba limpa será aberta para o novo semestre.
+3. **Reativar para Novo Semestre:** No catálogo permanente, localize a disciplina de semestres anteriores e clique no botão **🚀 Reativar**, atualize os professores responsáveis e uma nova aba limpa será aberta automaticamente.
 
 ---
 
-### 2.3. Enturmação de Alunos
+### 2.3. 📁 Arquivamento de Eletivas e Backup Automático (Frequências e Notas)
+
+Quando o semestre letivo termina ou uma eletiva deixa de ser ofertada, o sistema realiza o **arquivamento e backup 100% automatizado** de todo o histórico de frequências, aulas e notas:
+
+#### 🛑 Como Desativar e Arquivar uma Eletiva:
+1. Acesse o menu **🏫 Gestão Eletivas > Registrar Eletivas**.
+2. Na lista de eletivas ativas, localize a disciplina e clique no botão **⏸️ Desativar**.
+3. Uma janela de confirmação solicitará:
+   - **Ano Letivo:** (ex: `2026`);
+   - **Semestre:** (ex: `1` ou `2`);
+   - **Palavra de Confirmação:** Digite exatamente **`DESATIVAR`** para liberar o botão.
+4. Clique em **Confirmar Desativação**.
+
+#### 📦 O que o Sistema Faz Automaticamente no Backup:
+- **Transferência Segura de Dados:** Move a aba inteira da eletiva da planilha principal para a **Planilha Externa de Backup**, renomeando a aba no formato padrão: `ID_Ano.Semestre` (ex: `ELET10001_2026.2`).
+- **Geração do Quadro de Consolidação (Colunas K a N):**
+  - **Identificação do Professor:** Registra o nome da eletiva e de todos os professores responsáveis;
+  - **Total de Aulas:** Quantidade total de aulas ministradas no semestre;
+  - **Consolidado por Aluno:** Matrícula, nome, total de faltas acumuladas e o **cálculo dinâmico da porcentagem de faltas (`% de FALTAS`)**;
+  - **Preservação de Notas Finais:** Todo o histórico de notas e frequências fica permanentemente resguardado no backup externo.
+- **Limpeza Automática:** Remove a aba da planilha principal para mantê-la sempre rápida e leve.
+- **Liberação da Turma:** Remove automaticamente os vínculos dos alunos na aba `ENTURMACAO` para o próximo semestre.
+- **Catálogo Permanente:** A disciplina passa para o status `INATIVA` no catálogo, preservando os horários e configurações para reativação futura em 1 clique.
+
+#### 🗂️ Como Configurar ou Alterar a Planilha de Backup:
+1. No painel de eletivas, clique no botão **"📁 Planilha de Backup"** (ou no link dentro da janela de desativação).
+2. O sistema cria por padrão uma planilha chamada *"Backup - Histórico de Eletivas"* no Google Drive.
+3. Se você desejar apontar para outra planilha de histórico da escola, basta **colar a URL ou o ID** dela e clicar em **Salvar**.
+
+---
+
+### 2.4. Enturmação de Alunos
 Clique em **Gestão Eletivas > Enturmar Alunos**:
 
 1. **Passo 1: Selecionar a Eletiva:** Digite qualquer parte do nome ou código da eletiva para filtrar instantaneamente.
@@ -96,7 +124,7 @@ Clique em **Gestão Eletivas > Enturmar Alunos**:
 
 ---
 
-### 2.4. Geração de Relatórios Cruzados (Pivot)
+### 2.5. Geração de Relatórios Cruzados (Pivot)
 Clique em **Gestão Eletivas > Abrir Painel Diário**:
 1. Na barra lateral direita, escolha a visão: por **Turma Regular** ou por **Eletiva**.
 2. Selecione o período (**Por Mês** ou **Intervalo de Datas**).
@@ -106,7 +134,7 @@ Clique em **Gestão Eletivas > Abrir Painel Diário**:
 
 ---
 
-### 2.5. Monitoramento Mensal de Frequências
+### 2.6. Monitoramento Mensal de Frequências
 Clique em **Gestão Eletivas > Monitorar Frequências por Mês**:
 1. Selecione o **Mês** e o **Ano** e clique em **Atualizar**.
 2. Visualize os cartões com KPIs (Eletivas ativas, com chamadas realizadas, pendentes e total de aulas).

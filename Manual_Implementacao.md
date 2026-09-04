@@ -98,6 +98,28 @@ Quando criadas pelo sistema, as abas das eletivas possuem a seguinte estrutura:
 
 ---
 
+#### Aba de Apoio Pedagógico: `REGISTRO_ATIVIDADES_NOTAS` (Gerenciada Automaticamente)
+Criada e atualizada automaticamente pelo Web App do Professor para registro de atividades e anotações individuais:
+| Coluna A | Coluna B | Coluna C | Coluna D | Coluna E | Coluna F | Coluna G |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **ID_Eletiva** | **Data** | **Matricula** | **Tem_Atividade_Aula** | **Fez_Atividade** | **Anotacao** | **Atualizado_Em** |
+
+- **`Matricula = "__AULA__"`**: Registro mestre informando se a aula teve atividade (`SIM` ou `NAO`).
+- **`Fez_Atividade`**: Status do aluno naquela data (`SIM` [verde] ou `NAO` [vermelho]).
+- **`Anotacao`**: Observações pedagógicas registradas pelo professor no modal da aula.
+
+---
+
+#### Aba de Apoio Pedagógico: `CONFIG_NOTAS` (Gerenciada Automaticamente)
+Criada e mantida automaticamente pelo Web App do Professor com as regras de composição da Nota Geral:
+| Coluna A | Coluna B | Coluna C | Coluna D | Coluna E |
+| :--- | :--- | :--- | :--- | :--- |
+| **ID_Eletiva** | **Ativo_Freq** | **Max_Pontos_Freq** | **Ativo_Ativ** | **Max_Pontos_Ativ** |
+
+- Permite que cada eletiva possua sua própria proporção de pontos extras por frequência e atividades sem afetar o lançamento final de notas pela secretaria.
+
+---
+
 ## 3. Configuração do Google Apps Script
 
 ### 3.1. Acessando o Editor

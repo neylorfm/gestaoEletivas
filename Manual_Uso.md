@@ -8,7 +8,9 @@ Guia operacional passo a passo para **Professores, Coordenadores e Equipe da Sec
 1. [Módulo do Professor (Web App)](#1-módulo-do-professor-web-app)
    - [1.1. Acesso ao Aplicativo](#11-acesso-ao-aplicativo)
    - [1.2. Registro de Frequência Diária](#12-registro-de-frequência-diária)
-   - [1.3. Lançamento e Edição de Notas Finais](#13-lançamento-e-edição-de-notas-finais)
+   - [1.3. Registro de Atividades da Aula](#13-registro-de-atividades-da-aula)
+   - [1.4. Anotações Individuais por Aluno na Chamada](#14-anotações-individuais-por-aluno-na-chamada)
+   - [1.5. Gerenciamento Avançado da Nota Geral (Frequência, Atividades e Ajustes de 0.1)](#15-gerenciamento-avançado-da-nota-geral)
 2. [Módulo da Secretaria e Coordenação (Planilha Google)](#2-módulo-da-secretaria-e-coordenação)
    - [2.1. Menu Gestão Eletivas](#21-menu-gestão-eletivas)
    - [2.2. Cadastro e Gestão de Eletivas](#22-cadastro-e-gestão-de-eletivas)
@@ -24,6 +26,11 @@ Guia operacional passo a passo para **Professores, Coordenadores e Equipe da Sec
 ---
 
 ## 1. Módulo do Professor (Web App)
+
+> [!NOTE]
+> **Autonomia Pedagógica do Professor & Simplicidade para a Secretaria:**
+> As ferramentas de registro de atividades de aula, anotações de alunos e composição de pontuações de frequência são de **uso exclusivo do professor** no Web App para apoiar a avaliação contínua.
+> Para a **Secretaria**, nada muda: ela continua manipulando unicamente a **Nota Geral consolidada** (gerando os relatórios cruzados e alimentando o SIGE com a nota final).
 
 ### 1.1. Acesso ao Aplicativo
 1. Abra o link do Web App enviado pela coordenação escolar no celular ou computador.
@@ -46,13 +53,62 @@ Guia operacional passo a passo para **Professores, Coordenadores e Equipe da Sec
 
 ---
 
-### 1.3. Lançamento e Edição de Notas Finais
-1. No menu superior, clique na aba **"📝 Lançamento de Notas Finais"**.
-2. Selecione a sua Eletiva.
-3. Digite a nota final de cada aluno no campo correspondente (valores entre **0.0 e 10.0** com 1 casa decimal, ex: `8.5`, `10.0`).
-4. Alunos com notas alteradas receberão a etiqueta amarela **"MODIFICADA"**.
-5. Use a barra de pesquisa rápida para localizar estudantes por nome ou matrícula.
-6. Clique em **"💾 Salvar Todas as Notas"**.
+### 1.3. Registro de Atividades da Aula
+Cada chamada realizada pode ter uma **Atividade** vinculada para pontuação contínua:
+1. No painel esquerdo da aula, localize o botão **"📋 Ativar Atividade nesta Aula"** (padrão: desativada).
+2. Ao clicar no botão, ele passa para o estado **"✅ Atividade Ativada"**:
+   - Automaticamente, todos os alunos da turma recebem o botão de atividade ativado em **verde (`🟢 Fez Atividade`)**.
+3. **Alternância Individual:** Se algum aluno não entregou ou não realizou a atividade, clique diretamente no botão dele para alterná-lo para **vermelho (`🔴 Não Fez`)**.
+4. Clicando novamente, o status volta para verde.
+5. Ao salvar a chamada, o status das atividades daquela data é gravado no banco de dados.
+
+---
+
+### 1.4. Anotações Individuais por Aluno na Chamada
+Em cada chamada, o professor pode registrar observações qualitativas para qualquer estudante:
+1. No cartão do aluno, clique no botão **"💬 Anotação"** (estado neutro quando vazio).
+2. Uma janela modal será aberta:
+   - Digite a observação da aula (ex: *"Apresentou ótimo domínio no seminário"*, *"Chegou atrasado e sem material"*, etc.).
+   - Clique em **"💾 Salvar Anotação"** (ou use o botão "🗑️ Excluir" para apagar uma observação anterior).
+3. **Destaque Visual:** Ao salvar, o botão do aluno fica destacado com etiqueta **"📝 Anotado"** e exibe o resumo da nota ao passar o cursor.
+4. Ao clicar em **"Salvar Chamada"**, todas as anotações registradas são persistidas junto com a frequência do dia.
+
+---
+
+### 1.5. Gerenciamento Avançado da Nota Geral
+
+Na aba **"📝 Lançamento de Notas Finais"**, o professor tem controle total sobre a Nota Geral dos estudantes:
+
+#### A. Composição Automática com Frequência e Atividades
+No topo da tela de notas, clique em **"⚙️ Composição da Nota Geral (Frequência & Atividades)"**:
+1. **Pontuação de Frequência:**
+   - Ative a opção e defina a pontuação máxima (ex: `2.0` pontos).
+   - O sistema calcula os pontos de forma estritamente proporcional à taxa de presença do aluno:
+     - 100% de presença = pontuação máxima integral (`+2.0 pts`);
+     - 80% de presença = `+1.6 pts` proporcionais.
+2. **Pontuação de Atividades:**
+   - Ative a opção e defina a pontuação máxima (ex: `2.0` pontos).
+   - O sistema calcula os pontos proporcionalmente ao total de atividades aplicadas no período:
+     - Fez 4 de 4 atividades = pontuação máxima integral (`+2.0 pts`);
+     - Fez 2 de 4 atividades = `+1.0 pt` proporcional.
+3. Clique em **"💾 Salvar Regras"** para guardar a configuração da sua eletiva.
+4. Clique em **"⚡ Calcular Notas com Composição"** para somar automaticamente os pontos calculados de frequência e atividades à nota dos alunos.
+
+#### B. Consulta Consolidada de Anotações do Aluno
+Em cada cartão de aluno na lista de notas:
+1. O cartão exibe a quantidade de anotações já feitas (ex: **`👁️ Anotações (3)`**).
+2. Clique no botão para abrir o **Modal de Histórico do Aluno**:
+   - Veja o resumo de frequência (taxa % e aulas assistidas);
+   - Veja o total de atividades concluídas;
+   - Leia a linha do tempo cronológica com todas as observações registradas nas aulas passadas.
+
+#### C. Ajuste Rápido da Nota Geral por Incrementos de 0.1 Pontos
+O professor pode ajustar a Nota Geral com máxima agilidade:
+1. Tanto na grade de notas quanto dentro do Modal de Histórico do Aluno, utilize os botões:
+   - **`[ -0.1 ]`**: Diminui a nota em 0.1 ponto (limite inferior `0.0`).
+   - **`[ +0.1 ]`**: Aumenta a nota em 0.1 ponto (limite superior `10.0`).
+   - Ou digite diretamente no campo de texto se preferir.
+2. Ao finalizar os ajustes, clique em **"💾 Salvar Todas as Notas"**. A nota geral é atualizada na aba `ENTURMACAO` da planilha, ficando imediatamente pronta para os relatórios da secretaria e envio ao SIGE.
 
 ---
 

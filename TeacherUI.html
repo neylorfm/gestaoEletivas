@@ -701,6 +701,477 @@
     .btn-confirm:hover {
       background-color: var(--primary-hover);
     }
+
+    /* Botão e Toggle de Atividade na Aula */
+    .btn-toggle-atividade {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      background-color: var(--bg-color);
+      border: 2px dashed var(--border-color);
+      color: var(--text-color);
+      margin-top: 4px;
+    }
+    .btn-toggle-atividade:hover {
+      border-color: var(--primary-color);
+      background-color: rgba(37, 99, 235, 0.05);
+    }
+    .btn-toggle-atividade.active {
+      background-color: #e6f4ea;
+      border: 2px solid #34a853;
+      color: #137333;
+      box-shadow: 0 2px 4px rgba(52, 168, 83, 0.15);
+    }
+    body.dark-mode .btn-toggle-atividade.active {
+      background-color: #134e27;
+      border-color: #34a853;
+      color: #a8fabc;
+    }
+
+    /* Ações extras no Aluno Card (Atividade & Anotação) */
+    .aluno-card-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .btn-aluno-atividade {
+      padding: 0.4rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      border: 1px solid transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+    .btn-aluno-atividade.disabled {
+      opacity: 0.4;
+      background-color: var(--bg-color);
+      border-color: var(--border-color);
+      color: var(--text-color);
+      cursor: not-allowed;
+    }
+    .btn-aluno-atividade.fez {
+      background-color: #e6f4ea;
+      color: #137333;
+      border-color: #34a853;
+    }
+    body.dark-mode .btn-aluno-atividade.fez {
+      background-color: #134e27;
+      color: #a8fabc;
+      border-color: #34a853;
+    }
+    .btn-aluno-atividade.nao-fez {
+      background-color: #fce8e6;
+      color: #c5221f;
+      border-color: #ea4335;
+    }
+    body.dark-mode .btn-aluno-atividade.nao-fez {
+      background-color: #5c1313;
+      color: #fca5a5;
+      border-color: #ea4335;
+    }
+
+    .btn-aluno-anotacao {
+      padding: 0.4rem 0.7rem;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s ease;
+      background-color: var(--bg-color);
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
+      user-select: none;
+    }
+    .btn-aluno-anotacao:hover {
+      border-color: var(--primary-color);
+      background-color: rgba(37, 99, 235, 0.06);
+    }
+    .btn-aluno-anotacao.preenchido {
+      background-color: #fef7e0;
+      color: #b06000;
+      border-color: #f9ab00;
+      font-weight: 700;
+    }
+    body.dark-mode .btn-aluno-anotacao.preenchido {
+      background-color: #4a3800;
+      color: #fde293;
+      border-color: #f9ab00;
+    }
+
+    /* Estilos do Painel de Configuração de Notas */
+    .panel-config-notas {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      margin-bottom: 1.5rem;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .panel-config-header {
+      padding: 0.9rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+      background-color: rgba(128, 128, 128, 0.04);
+      transition: background-color 0.2s;
+    }
+    .panel-config-header:hover {
+      background-color: rgba(128, 128, 128, 0.08);
+    }
+    .panel-config-body {
+      padding: 1.25rem;
+      border-top: 1px solid var(--border-color);
+    }
+    .config-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    @media (min-width: 800px) {
+      .config-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    .config-card {
+      background-color: var(--bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1rem 1.15rem;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .config-card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .config-card-title {
+      font-weight: 700;
+      font-size: 0.98rem;
+    }
+    .config-desc {
+      font-size: 0.8rem;
+      opacity: 0.75;
+      line-height: 1.35;
+    }
+    .config-input-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+    .input-config-pts {
+      width: 75px;
+      padding: 5px 8px;
+      text-align: center;
+      font-size: 0.95rem;
+      font-weight: bold;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background-color: var(--card-bg);
+      color: var(--text-color);
+    }
+    .config-summary-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-color);
+    }
+    .summary-item {
+      font-size: 0.88rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .summary-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* Stepper Controls para Nota Geral (+0.1 / -0.1) */
+    .nota-control-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+    }
+    .stepper-nota {
+      display: inline-flex;
+      align-items: center;
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      overflow: hidden;
+      background-color: var(--bg-color);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .stepper-nota:focus-within {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    }
+    .btn-step {
+      background: transparent;
+      border: none;
+      padding: 6px 9px;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      color: var(--primary-color);
+      transition: background-color 0.15s, transform 0.1s;
+      user-select: none;
+    }
+    .btn-step:hover {
+      background-color: rgba(128, 128, 128, 0.15);
+    }
+    .btn-step:active {
+      transform: scale(0.92);
+    }
+    .input-nota-step {
+      width: 58px;
+      border: none;
+      background: transparent;
+      text-align: center;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-color);
+      outline: none;
+      padding: 6px 0;
+    }
+
+    /* Badges / Pills de Composição no Card do Aluno (Notas) */
+    .aluno-nota-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .pills-composicao {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+    .pill-info {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 10px;
+      background-color: var(--bg-color);
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .btn-ver-anotacoes {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 10px;
+      background-color: rgba(37, 99, 235, 0.08);
+      border: 1px solid var(--primary-color);
+      color: var(--primary-color);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s ease;
+    }
+    .btn-ver-anotacoes:hover {
+      background-color: var(--primary-color);
+      color: #fff;
+    }
+
+    /* Modais Grandes e Específicos */
+    .modal-content.modal-anotacao-box {
+      max-width: 500px;
+      text-align: left;
+    }
+    .modal-content.modal-historico-box {
+      max-width: 660px;
+      text-align: left;
+      max-height: 88vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .btn-close-x {
+      background: none;
+      border: none;
+      font-size: 1.25rem;
+      cursor: pointer;
+      color: var(--text-color);
+      opacity: 0.7;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .btn-close-x:hover {
+      opacity: 1;
+      background: rgba(128,128,128,0.15);
+    }
+    .textarea-anotacao {
+      width: 100%;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      padding: 10px;
+      font-size: 0.95rem;
+      resize: vertical;
+      outline: none;
+      line-height: 1.4;
+      font-family: inherit;
+    }
+    .textarea-anotacao:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+    }
+
+    /* Histórico Modal KPIs */
+    .historico-kpis-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    @media (max-width: 580px) {
+      .historico-kpis-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .historico-kpi-card {
+      background-color: var(--bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 8px 12px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .kpi-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      opacity: 0.75;
+      font-weight: 700;
+    }
+    .kpi-value {
+      font-size: 1.2rem;
+    }
+    .kpi-sub {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #10b981;
+    }
+
+    /* Ajuste de nota no modal do histórico */
+    .ajuste-nota-box {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: var(--bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 12px;
+      gap: 12px;
+    }
+    .stepper-nota-container {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-step-modal {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 7px 12px;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      color: var(--primary-color);
+      transition: all 0.15s;
+    }
+    .btn-step-modal:hover {
+      background-color: var(--primary-color);
+      color: #fff;
+    }
+    .btn-step-modal:active {
+      transform: scale(0.92);
+    }
+    .input-nota-modal {
+      width: 75px;
+      text-align: center;
+      font-size: 1.25rem;
+      font-weight: 800;
+      border: 2px solid var(--border-color);
+      border-radius: 6px;
+      padding: 6px 8px;
+      background-color: var(--card-bg);
+      color: var(--text-color);
+      outline: none;
+    }
+    .input-nota-modal:focus {
+      border-color: var(--primary-color);
+    }
+
+    /* Scroll das Anotações */
+    .historico-anotacoes-scroll {
+      max-height: 220px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-right: 4px;
+    }
+    .anotacao-item-card {
+      background-color: var(--bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .anotacao-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      font-weight: 700;
+      opacity: 0.8;
+    }
+    .anotacao-item-body {
+      font-size: 0.88rem;
+      line-height: 1.4;
+      white-space: pre-wrap;
+    }
   </style>
 </head>
 <body>
@@ -754,6 +1225,22 @@
               Selecione uma eletiva...
             </div>
           </div>
+
+          <!-- Controle de Atividade na Aula -->
+          <div class="form-group" style="margin-top: 1rem; padding-top: 1rem; border-top: 1px dashed var(--border-color);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.5rem;">
+              <label style="margin-bottom:0;">Atividade nesta Aula:</label>
+              <span id="badge-aula-atividade" class="badge-status-nota badge-empty">Desativada</span>
+            </div>
+            <button type="button" id="btn-toggle-aula-atividade" class="btn-toggle-atividade" onclick="toggleAtividadeAula()">
+              <span id="icon-aula-atividade">📋</span>
+              <span id="text-aula-atividade">Ativar Atividade nesta Aula</span>
+            </button>
+            <p style="font-size:0.78rem; opacity:0.75; margin-top:6px; line-height:1.35;">
+              Ao ativar, todos os alunos iniciam com atividade concluída (<strong style="color:#10b981;">verde</strong>). Você pode clicar para marcar em <strong style="color:#ef4444;">vermelho</strong> quem não fez.
+            </p>
+          </div>
+
           <button class="primary" id="btn-salvar" onclick="salvarChamada()">Salvar Chamada</button>
         </div>
 
@@ -788,6 +1275,70 @@
           <span id="contador-notas" style="opacity:0.7; font-size:0.9rem; margin-top: 5px;"></span>
         </div>
 
+        <!-- Painel de Composição da Nota Geral (Frequência & Atividades) -->
+        <div class="panel-config-notas" id="panel-config-notas">
+          <div class="panel-config-header" onclick="toggleConfigNotasPanel()">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:1.15rem;">⚙️</span>
+              <span style="font-weight:700;">Composição da Nota Geral (Frequência & Atividades)</span>
+              <span id="badge-config-status" class="badge-status-nota badge-empty" style="margin-left:6px;">Configurar</span>
+            </div>
+            <span id="arrow-config-notas" style="font-size:0.9rem; transition:transform 0.2s;">▼</span>
+          </div>
+
+          <div class="panel-config-body" id="panel-config-body" style="display:none;">
+            <div class="config-grid">
+              <!-- Item 1: Frequência -->
+              <div class="config-card">
+                <div class="config-card-header">
+                  <input type="checkbox" id="chk-config-freq" style="width:18px; height:18px; cursor:pointer;" onchange="onConfigNotasChange()">
+                  <label for="chk-config-freq" class="config-card-title" style="cursor:pointer; margin-bottom:0;">Pontuação de Frequência</label>
+                </div>
+                <p class="config-desc">Acresce pontos à Nota Geral proporcionalmente à taxa de presença do aluno (100% de frequência = pontuação indicada e as demais na proporção).</p>
+                <div class="config-input-row">
+                  <label for="input-max-freq" style="margin-bottom:0;">Pontuação Máxima:</label>
+                  <input type="number" id="input-max-freq" min="0" max="10" step="0.1" value="2.0" class="input-config-pts" onchange="onConfigNotasChange()">
+                  <span>pontos</span>
+                </div>
+              </div>
+
+              <!-- Item 2: Atividades -->
+              <div class="config-card">
+                <div class="config-card-header">
+                  <input type="checkbox" id="chk-config-ativ" style="width:18px; height:18px; cursor:pointer;" onchange="onConfigNotasChange()">
+                  <label for="chk-config-ativ" class="config-card-title" style="cursor:pointer; margin-bottom:0;">Pontuação de Atividades</label>
+                </div>
+                <p class="config-desc">Acresce pontos à Nota Geral proporcionalmente à quantidade de atividades feitas pelo aluno no período.</p>
+                <div class="config-input-row">
+                  <label for="input-max-ativ" style="margin-bottom:0;">Pontuação Máxima:</label>
+                  <input type="number" id="input-max-ativ" min="0" max="10" step="0.1" value="2.0" class="input-config-pts" onchange="onConfigNotasChange()">
+                  <span>pontos</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Resumo e Ações de Composição -->
+            <div class="config-summary-bar">
+              <div class="summary-item">
+                <span>Total de Aulas Registradas:</span>
+                <strong id="summary-total-aulas" style="color:var(--primary-color);">0</strong>
+              </div>
+              <div class="summary-item">
+                <span>Atividades Aplicadas no Período:</span>
+                <strong id="summary-total-ativ" style="color:var(--primary-color);">0</strong>
+              </div>
+              <div class="summary-actions">
+                <button type="button" class="secondary" onclick="salvarConfiguracaoNotas()" id="btn-salvar-config">
+                  <span>💾</span> Salvar Regras
+                </button>
+                <button type="button" class="primary" onclick="aplicarComposicaoNotas()" id="btn-aplicar-composicao" style="width:auto; padding:0.6rem 1.1rem;">
+                  <span>⚡</span> Calcular Notas com Composição
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div class="toolbar-notas">
           <div class="search-notas-box">
             <input type="text" id="search-notas" placeholder="🔍 Buscar aluno por nome ou matrícula..." onkeyup="filtrarAlunosNotas()">
@@ -815,7 +1366,7 @@
 
   <div id="toast">Operação realizada com sucesso!</div>
 
-  <!-- Modal Customizado -->
+  <!-- Modal Customizado de Sobrescrita -->
   <div id="confirmModal" class="modal-overlay">
     <div class="modal-content">
       <h3 id="modalTitle">Atenção!</h3>
@@ -827,6 +1378,92 @@
     </div>
   </div>
 
+  <!-- Modal 1: Anotação da Aula por Aluno -->
+  <div id="modalAnotacaoAula" class="modal-overlay">
+    <div class="modal-content modal-anotacao-box">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+        <div style="text-align:left;">
+          <h3 id="modalAnotacaoNome" style="margin-bottom:4px; font-size:1.15rem;">Anotação da Aula</h3>
+          <p id="modalAnotacaoSub" style="margin-bottom:0; font-size:0.85rem; opacity:0.8;">Data e Aluno</p>
+        </div>
+        <button type="button" class="btn-close-x" onclick="fecharModalAnotacaoAula()">✕</button>
+      </div>
+      <div style="text-align:left; margin-bottom:16px;">
+        <label for="txtAnotacaoAula" style="font-size:0.88rem; font-weight:600; margin-bottom:6px; display:block;">
+          Observações / Anotações desta aula:
+        </label>
+        <textarea id="txtAnotacaoAula" class="textarea-anotacao" rows="5" placeholder="Ex: Participativo no debate, tirou dúvidas sobre o tema, entregou o trabalho prático..."></textarea>
+      </div>
+      <div class="modal-actions" style="gap:8px;">
+        <button type="button" class="btn-cancel" onclick="limparAnotacaoAtual()" id="btn-limpar-anot" style="color:var(--danger-color); border-color:rgba(239,68,68,0.3) !important;">
+          🗑️ Excluir
+        </button>
+        <button type="button" class="btn-cancel" onclick="fecharModalAnotacaoAula()">Cancelar</button>
+        <button type="button" class="btn-confirm" onclick="salvarAnotacaoAulaModal()">💾 Salvar Anotação</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Histórico de Anotações e Ajuste da Nota Geral (Requisito 3.3 e 3.4) -->
+  <div id="modalHistoricoAluno" class="modal-overlay">
+    <div class="modal-content modal-historico-box">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:1px solid var(--border-color); padding-bottom:12px; margin-bottom:14px;">
+        <div style="text-align:left;">
+          <h3 id="histAlunoNome" style="margin-bottom:4px; font-size:1.2rem; color:var(--primary-color);">Histórico do Aluno</h3>
+          <p id="histAlunoSub" style="margin-bottom:0; font-size:0.85rem; opacity:0.8;">Matrícula • Turma</p>
+        </div>
+        <button type="button" class="btn-close-x" onclick="fecharModalHistoricoAluno()">✕</button>
+      </div>
+
+      <!-- Resumo de Frequência e Atividades do Aluno -->
+      <div class="historico-kpis-grid">
+        <div class="historico-kpi-card">
+          <span class="kpi-label">Frequência no Período</span>
+          <strong class="kpi-value" id="histAlunoFreq">100%</strong>
+          <span class="kpi-sub" id="histAlunoFreqPts">+0.0 pts</span>
+        </div>
+        <div class="historico-kpi-card">
+          <span class="kpi-label">Atividades Concluídas</span>
+          <strong class="kpi-value" id="histAlunoAtiv">0 / 0</strong>
+          <span class="kpi-sub" id="histAlunoAtivPts">+0.0 pts</span>
+        </div>
+        <div class="historico-kpi-card" style="background:rgba(37,99,235,0.08); border-color:var(--primary-color);">
+          <span class="kpi-label" style="color:var(--primary-color);">Nota Geral Atual</span>
+          <strong class="kpi-value" id="histAlunoNotaDisplay" style="color:var(--primary-color);">0.0</strong>
+          <span class="kpi-sub" id="histAlunoNotaStatus">Salva</span>
+        </div>
+      </div>
+
+      <!-- Controle de Ajuste Rápido da Nota Geral (+0.1 / -0.1) -->
+      <div class="ajuste-nota-box">
+        <div style="text-align:left;">
+          <strong style="font-size:0.95rem; display:block;">Ajuste da Nota Geral:</strong>
+          <span style="font-size:0.8rem; opacity:0.75;">Aumente ou diminua em incrementos de 0.1 pontos</span>
+        </div>
+        <div class="stepper-nota-container">
+          <button type="button" class="btn-step-modal" onclick="stepNotaModal(-0.1)" title="Diminuir 0.1">-0.1</button>
+          <input type="text" id="histInputNota" class="input-nota-modal" maxlength="5" oninput="onInputNotaModalChange()" onblur="onInputNotaModalBlur()">
+          <button type="button" class="btn-step-modal" onclick="stepNotaModal(0.1)" title="Aumentar 0.1">+0.1</button>
+        </div>
+      </div>
+
+      <!-- Histórico de Anotações -->
+      <div style="text-align:left; margin-top:10px; flex:1; display:flex; flex-direction:column; overflow:hidden;">
+        <h4 style="font-size:0.95rem; margin-bottom:8px; display:flex; justify-content:space-between;">
+          <span>📝 Todas as Anotações Registradas</span>
+          <span id="histQtdAnotacoes" style="font-size:0.8rem; font-weight:normal; opacity:0.75;">0 anotação(ões)</span>
+        </h4>
+        <div id="histListaAnotacoes" class="historico-anotacoes-scroll">
+          <!-- Renderizado dinamicamente -->
+        </div>
+      </div>
+
+      <div class="modal-actions" style="margin-top:16px; justify-content:flex-end;">
+        <button type="button" class="btn-confirm" onclick="fecharModalHistoricoAluno()" style="max-width:140px;">Concluir</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     let eletivasCache = [];
     let currentAlunosCache = [];
@@ -834,6 +1471,23 @@
     let confirmActionCallback = null;
     let currentTab = 'frequencia';
     
+    // --- Variáveis de Estado para Atividades e Anotações ---
+    let currentAulaTemAtividade = false;
+    let currentAtividadesAlunos = {}; // { [matricula]: boolean } (true: fez, false: não fez)
+    let currentAnotacoesAlunos = {}; // { [matricula]: string }
+    let alunoAnotacaoModalMatricula = null;
+
+    // --- Variáveis de Estado para Composição da Nota Geral ---
+    let currentEstatisticas = null;
+    let currentConfigNotas = {
+      ativoFreq: false,
+      maxPontosFreq: 2.0,
+      ativoAtiv: false,
+      maxPontosAtiv: 2.0
+    };
+    let isConfigNotasPanelOpen = false;
+    let alunoHistoricoModalMatricula = null;
+
     // --- 1. Inicialização do Tema e Abas ---
     function initTheme() {
       const savedTheme = localStorage.getItem('theme');
@@ -882,6 +1536,7 @@
         document.getElementById('tab-btn-notas').classList.add('active');
         document.getElementById('view-notas').classList.add('active');
         atualizarHeaderNotas();
+        carregarEstatisticasEletiva();
       }
     }
     
@@ -965,6 +1620,11 @@
       contadorNotas.innerText = '';
       currentAlunosCache = [];
       originalNotasMap = {};
+      currentAulaTemAtividade = false;
+      currentAtividadesAlunos = {};
+      currentAnotacoesAlunos = {};
+      currentEstatisticas = null;
+      atualizarVisualBotaoAulaAtividade();
       
       if (!idStr) {
         tabBtnNotas.disabled = true;
@@ -1017,9 +1677,10 @@
       
       renderAlunosFrequencia(alunos);
       renderAlunosNotas(alunos);
+      carregarEstatisticasEletiva();
     }
     
-    // --- 3. Renderização Frequência ---
+    // --- 3. Renderização Frequência, Atividades e Anotações ---
     function renderAlunosFrequencia(alunos) {
       const container = document.getElementById('alunos-container');
       const contador = document.getElementById('contador-alunos');
@@ -1040,6 +1701,7 @@
         const card = document.createElement('div');
         card.className = 'aluno-card';
         card.id = 'aluno-' + index;
+        card.dataset.matricula = aluno.matricula;
         
         const info = document.createElement('div');
         info.className = 'aluno-info';
@@ -1047,6 +1709,28 @@
         const notaBadge = aluno.notaFinal ? ` <span style="background:var(--badge-saved-bg); color:var(--badge-saved-color); font-weight:bold; padding:2px 6px; border-radius:4px; font-size:0.75rem;">Nota: ${aluno.notaFinal}</span>` : '';
         info.innerHTML = `<h3>${aluno.nome}${notaBadge}</h3><p>Matrícula: ${aluno.matricula}<span style="color:var(--danger-color); font-weight:600;">${turmaTexto}</span></p>`;
         
+        const actionsContainer = document.createElement('div');
+        actionsContainer.className = 'aluno-card-actions';
+
+        // 1. Botão de Atividade do Aluno
+        const btnAtiv = document.createElement('button');
+        btnAtiv.type = 'button';
+        btnAtiv.className = 'btn-aluno-atividade' + (currentAulaTemAtividade ? (currentAtividadesAlunos[aluno.matricula] === false ? ' nao-fez' : ' fez') : ' disabled');
+        btnAtiv.id = 'btn-ativ-' + aluno.matricula;
+        btnAtiv.onclick = function() { toggleAlunoAtividade(aluno.matricula); };
+        atualizarTextoBotaoAlunoAtividade(btnAtiv, aluno.matricula);
+
+        // 2. Botão de Anotação do Aluno
+        const btnAnot = document.createElement('button');
+        btnAnot.type = 'button';
+        const temAnot = (currentAnotacoesAlunos[aluno.matricula] || '').trim() !== '';
+        btnAnot.className = 'btn-aluno-anotacao' + (temAnot ? ' preenchido' : '');
+        btnAnot.id = 'btn-anot-' + aluno.matricula;
+        btnAnot.innerHTML = temAnot ? '<span>📝</span> <span>Anotado</span>' : '<span>💬</span> <span>Anotação</span>';
+        if (temAnot) btnAnot.title = currentAnotacoesAlunos[aluno.matricula];
+        btnAnot.onclick = function() { abrirModalAnotacaoAula(aluno.matricula); };
+
+        // 3. Switches de presença por período
         const switchContainer = document.createElement('div');
         switchContainer.className = 'switch-container';
         switchContainer.style.flexWrap = 'wrap';
@@ -1067,7 +1751,7 @@
           span.innerText = p;
           
           input.onchange = function() {
-            const anyUnchecked = card.querySelectorAll('input:not(:checked)').length > 0;
+            const anyUnchecked = card.querySelectorAll('input.chk-aluno-periodo:not(:checked)').length > 0;
             if (anyUnchecked) card.classList.add('faltou');
             else card.classList.remove('faltou');
           };
@@ -1076,15 +1760,147 @@
           label.appendChild(span);
           switchContainer.appendChild(label);
         });
+
+        actionsContainer.appendChild(btnAtiv);
+        actionsContainer.appendChild(btnAnot);
+        actionsContainer.appendChild(switchContainer);
         
         card.appendChild(info);
-        card.appendChild(switchContainer);
+        card.appendChild(actionsContainer);
         container.appendChild(card);
       });
       
       onDataChange(false);
     }
     
+    // --- 3.1. Funções de Atividades por Aula e Aluno ---
+    function toggleAtividadeAula() {
+      currentAulaTemAtividade = !currentAulaTemAtividade;
+      if (currentAulaTemAtividade) {
+        currentAlunosCache.forEach(a => {
+          if (currentAtividadesAlunos[a.matricula] === undefined) {
+            currentAtividadesAlunos[a.matricula] = true;
+          }
+        });
+        showToast("Atividade ativada nesta aula! Todos os alunos estão marcados em verde.");
+      } else {
+        showToast("Atividade desativada para esta aula.");
+      }
+      atualizarVisualBotaoAulaAtividade();
+      atualizarTodosBotoesAlunoAtividade();
+    }
+
+    function atualizarVisualBotaoAulaAtividade() {
+      const btn = document.getElementById('btn-toggle-aula-atividade');
+      const badge = document.getElementById('badge-aula-atividade');
+      const text = document.getElementById('text-aula-atividade');
+      const icon = document.getElementById('icon-aula-atividade');
+      if (!btn || !badge || !text || !icon) return;
+
+      if (currentAulaTemAtividade) {
+        btn.classList.add('active');
+        badge.className = 'badge-status-nota badge-saved';
+        badge.innerText = 'Ativada';
+        text.innerText = 'Atividade Ativada (Clique para Desativar)';
+        icon.innerText = '✅';
+      } else {
+        btn.classList.remove('active');
+        badge.className = 'badge-status-nota badge-empty';
+        badge.innerText = 'Desativada';
+        text.innerText = 'Ativar Atividade nesta Aula';
+        icon.innerText = '📋';
+      }
+    }
+
+    function toggleAlunoAtividade(matricula) {
+      if (!currentAulaTemAtividade) {
+        showToast("Ative primeiro a Atividade da Aula acima para marcar os alunos.", true);
+        return;
+      }
+      const atual = currentAtividadesAlunos[matricula] !== false; // default true
+      currentAtividadesAlunos[matricula] = !atual;
+
+      const btn = document.getElementById('btn-ativ-' + matricula);
+      if (btn) {
+        atualizarTextoBotaoAlunoAtividade(btn, matricula);
+      }
+    }
+
+    function atualizarTextoBotaoAlunoAtividade(btn, matricula) {
+      if (!btn) return;
+      if (!currentAulaTemAtividade) {
+        btn.className = 'btn-aluno-atividade disabled';
+        btn.innerHTML = '<span>📋</span> <span>Sem Ativ.</span>';
+        btn.title = 'Nenhuma atividade ativada nesta aula';
+      } else {
+        const fez = currentAtividadesAlunos[matricula] !== false;
+        btn.className = 'btn-aluno-atividade ' + (fez ? 'fez' : 'nao-fez');
+        btn.innerHTML = fez ? '<span>🟢</span> <span>Fez Atividade</span>' : '<span>🔴</span> <span>Não Fez</span>';
+        btn.title = fez ? 'Aluno concluiu a atividade (clique para alternar para vermelho)' : 'Aluno NÃO concluiu (clique para alternar para verde)';
+      }
+    }
+
+    function atualizarTodosBotoesAlunoAtividade() {
+      currentAlunosCache.forEach(a => {
+        const btn = document.getElementById('btn-ativ-' + a.matricula);
+        if (btn) atualizarTextoBotaoAlunoAtividade(btn, a.matricula);
+      });
+    }
+
+    // --- 3.2. Funções de Anotações por Aluno na Aula ---
+    function abrirModalAnotacaoAula(matricula) {
+      alunoAnotacaoModalMatricula = matricula;
+      const aluno = currentAlunosCache.find(a => a.matricula.toString() === matricula.toString());
+      const dataStr = document.getElementById('data').value || '';
+      
+      document.getElementById('modalAnotacaoNome').innerText = aluno ? aluno.nome : 'Aluno';
+      document.getElementById('modalAnotacaoSub').innerText = `Data: ${dataStr} • Matrícula: ${matricula} ${aluno && aluno.turma ? '(' + aluno.turma + ')' : ''}`;
+      
+      const textoAtual = currentAnotacoesAlunos[matricula] || '';
+      document.getElementById('txtAnotacaoAula').value = textoAtual;
+      
+      const btnLimpar = document.getElementById('btn-limpar-anot');
+      btnLimpar.style.display = textoAtual.trim() !== '' ? 'inline-block' : 'none';
+      
+      document.getElementById('modalAnotacaoAula').classList.add('show');
+      setTimeout(() => { document.getElementById('txtAnotacaoAula').focus(); }, 120);
+    }
+
+    function fecharModalAnotacaoAula() {
+      document.getElementById('modalAnotacaoAula').classList.remove('show');
+      alunoAnotacaoModalMatricula = null;
+    }
+
+    function salvarAnotacaoAulaModal() {
+      if (!alunoAnotacaoModalMatricula) return;
+      const mat = alunoAnotacaoModalMatricula;
+      const txt = document.getElementById('txtAnotacaoAula').value.trim();
+      currentAnotacoesAlunos[mat] = txt;
+
+      const btn = document.getElementById('btn-anot-' + mat);
+      if (btn) {
+        if (txt !== '') {
+          btn.className = 'btn-aluno-anotacao preenchido';
+          btn.innerHTML = '<span>📝</span> <span>Anotado</span>';
+          btn.title = txt;
+        } else {
+          btn.className = 'btn-aluno-anotacao';
+          btn.innerHTML = '<span>💬</span> <span>Anotação</span>';
+          btn.removeAttribute('title');
+        }
+      }
+
+      fecharModalAnotacaoAula();
+      showToast(txt !== '' ? "Anotação registrada para a aula!" : "Anotação limpa.");
+    }
+
+    function limparAnotacaoAtual() {
+      if (!alunoAnotacaoModalMatricula) return;
+      document.getElementById('txtAnotacaoAula').value = '';
+      salvarAnotacaoAulaModal();
+    }
+
+    // --- 3.3. Sincronização de Data e Chamada ---
     function onDataChange(isUserAction = false) {
       const idStr = document.getElementById('eletiva').value;
       const data = document.getElementById('data').value;
@@ -1114,7 +1930,6 @@
       
       if (expectedDayStr && expectedDayStr !== actualDayStr) {
         document.getElementById('btn-salvar').disabled = true;
-        // Só exibe aviso caso tenha sido ação intencional do usuário na aba de Frequência
         if (isUserAction && currentTab === 'frequencia') {
           showToast(`A Eletiva ocorre na ${eletiva.dia}. Por favor, escolha a data correta.`, true);
         }
@@ -1126,12 +1941,12 @@
       
       document.getElementById('loader').style.display = 'block';
       google.script.run
-        .withSuccessHandler(aplicarFaltasExistentes)
+        .withSuccessHandler(aplicarDadosCompletosChamada)
         .withFailureHandler(err => {
           document.getElementById('loader').style.display = 'none';
-          console.error("Erro ao buscar faltas:", err);
+          console.error("Erro ao buscar dados da chamada:", err);
         })
-        .getFaltasDaChamada(eletiva.idEletiva, data);
+        .getDadosDaChamada(eletiva.idEletiva, data);
     }
     
     function resetVisualFaltas() {
@@ -1143,14 +1958,16 @@
       cards.forEach(card => card.classList.remove('faltou'));
     }
     
-    function aplicarFaltasExistentes(faltasObj) {
+    function aplicarDadosCompletosChamada(dados) {
       document.getElementById('loader').style.display = 'none';
-      
+      if (!dados) return;
+
+      // 1. Aplicar faltas
+      const faltasObj = dados.faltas || {};
       const checkboxes = document.querySelectorAll('.chk-aluno-periodo');
       checkboxes.forEach(chk => {
         const p = chk.dataset.periodo;
         const mat = chk.dataset.matricula;
-        
         if (faltasObj[p] && faltasObj[p].includes(mat)) {
           chk.checked = false;
         }
@@ -1158,13 +1975,37 @@
       
       const cards = document.querySelectorAll('.aluno-card');
       cards.forEach(card => {
-        const anyUnchecked = card.querySelectorAll('input:not(:checked)').length > 0;
+        const anyUnchecked = card.querySelectorAll('input.chk-aluno-periodo:not(:checked)').length > 0;
         if (anyUnchecked) card.classList.add('faltou');
         else card.classList.remove('faltou');
       });
+
+      // 2. Aplicar Atividades
+      currentAulaTemAtividade = dados.temAtividade === true;
+      currentAtividadesAlunos = dados.atividades || {};
+      atualizarVisualBotaoAulaAtividade();
+      atualizarTodosBotoesAlunoAtividade();
+
+      // 3. Aplicar Anotações
+      currentAnotacoesAlunos = dados.anotacoes || {};
+      currentAlunosCache.forEach(a => {
+        const btn = document.getElementById('btn-anot-' + a.matricula);
+        if (btn) {
+          const txt = (currentAnotacoesAlunos[a.matricula] || '').trim();
+          if (txt !== '') {
+            btn.className = 'btn-aluno-anotacao preenchido';
+            btn.innerHTML = '<span>📝</span> <span>Anotado</span>';
+            btn.title = txt;
+          } else {
+            btn.className = 'btn-aluno-anotacao';
+            btn.innerHTML = '<span>💬</span> <span>Anotação</span>';
+            btn.removeAttribute('title');
+          }
+        }
+      });
     }
 
-    // --- 4. Salvar Chamada de Frequência ---
+    // --- 4. Salvar Chamada de Frequência, Atividades e Anotações ---
     function salvarChamada(forceOverwrite = false) {
       const btn = document.getElementById('btn-salvar');
       const idStr = document.getElementById('eletiva').value;
@@ -1212,7 +2053,10 @@
         data: data,
         periodosTotais: eletiva.periodos,
         faltasPorPeriodo: faltasPorPeriodo,
-        forceOverwrite: forceOverwrite
+        forceOverwrite: forceOverwrite,
+        temAtividade: currentAulaTemAtividade,
+        atividadesPorAluno: currentAtividadesAlunos,
+        anotacoesPorAluno: currentAnotacoesAlunos
       };
       
       google.script.run
@@ -1224,7 +2068,9 @@
               salvarChamada(true);
             });
           } else {
-            showToast("Chamada salva com sucesso!");
+            showToast("Chamada, atividades e anotações salvas com sucesso!");
+            // Atualiza estatísticas em background
+            carregarEstatisticasEletiva();
           }
         })
         .withFailureHandler(err => {
@@ -1235,7 +2081,7 @@
         .salvarChamada(payload);
     }
 
-    // --- 5. Renderização e Gestão de Notas Finais ---
+    // --- 5. Renderização e Gestão de Notas Finais & Composição ---
     function atualizarHeaderNotas() {
       const idStr = document.getElementById('eletiva').value;
       const titleEl = document.getElementById('notas-eletiva-title');
@@ -1250,9 +2096,140 @@
       const eletiva = eletivasCache.find(e => e.idUnico === idStr);
       if (eletiva) {
         titleEl.innerText = `Notas Finais: ${eletiva.nome}`;
-        // Exibe dias e aulas da eletiva: SEGUNDA-FEIRA(5ªAULA,6ªAULA) : TERCA-FEIRA(1ªAULA)
         subEl.innerText = eletiva.diasAulasInfo || `${eletiva.dia.toUpperCase()}(${(eletiva.periodos || []).map(p => p.toUpperCase().replace(/\s+/g, '')).join(',')})`;
       }
+    }
+
+    function toggleConfigNotasPanel() {
+      const body = document.getElementById('panel-config-body');
+      const arrow = document.getElementById('arrow-config-notas');
+      if (!body || !arrow) return;
+      isConfigNotasPanelOpen = !isConfigNotasPanelOpen;
+      if (isConfigNotasPanelOpen) {
+        body.style.display = 'block';
+        arrow.style.transform = 'rotate(180deg)';
+      } else {
+        body.style.display = 'none';
+        arrow.style.transform = 'rotate(0deg)';
+      }
+    }
+
+    function onConfigNotasChange() {
+      currentConfigNotas.ativoFreq = document.getElementById('chk-config-freq').checked;
+      currentConfigNotas.maxPontosFreq = parseFloat(document.getElementById('input-max-freq').value) || 0;
+      currentConfigNotas.ativoAtiv = document.getElementById('chk-config-ativ').checked;
+      currentConfigNotas.maxPontosAtiv = parseFloat(document.getElementById('input-max-ativ').value) || 0;
+      atualizarBadgeConfigStatus();
+    }
+
+    function atualizarBadgeConfigStatus() {
+      const badge = document.getElementById('badge-config-status');
+      if (!badge) return;
+      const ativ = currentConfigNotas.ativoFreq || currentConfigNotas.ativoAtiv;
+      if (ativ) {
+        badge.className = 'badge-status-nota badge-saved';
+        badge.innerText = 'Ativa';
+      } else {
+        badge.className = 'badge-status-nota badge-empty';
+        badge.innerText = 'Desativada';
+      }
+    }
+
+    function carregarEstatisticasEletiva() {
+      const idStr = document.getElementById('eletiva').value;
+      if (!idStr) return;
+      const eletiva = eletivasCache.find(e => e.idUnico === idStr);
+      if (!eletiva) return;
+
+      google.script.run
+        .withSuccessHandler(onEstatisticasLoaded)
+        .withFailureHandler(err => console.error("Erro ao buscar estatísticas:", err))
+        .getEstatisticasEletiva(eletiva.idEletiva);
+    }
+
+    function onEstatisticasLoaded(stats) {
+      if (!stats) return;
+      currentEstatisticas = stats;
+      if (stats.configNotas) {
+        currentConfigNotas = stats.configNotas;
+        document.getElementById('chk-config-freq').checked = currentConfigNotas.ativoFreq === true;
+        document.getElementById('input-max-freq').value = (currentConfigNotas.maxPontosFreq !== undefined ? currentConfigNotas.maxPontosFreq : 2.0).toFixed(1);
+        document.getElementById('chk-config-ativ').checked = currentConfigNotas.ativoAtiv === true;
+        document.getElementById('input-max-ativ').value = (currentConfigNotas.maxPontosAtiv !== undefined ? currentConfigNotas.maxPontosAtiv : 2.0).toFixed(1);
+        atualizarBadgeConfigStatus();
+      }
+
+      document.getElementById('summary-total-aulas').innerText = stats.totalAulas || 0;
+      document.getElementById('summary-total-ativ').innerText = stats.totalAtividades || 0;
+
+      if (currentAlunosCache.length > 0) {
+        renderAlunosNotas(currentAlunosCache);
+      }
+    }
+
+    function salvarConfiguracaoNotas() {
+      const idStr = document.getElementById('eletiva').value;
+      if (!idStr) {
+        showToast("Selecione uma eletiva primeiro.", true);
+        return;
+      }
+      const eletiva = eletivasCache.find(e => e.idUnico === idStr);
+      if (!eletiva) return;
+
+      onConfigNotasChange();
+      const btn = document.getElementById('btn-salvar-config');
+      btn.disabled = true;
+      btn.innerHTML = '<span>⏳</span> Salvando...';
+
+      google.script.run
+        .withSuccessHandler(res => {
+          btn.disabled = false;
+          btn.innerHTML = '<span>💾</span> Salvar Regras';
+          showToast(res && res.message ? res.message : "Configurações salvas com sucesso!");
+          carregarEstatisticasEletiva();
+        })
+        .withFailureHandler(err => {
+          btn.disabled = false;
+          btn.innerHTML = '<span>💾</span> Salvar Regras';
+          showToast("Erro ao salvar regras: " + err, true);
+        })
+        .salvarConfigNotas(eletiva.idEletiva, currentConfigNotas);
+    }
+
+    function aplicarComposicaoNotas() {
+      if (!currentEstatisticas || !currentEstatisticas.alunosStats) {
+        showToast("Estatísticas ainda não carregadas. Aguarde um instante.", true);
+        return;
+      }
+      const stats = currentEstatisticas.alunosStats;
+      let qtdAtualizadas = 0;
+
+      currentAlunosCache.forEach(aluno => {
+        const mat = aluno.matricula;
+        const alStat = stats[mat] || {};
+        
+        let notaBase = 0.0;
+        const original = (originalNotasMap[mat] || '').replace(',', '.').trim();
+        if (original !== '') {
+          let num = parseFloat(original);
+          if (!isNaN(num)) notaBase = num;
+        }
+
+        let pontosFreq = currentConfigNotas.ativoFreq ? (alStat.pontosFreq || 0) : 0;
+        let pontosAtiv = currentConfigNotas.ativoAtiv ? (alStat.pontosAtiv || 0) : 0;
+        
+        let finalVal = Math.round((notaBase + pontosFreq + pontosAtiv) * 10) / 10;
+        finalVal = Math.max(0.0, Math.min(10.0, finalVal));
+
+        const input = document.getElementById('input-nota-' + mat);
+        if (input) {
+          input.value = finalVal.toFixed(1);
+          onNotaInputChange(mat);
+          qtdAtualizadas++;
+        }
+      });
+
+      showToast(`Notas calculadas para ${qtdAtualizadas} aluno(s) com base nas regras ativas! Clique em "Salvar Todas as Notas" para efetivar.`);
     }
 
     function validarNota(str) {
@@ -1260,7 +2237,6 @@
         return { valid: true, empty: true, formatted: '' };
       }
       const normalized = str.trim().replace(',', '.');
-      // Permite números de 0 a 10 com até 1 casa decimal
       const num = parseFloat(normalized);
       if (isNaN(num) || num < 0 || num > 10) {
         return { valid: false, empty: false, formatted: '' };
@@ -1279,6 +2255,7 @@
       }
       
       contador.innerText = `${alunos.length} aluno(s)`;
+      const statsMap = (currentEstatisticas && currentEstatisticas.alunosStats) ? currentEstatisticas.alunosStats : {};
       
       alunos.forEach((aluno, index) => {
         const card = document.createElement('div');
@@ -1296,27 +2273,83 @@
           statusBadgeText = 'Salva';
         }
 
+        const alStats = statsMap[aluno.matricula] || {
+          pctPresenca: 100,
+          pontosFreq: 0,
+          atividadesFeitas: 0,
+          totalAtividades: 0,
+          pontosAtiv: 0,
+          totalAnotacoes: 0
+        };
+
+        let pillFreqHtml = '';
+        if (currentConfigNotas.ativoFreq) {
+          pillFreqHtml = `<span class="pill-info" title="Frequência: ${alStats.pctPresenca}%">📊 ${alStats.pctPresenca}% (+${alStats.pontosFreq} pts)</span>`;
+        }
+        let pillAtivHtml = '';
+        if (currentConfigNotas.ativoAtiv) {
+          pillAtivHtml = `<span class="pill-info" title="Atividades feitas: ${alStats.atividadesFeitas} de ${alStats.totalAtividades}">📝 ${alStats.atividadesFeitas}/${alStats.totalAtividades} (+${alStats.pontosAtiv} pts)</span>`;
+        }
+        const totalAnot = alStats.totalAnotacoes || 0;
+        const btnAnotHtml = `<button type="button" class="btn-ver-anotacoes" onclick="abrirModalHistoricoAluno('${aluno.matricula}')">👁️ Anotações (${totalAnot})</button>`;
+
         card.innerHTML = `
-          <div class="aluno-info">
+          <div class="aluno-info aluno-nota-meta">
             <h3>${aluno.nome}</h3>
             <p>Matrícula: ${aluno.matricula}<span style="color:var(--primary-color); font-weight:600;">${turmaTexto}</span></p>
+            <div class="pills-composicao">
+              ${pillFreqHtml}
+              ${pillAtivHtml}
+              ${btnAnotHtml}
+            </div>
           </div>
-          <div class="nota-input-container">
-            <input type="text" 
-                   class="input-nota" 
-                   id="input-nota-${aluno.matricula}" 
-                   data-matricula="${aluno.matricula}" 
-                   value="${valorNota}" 
-                   placeholder="0.0 a 10.0"
-                   maxlength="5"
-                   oninput="onNotaInputChange('${aluno.matricula}')"
-                   onblur="onNotaBlur('${aluno.matricula}')">
+          <div class="nota-control-wrapper">
+            <div class="stepper-nota">
+              <button type="button" class="btn-step" onclick="stepNota('${aluno.matricula}', -0.1)" title="Diminuir 0.1 ponto">-0.1</button>
+              <input type="text" 
+                     class="input-nota-step" 
+                     id="input-nota-${aluno.matricula}" 
+                     data-matricula="${aluno.matricula}" 
+                     value="${valorNota}" 
+                     placeholder="0.0"
+                     maxlength="5"
+                     oninput="onNotaInputChange('${aluno.matricula}')"
+                     onblur="onNotaBlur('${aluno.matricula}')">
+              <button type="button" class="btn-step" onclick="stepNota('${aluno.matricula}', 0.1)" title="Aumentar 0.1 ponto">+0.1</button>
+            </div>
             <span class="badge-status-nota ${statusBadgeClass}" id="badge-nota-${aluno.matricula}">${statusBadgeText}</span>
           </div>
         `;
         
         container.appendChild(card);
       });
+    }
+
+    // --- 5.1. Ajuste Rápido por Incrementos de 0.1 Pontos (Requisito 3.4) ---
+    function stepNota(matricula, delta) {
+      const input = document.getElementById('input-nota-' + matricula);
+      if (!input) return;
+      
+      let raw = input.value.trim().replace(',', '.');
+      let val = 0.0;
+      if (raw !== '') {
+        let parsed = parseFloat(raw);
+        if (!isNaN(parsed)) val = parsed;
+      }
+      
+      val = Math.round((val + delta) * 10) / 10;
+      val = Math.max(0.0, Math.min(10.0, val));
+      
+      input.value = val.toFixed(1);
+      onNotaInputChange(matricula);
+
+      // Sincroniza em tempo real caso o modal de histórico esteja aberto
+      if (alunoHistoricoModalMatricula && alunoHistoricoModalMatricula.toString() === matricula.toString()) {
+        const modalInput = document.getElementById('histInputNota');
+        const modalDisplay = document.getElementById('histAlunoNotaDisplay');
+        if (modalInput) modalInput.value = val.toFixed(1);
+        if (modalDisplay) modalDisplay.innerText = val.toFixed(1);
+      }
     }
 
     function onNotaInputChange(matricula) {
@@ -1380,7 +2413,7 @@
       const eletiva = eletivasCache.find(e => e.idUnico === idStr);
       if (!eletiva) return;
       
-      const inputs = document.querySelectorAll('.input-nota');
+      const inputs = document.querySelectorAll('.input-nota-step');
       if (inputs.length === 0) {
         showToast("Nenhum aluno para salvar.", true);
         return;
@@ -1421,10 +2454,8 @@
         .withSuccessHandler((res) => {
           btn.disabled = false;
           btn.innerHTML = '<span>💾</span> Salvar Todas as Notas';
-          
           showToast(res && res.message ? res.message : "Notas salvas com sucesso!");
           
-          // Atualiza o mapa original, inputs e badges
           listaNotas.forEach(n => {
             originalNotasMap[n.matricula] = n.nota;
             const alunoInCache = currentAlunosCache.find(a => a.matricula.toString() === n.matricula.toString());
@@ -1446,8 +2477,8 @@
             }
           });
           
-          // Atualiza também os cards da frequência com a nova nota
           renderAlunosFrequencia(currentAlunosCache);
+          carregarEstatisticasEletiva();
         })
         .withFailureHandler(err => {
           btn.disabled = false;
@@ -1482,8 +2513,133 @@
         }
       });
     }
+
+    // --- 5.2. Modal de Histórico e Ajuste da Nota Geral (Requisito 3.3) ---
+    function abrirModalHistoricoAluno(matricula) {
+      alunoHistoricoModalMatricula = matricula;
+      const aluno = currentAlunosCache.find(a => a.matricula.toString() === matricula.toString());
+      if (!aluno) return;
+
+      const idStr = document.getElementById('eletiva').value;
+      const eletiva = eletivasCache.find(e => e.idUnico === idStr);
+      if (!eletiva) return;
+
+      document.getElementById('histAlunoNome').innerText = aluno.nome;
+      document.getElementById('histAlunoSub').innerText = `Matrícula: ${aluno.matricula} • Turma: ${aluno.turma || 'Regular'}`;
+
+      const inputCard = document.getElementById('input-nota-' + matricula);
+      const notaAtual = inputCard ? inputCard.value.trim() : (aluno.notaFinal || '');
+      document.getElementById('histInputNota').value = notaAtual || '0.0';
+      document.getElementById('histAlunoNotaDisplay').innerText = notaAtual || 'Sem Nota';
+      
+      const badgeCard = document.getElementById('badge-nota-' + matricula);
+      document.getElementById('histAlunoNotaStatus').innerText = badgeCard ? badgeCard.innerText : '';
+
+      const alStat = (currentEstatisticas && currentEstatisticas.alunosStats && currentEstatisticas.alunosStats[matricula])
+        ? currentEstatisticas.alunosStats[matricula]
+        : { pctPresenca: 100, presencas: 0, totalAulas: 0, pontosFreq: 0, atividadesFeitas: 0, totalAtividades: 0, pontosAtiv: 0, totalAnotacoes: 0 };
+
+      document.getElementById('histAlunoFreq').innerText = `${alStat.pctPresenca}% (${alStat.presencas || 0}/${alStat.totalAulas || 0} aulas)`;
+      document.getElementById('histAlunoFreqPts').innerText = currentConfigNotas.ativoFreq ? `+${alStat.pontosFreq} pts` : `Frequência s/ pontos`;
+
+      document.getElementById('histAlunoAtiv').innerText = `${alStat.atividadesFeitas} de ${alStat.totalAtividades} feitas`;
+      document.getElementById('histAlunoAtivPts').innerText = currentConfigNotas.ativoAtiv ? `+${alStat.pontosAtiv} pts` : `Atividades s/ pontos`;
+
+      const scrollEl = document.getElementById('histListaAnotacoes');
+      scrollEl.innerHTML = '<div style="text-align:center; padding:1.5rem; opacity:0.7;">Carregando histórico de anotações...</div>';
+      document.getElementById('histQtdAnotacoes').innerText = 'Buscando...';
+
+      document.getElementById('modalHistoricoAluno').classList.add('show');
+
+      google.script.run
+        .withSuccessHandler(onHistoricoAnotacoesLoaded)
+        .withFailureHandler(err => {
+          scrollEl.innerHTML = '<div style="text-align:center; padding:1rem; color:var(--danger-color);">Erro ao carregar anotações.</div>';
+        })
+        .getTodasAnotacoesDoAluno(eletiva.idEletiva, matricula);
+    }
+
+    function onHistoricoAnotacoesLoaded(anotacoes) {
+      const scrollEl = document.getElementById('histListaAnotacoes');
+      const qtdEl = document.getElementById('histQtdAnotacoes');
+      scrollEl.innerHTML = '';
+
+      if (!anotacoes || anotacoes.length === 0) {
+        scrollEl.innerHTML = '<div style="text-align:center; padding:1.8rem; opacity:0.65; font-style:italic;">Nenhuma anotação registrada para este estudante nas aulas anteriores.</div>';
+        qtdEl.innerText = '0 anotação(ões)';
+        return;
+      }
+
+      qtdEl.innerText = `${anotacoes.length} anotação(ões)`;
+
+      anotacoes.forEach(item => {
+        const itemCard = document.createElement('div');
+        itemCard.className = 'anotacao-item-card';
+
+        const parts = (item.data || '').split('-');
+        let dataFmt = item.data;
+        if (parts.length === 3) dataFmt = `${parts[2]}/${parts[1]}/${parts[0]}`;
+
+        let statusAtivTag = '';
+        if (item.fezAtividade === 'SIM') {
+          statusAtivTag = '<span style="color:#10b981; font-weight:700;">🟢 Fez Atividade</span>';
+        } else if (item.fezAtividade === 'NAO') {
+          statusAtivTag = '<span style="color:#ef4444; font-weight:700;">🔴 Não Fez</span>';
+        }
+
+        itemCard.innerHTML = `
+          <div class="anotacao-item-header">
+            <span>📅 Aula de ${dataFmt}</span>
+            <span>${statusAtivTag}</span>
+          </div>
+          <div class="anotacao-item-body">${escapeHtml(item.anotacao)}</div>
+        `;
+        scrollEl.appendChild(itemCard);
+      });
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function fecharModalHistoricoAluno() {
+      document.getElementById('modalHistoricoAluno').classList.remove('show');
+      alunoHistoricoModalMatricula = null;
+    }
+
+    function stepNotaModal(delta) {
+      if (!alunoHistoricoModalMatricula) return;
+      stepNota(alunoHistoricoModalMatricula, delta);
+    }
+
+    function onInputNotaModalChange() {
+      if (!alunoHistoricoModalMatricula) return;
+      const raw = document.getElementById('histInputNota').value;
+      const inputCard = document.getElementById('input-nota-' + alunoHistoricoModalMatricula);
+      if (inputCard) {
+        inputCard.value = raw;
+        onNotaInputChange(alunoHistoricoModalMatricula);
+      }
+      document.getElementById('histAlunoNotaDisplay').innerText = raw || 'Sem Nota';
+    }
+
+    function onInputNotaModalBlur() {
+      if (!alunoHistoricoModalMatricula) return;
+      const inputCard = document.getElementById('input-nota-' + alunoHistoricoModalMatricula);
+      if (inputCard) {
+        onNotaBlur(alunoHistoricoModalMatricula);
+        document.getElementById('histInputNota').value = inputCard.value;
+        document.getElementById('histAlunoNotaDisplay').innerText = inputCard.value || 'Sem Nota';
+      }
+    }
     
-    // Funções do Modal Customizado
+    // --- 6. Funções do Modal Customizado de Confirmação ---
     function showConfirmModal(message, callback) {
       document.getElementById('modalMessage').innerText = message;
       confirmActionCallback = callback;
@@ -1502,7 +2658,7 @@
       closeConfirmModal();
     }
     
-    // Função para Toast
+    // --- 7. Toast ---
     function showToast(message, isError = false) {
       const toast = document.getElementById("toast");
       toast.innerText = message;
@@ -1512,7 +2668,7 @@
         toast.classList.remove("error");
       }
       toast.classList.add("show");
-      setTimeout(() => { toast.classList.remove("show"); }, 3000);
+      setTimeout(() => { toast.classList.remove("show"); }, 3200);
     }
   </script>
 </body>

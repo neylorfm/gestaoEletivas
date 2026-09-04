@@ -1046,6 +1046,145 @@
       box-shadow: 0 0 14px rgba(245, 158, 11, 0.7);
     }
 
+    /* Card de Status da Frequência (Nova vs Registrada) */
+    .status-frequencia-card {
+      margin-top: 10px;
+      margin-bottom: 6px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.25s ease;
+      user-select: none;
+    }
+    .status-freq-icon {
+      font-size: 1.35rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .status-freq-textos {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .status-freq-titulo {
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .status-freq-subtitulo {
+      font-size: 0.74rem;
+      opacity: 0.88;
+      line-height: 1.25;
+    }
+    
+    /* Estado: Registrada (Verde / Esmeralda) */
+    .status-frequencia-card.status-registrada {
+      background-color: #ecfdf5;
+      border: 1.5px solid #10b981;
+      color: #065f46;
+    }
+    body.dark-mode .status-frequencia-card.status-registrada {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.18), rgba(5, 150, 105, 0.28));
+      border: 1.5px solid #34d399;
+      color: #a7f3d0;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.25);
+    }
+    
+    /* Estado: Nova Chamada (Azul Céu) */
+    .status-frequencia-card.status-nova {
+      background-color: #f0f9ff;
+      border: 1.5px solid #0284c7;
+      color: #0369a1;
+    }
+    body.dark-mode .status-frequencia-card.status-nova {
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.15), rgba(14, 165, 233, 0.25));
+      border: 1.5px solid #38bdf8;
+      color: #bae6fd;
+      box-shadow: 0 0 10px rgba(2, 132, 199, 0.2);
+    }
+    
+    /* Estado: Carregando (Cinza) */
+    .status-frequencia-card.status-carregando {
+      background-color: #f3f4f6;
+      border: 1.5px solid #9ca3af;
+      color: #4b5563;
+      opacity: 0.8;
+    }
+    body.dark-mode .status-frequencia-card.status-carregando {
+      background: rgba(75, 85, 99, 0.2);
+      border: 1.5px solid #6b7280;
+      color: #d1d5db;
+    }
+
+    /* Estado: Aviso / Incompatível (Âmbar) */
+    .status-frequencia-card.status-aviso {
+      background-color: #fffbeb;
+      border: 1.5px solid #f59e0b;
+      color: #92400e;
+    }
+    body.dark-mode .status-frequencia-card.status-aviso {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.18), rgba(217, 119, 6, 0.28));
+      border: 1.5px solid #fbbf24;
+      color: #fde68a;
+    }
+    
+    /* Badge no Cabeçalho da Lista de Alunos */
+    .badge-status-pill {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      user-select: none;
+      transition: all 0.25s ease;
+    }
+    .badge-status-pill.badge-pill-registrada {
+      background-color: #d1fae5;
+      border: 1.5px solid #10b981;
+      color: #065f46;
+    }
+    body.dark-mode .badge-status-pill.badge-pill-registrada {
+      background: rgba(16, 185, 129, 0.25);
+      border: 1.5px solid #34d399;
+      color: #6ee7b7;
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.35);
+    }
+    .badge-status-pill.badge-pill-nova {
+      background-color: #e0f2fe;
+      border: 1.5px solid #0284c7;
+      color: #0369a1;
+    }
+    body.dark-mode .badge-status-pill.badge-pill-nova {
+      background: rgba(2, 132, 199, 0.25);
+      border: 1.5px solid #38bdf8;
+      color: #7dd3fc;
+      box-shadow: 0 0 8px rgba(2, 132, 199, 0.3);
+    }
+    
+    /* Botão Salvar no modo Atualizar */
+    button.primary.btn-salvar-atualizar {
+      background-color: #059669;
+    }
+    button.primary.btn-salvar-atualizar:hover {
+      background-color: #047857;
+    }
+    body.dark-mode button.primary.btn-salvar-atualizar {
+      background: linear-gradient(135deg, #059669, #10b981);
+      box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+    }
+    body.dark-mode button.primary.btn-salvar-atualizar:hover {
+      background: linear-gradient(135deg, #047857, #059669);
+    }
+
     /* Modais Grandes e Específicos */
     .modal-content.modal-anotacao-box {
       max-width: 500px;
@@ -1256,6 +1395,16 @@
             <label for="data">Data</label>
             <input type="date" id="data" onchange="onDataChange(true)">
           </div>
+
+          <!-- Indicativo Visual de Chamada (Nova vs Registrada) -->
+          <div id="status-frequencia-box" class="status-frequencia-card status-nova" style="display:none;">
+            <div class="status-freq-icon" id="status-freq-icon">🆕</div>
+            <div class="status-freq-textos">
+              <div class="status-freq-titulo" id="status-freq-titulo">Nova Frequência</div>
+              <div class="status-freq-subtitulo" id="status-freq-subtitulo">Ainda não registrada para esta data</div>
+            </div>
+          </div>
+
           <div class="form-group">
             <label>Períodos sendo registrados nesta aula:</label>
             <div id="periodos-info" style="font-weight: bold; color: var(--primary-color);">
@@ -1283,9 +1432,12 @@
 
         <!-- Lista de Alunos (Frequência) -->
         <div class="card panel-alunos">
-          <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid var(--border-color); margin-bottom: 1.5rem; padding-bottom: 0.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid var(--border-color); margin-bottom: 1.5rem; padding-bottom: 0.5rem; flex-wrap: wrap; gap: 8px;">
             <h2 id="lista-alunos-title" style="margin-bottom: 0; border-bottom: none; padding-bottom: 0;">Lista de Alunos</h2>
-            <span id="contador-alunos" style="opacity:0.7; font-size:0.9rem; margin-top: 5px;"></span>
+            <div style="display: flex; align-items: center; gap: 10px; margin-top: 5px;">
+              <span id="badge-header-chamada" class="badge-status-pill badge-pill-nova" style="display: none;">🆕 Não Registrada</span>
+              <span id="contador-alunos" style="opacity:0.7; font-size:0.9rem;"></span>
+            </div>
           </div>
           
           <div id="loader" class="loader"></div>
@@ -1937,6 +2089,83 @@
       salvarAnotacaoAulaModal();
     }
 
+    // --- 3.2. Indicador Visual de Chamada (Nova vs Registrada) ---
+    function atualizarIndicadorStatusChamada(estado, dados = {}) {
+      const box = document.getElementById('status-frequencia-box');
+      const icon = document.getElementById('status-freq-icon');
+      const titulo = document.getElementById('status-freq-titulo');
+      const subtitulo = document.getElementById('status-freq-subtitulo');
+      const badgeHeader = document.getElementById('badge-header-chamada');
+      const btnSalvar = document.getElementById('btn-salvar');
+
+      if (!box || !icon || !titulo || !subtitulo) return;
+
+      box.style.display = 'flex';
+      box.className = 'status-frequencia-card';
+
+      if (estado === 'registrada') {
+        box.classList.add('status-registrada');
+        icon.innerText = '✅';
+        titulo.innerText = 'Frequência Já Registrada';
+        const faltas = dados.totalFaltas !== undefined ? dados.totalFaltas : 0;
+        const faltasText = faltas === 0 ? '100% de Presença' : `${faltas} falta(s) registrada(s)`;
+        subtitulo.innerText = `${faltasText} no sistema. Qualquer alteração atualizará os registros.`;
+
+        if (badgeHeader) {
+          badgeHeader.style.display = 'inline-flex';
+          badgeHeader.className = 'badge-status-pill badge-pill-registrada';
+          badgeHeader.innerHTML = '✅ Registrada';
+          badgeHeader.title = 'Frequência já registrada para esta aula no sistema.';
+        }
+
+        if (btnSalvar) {
+          btnSalvar.innerText = '🔄 Atualizar Chamada Registrada';
+          btnSalvar.classList.add('btn-salvar-atualizar');
+          btnSalvar.title = 'Esta chamada já foi salva. Clicar atualizará as presenças, faltas, atividades e anotações.';
+        }
+      } else if (estado === 'nova') {
+        box.classList.add('status-nova');
+        icon.innerText = '🆕';
+        titulo.innerText = 'Nova Frequência';
+        subtitulo.innerText = 'Nenhum registro para esta data. Preencha e salve a chamada.';
+
+        if (badgeHeader) {
+          badgeHeader.style.display = 'inline-flex';
+          badgeHeader.className = 'badge-status-pill badge-pill-nova';
+          badgeHeader.innerHTML = '🆕 Nova Chamada';
+          badgeHeader.title = 'Frequência ainda não registrada para esta data.';
+        }
+
+        if (btnSalvar) {
+          btnSalvar.innerText = '💾 Salvar Chamada';
+          btnSalvar.classList.remove('btn-salvar-atualizar');
+          btnSalvar.title = 'Gravar a chamada desta aula pela primeira vez.';
+        }
+      } else if (estado === 'carregando') {
+        box.classList.add('status-carregando');
+        icon.innerText = '⏳';
+        titulo.innerText = 'Verificando Data...';
+        subtitulo.innerText = 'Consultando registros no sistema...';
+
+        if (badgeHeader) {
+          badgeHeader.style.display = 'none';
+        }
+      } else if (estado === 'invalido') {
+        box.classList.add('status-aviso');
+        icon.innerText = '⚠️';
+        titulo.innerText = 'Data Incompatível';
+        subtitulo.innerText = `Esta eletiva ocorre às ${dados.diaEsperado || 'outras datas'}.`;
+
+        if (badgeHeader) {
+          badgeHeader.style.display = 'none';
+        }
+        if (btnSalvar) {
+          btnSalvar.innerText = 'Salvar Chamada';
+          btnSalvar.classList.remove('btn-salvar-atualizar');
+        }
+      }
+    }
+
     // --- 3.3. Sincronização de Data e Chamada ---
     function onDataChange(isUserAction = false) {
       const idStr = document.getElementById('eletiva').value;
@@ -1967,11 +2196,13 @@
       
       if (expectedDayStr && expectedDayStr !== actualDayStr) {
         document.getElementById('btn-salvar').disabled = true;
+        atualizarIndicadorStatusChamada('invalido', { diaEsperado: eletiva.dia });
         if (isUserAction && currentTab === 'frequencia') {
           showToast(`A Eletiva ocorre na ${eletiva.dia}. Por favor, escolha a data correta.`, true);
         }
       } else {
         document.getElementById('btn-salvar').disabled = false;
+        atualizarIndicadorStatusChamada('carregando');
       }
       
       resetVisualFaltas();
@@ -2040,6 +2271,10 @@
           }
         }
       });
+
+      // 4. Atualizar Indicador de Status da Frequência (Nova vs Registrada)
+      const estaRegistrada = dados.registrada === true;
+      atualizarIndicadorStatusChamada(estaRegistrada ? 'registrada' : 'nova', dados);
     }
 
     // --- 4. Salvar Chamada de Frequência, Atividades e Anotações ---
@@ -2099,20 +2334,21 @@
       google.script.run
         .withSuccessHandler((res) => {
           btn.disabled = false;
-          btn.innerText = 'Salvar Chamada';
           if (res && res.status === 'CONFIRM_OVERWRITE') {
             showConfirmModal(res.message, function() {
               salvarChamada(true);
             });
           } else {
             showToast("Chamada, atividades e anotações salvas com sucesso!");
+            // Imediatamente atualiza o indicativo visual na tela
+            const countFaltas = document.querySelectorAll('.chk-aluno-periodo:not(:checked)').length;
+            atualizarIndicadorStatusChamada('registrada', { totalFaltas: countFaltas });
             // Atualiza estatísticas em background
             carregarEstatisticasEletiva();
           }
         })
         .withFailureHandler(err => {
           btn.disabled = false;
-          btn.innerText = 'Salvar Chamada';
           showToast("Erro ao salvar: " + err, true);
         })
         .salvarChamada(payload);

@@ -506,6 +506,9 @@ function excluirFalta(idRegistro, abaDestino) {
  */
 function getDadosDaChamada(idEletiva, dataStr) {
   var resultado = {
+    registrada: false,
+    totalFaltas: 0,
+    periodosRegistrados: [],
     faltas: {},
     temAtividade: false,
     atividades: {},
@@ -518,6 +521,9 @@ function getDadosDaChamada(idEletiva, dataStr) {
   var sheet = getPlanilha(idEletivaNorm);
   if (sheet) {
     var sheetData = sheet.getDataRange().getValues();
+    var periodosMap = {};
+    var faltasSet = {};
+
     for (var i = 1; i < sheetData.length; i++) {
       var rowDate = sheetData[i][1];
       if (!rowDate) continue;
@@ -530,7 +536,10 @@ function getDadosDaChamada(idEletiva, dataStr) {
       }
 
       if (rowDateStr === dataStr) {
+        resultado.registrada = true;
         var periodo = sheetData[i][2];
+        if (periodo) periodosMap[periodo] = true;
+
         var tipoOcorrencia = sheetData[i][8]; // Coluna I (índice 8)
 
         if (!resultado.faltas[periodo]) resultado.faltas[periodo] = [];
@@ -539,10 +548,13 @@ function getDadosDaChamada(idEletiva, dataStr) {
           var matricula = sheetData[i][6] ? sheetData[i][6].toString() : null; // Coluna G
           if (matricula) {
             resultado.faltas[periodo].push(matricula);
+            faltasSet[matricula] = true;
           }
         }
       }
     }
+    resultado.periodosRegistrados = Object.keys(periodosMap);
+    resultado.totalFaltas = Object.keys(faltasSet).length;
   }
 
   // 2. Atividades e Anotações na aba REGISTRO_ATIVIDADES_NOTAS

@@ -990,23 +990,60 @@
       align-items: center;
       gap: 4px;
     }
+    /* Botão de Ver Anotações no Card de Notas */
     .btn-ver-anotacoes {
       font-size: 0.75rem;
       font-weight: 600;
       padding: 2px 8px;
       border-radius: 10px;
-      background-color: rgba(37, 99, 235, 0.08);
-      border: 1px solid var(--primary-color);
-      color: var(--primary-color);
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
       transition: all 0.2s ease;
+      user-select: none;
     }
-    .btn-ver-anotacoes:hover {
-      background-color: var(--primary-color);
-      color: #fff;
+    
+    /* Quando NÃO tem anotações (0) - Estilo discreto e neutro */
+    .btn-ver-anotacoes.sem-anotacoes {
+      background-color: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
+      opacity: 0.65;
+    }
+    .btn-ver-anotacoes.sem-anotacoes:hover {
+      opacity: 1;
+      border-color: var(--primary-color);
+      color: var(--primary-color);
+      background-color: rgba(37, 99, 235, 0.08);
+    }
+    
+    /* Quando TEM anotações (>0) - Destaque visual vibrante em Âmbar/Dourado */
+    .btn-ver-anotacoes.com-anotacoes {
+      background-color: #fef3c7;
+      border: 1.5px solid #f59e0b;
+      color: #b45309;
+      font-weight: 700;
+      box-shadow: 0 1px 4px rgba(245, 158, 11, 0.25);
+    }
+    .btn-ver-anotacoes.com-anotacoes:hover {
+      background-color: #f59e0b;
+      color: #ffffff;
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+    }
+    
+    /* Dark Mode para Anotações com Destaque */
+    body.dark-mode .btn-ver-anotacoes.com-anotacoes {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(217, 119, 6, 0.35));
+      border: 1.5px solid #fbbf24;
+      color: #fde68a;
+      box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+    }
+    body.dark-mode .btn-ver-anotacoes.com-anotacoes:hover {
+      background: #f59e0b;
+      color: #111827;
+      border-color: #fcd34d;
+      box-shadow: 0 0 14px rgba(245, 158, 11, 0.7);
     }
 
     /* Modais Grandes e Específicos */
@@ -2291,7 +2328,13 @@
           pillAtivHtml = `<span class="pill-info" title="Atividades feitas: ${alStats.atividadesFeitas} de ${alStats.totalAtividades}">📝 ${alStats.atividadesFeitas}/${alStats.totalAtividades} (+${alStats.pontosAtiv} pts)</span>`;
         }
         const totalAnot = alStats.totalAnotacoes || 0;
-        const btnAnotHtml = `<button type="button" class="btn-ver-anotacoes" onclick="abrirModalHistoricoAluno('${aluno.matricula}')">👁️ Anotações (${totalAnot})</button>`;
+        const temAnotacoes = totalAnot > 0;
+        const classeAnot = temAnotacoes ? 'com-anotacoes' : 'sem-anotacoes';
+        const iconeAnot = temAnotacoes ? '📝' : '💬';
+        const tituloAnot = temAnotacoes 
+          ? `Clique para consultar ${totalAnot} anotação(ões) registrada(s)` 
+          : 'Nenhuma anotação registrada para este aluno';
+        const btnAnotHtml = `<button type="button" class="btn-ver-anotacoes ${classeAnot}" title="${tituloAnot}" onclick="abrirModalHistoricoAluno('${aluno.matricula}')">${iconeAnot} Anotações (${totalAnot})</button>`;
 
         card.innerHTML = `
           <div class="aluno-info aluno-nota-meta">

@@ -1185,6 +1185,290 @@
       background: linear-gradient(135deg, #047857, #059669);
     }
 
+    /* Custom Date Picker & Navigation */
+    .custom-date-group {
+      position: relative;
+    }
+    .date-picker-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      width: 100%;
+    }
+    .btn-nav-dia {
+      background-color: var(--bg-color);
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      flex-shrink: 0;
+      user-select: none;
+    }
+    .btn-nav-dia:hover {
+      border-color: var(--primary-color);
+      color: var(--primary-color);
+      background-color: rgba(37, 99, 235, 0.08);
+    }
+    .custom-date-input-box {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1.5px solid var(--border-color);
+      background-color: var(--input-bg, var(--bg-color));
+      color: var(--text-color);
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s;
+    }
+    .custom-date-input-box:hover {
+      border-color: var(--primary-color);
+    }
+    .date-icon {
+      font-size: 1.1rem;
+    }
+    .date-display-text {
+      flex: 1;
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+    .calendar-toggle-arrow {
+      font-size: 0.75rem;
+      opacity: 0.6;
+      transition: transform 0.2s;
+    }
+    .custom-date-input-box.open .calendar-toggle-arrow {
+      transform: rotate(180deg);
+    }
+
+    /* Popover do Calendário Customizado */
+    .custom-calendar-popover {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      width: 100%;
+      min-width: 290px;
+      background-color: var(--card-bg);
+      border: 1.5px solid var(--border-color);
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+      z-index: 1050;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      animation: fadeInPopover 0.15s ease-out;
+    }
+    @keyframes fadeInPopover {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    body.dark-mode .custom-calendar-popover {
+      background-color: #1e293b;
+      border-color: #334155;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.55);
+    }
+
+    /* Cabeçalho do Calendário */
+    .cal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 8px;
+    }
+    .cal-nav-btn {
+      background: none;
+      border: 1px solid var(--border-color);
+      color: var(--text-color);
+      border-radius: 6px;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0;
+      transition: all 0.2s;
+    }
+    .cal-nav-btn:hover {
+      background-color: rgba(37, 99, 235, 0.1);
+      border-color: var(--primary-color);
+      color: var(--primary-color);
+    }
+    .cal-month-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      text-transform: capitalize;
+    }
+
+    /* Dias da Semana (D S T Q Q S S) */
+    .cal-weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      opacity: 0.65;
+    }
+    .cal-weekdays span.dia-eletiva-col {
+      color: var(--primary-color);
+      opacity: 1;
+      font-weight: 800;
+    }
+
+    /* Grade de Dias */
+    .cal-days-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+    .cal-day-cell {
+      position: relative;
+      aspect-ratio: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      background: none;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      color: var(--text-color);
+      transition: all 0.18s ease;
+      padding: 0;
+      user-select: none;
+    }
+    .cal-day-cell:hover {
+      background-color: rgba(37, 99, 235, 0.12);
+      transform: scale(1.05);
+    }
+    .cal-day-cell.day-empty {
+      cursor: default;
+      pointer-events: none;
+      opacity: 0;
+    }
+    .cal-day-cell.day-outro-mes {
+      opacity: 0.25;
+    }
+    .cal-day-cell.day-outro-dia {
+      opacity: 0.55;
+    }
+
+    /* Dia de Aula da Eletiva (Pendente / Sem Registro) */
+    .cal-day-cell.day-dia-aula {
+      font-weight: 700;
+      border: 1px dashed var(--primary-color);
+      color: var(--primary-color);
+      opacity: 0.95;
+    }
+    .cal-day-cell.day-dia-aula:hover {
+      background-color: rgba(37, 99, 235, 0.2);
+    }
+
+    /* Dia com Chamada REGISTRADA (Destaque em Verde / Esmeralda) */
+    .cal-day-cell.day-registrada {
+      background-color: #10b981;
+      color: #ffffff;
+      font-weight: 800;
+      box-shadow: 0 1px 4px rgba(16, 185, 129, 0.3);
+    }
+    .cal-day-cell.day-registrada:hover {
+      background-color: #059669;
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+    }
+    body.dark-mode .cal-day-cell.day-registrada {
+      background: linear-gradient(135deg, #059669, #10b981);
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.45);
+      color: #ffffff;
+    }
+    body.dark-mode .cal-day-cell.day-registrada:hover {
+      background: #10b981;
+      box-shadow: 0 0 14px rgba(16, 185, 129, 0.75);
+    }
+    .cal-day-badge-check {
+      font-size: 0.62rem;
+      line-height: 1;
+      margin-top: -2px;
+    }
+
+    /* Dia Selecionado Atualmente */
+    .cal-day-cell.day-selected {
+      outline: 2px solid #2563eb;
+      outline-offset: 1px;
+    }
+    body.dark-mode .cal-day-cell.day-selected {
+      outline: 2px solid #38bdf8;
+      outline-offset: 1px;
+    }
+
+    /* Dia de Hoje */
+    .cal-day-cell.day-today .cal-day-num {
+      text-decoration: underline;
+      font-weight: 800;
+    }
+
+    /* Rodapé do Calendário */
+    .cal-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border-color);
+      padding-top: 8px;
+      font-size: 0.72rem;
+    }
+    .cal-legend {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0.9;
+    }
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .legend-dot.dot-registrada {
+      background-color: #10b981;
+      box-shadow: 0 0 4px #10b981;
+    }
+    .legend-dot.dot-aula {
+      border: 1px dashed var(--primary-color);
+      background-color: rgba(37, 99, 235, 0.15);
+    }
+    .cal-btn-hoje {
+      background: none;
+      border: none;
+      color: var(--primary-color);
+      font-weight: 700;
+      font-size: 0.75rem;
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+    .cal-btn-hoje:hover {
+      background-color: rgba(37, 99, 235, 0.1);
+      text-decoration: underline;
+    }
+
     /* Modais Grandes e Específicos */
     .modal-content.modal-anotacao-box {
       max-width: 500px;
@@ -1391,9 +1675,41 @@
               <option value="">Carregando...</option>
             </select>
           </div>
-          <div class="form-group">
-            <label for="data">Data</label>
-            <input type="date" id="data" onchange="onDataChange(true)">
+          <div class="form-group custom-date-group">
+            <label for="data-display">Data da Aula:</label>
+            <div class="date-picker-wrapper">
+              <button type="button" class="btn-nav-dia" onclick="navegarAulaAnterior()" title="Aula Anterior na Eletiva">◀</button>
+              <div class="custom-date-input-box" id="btn-abrir-calendario" onclick="toggleCalendarioCustom(event)" title="Clique para abrir o calendário com os dias marcados">
+                <span class="date-icon">📅</span>
+                <span id="data-display" class="date-display-text">Carregando data...</span>
+                <span class="calendar-toggle-arrow">▾</span>
+                <!-- Campo de data original mantido oculto para compatibilidade total -->
+                <input type="hidden" id="data" onchange="onDataChange(true)">
+              </div>
+              <button type="button" class="btn-nav-dia" onclick="navegarProximaAula()" title="Próxima Aula na Eletiva">▶</button>
+            </div>
+
+            <!-- Popover do Calendário Customizado Interativo -->
+            <div id="custom-calendar-popover" class="custom-calendar-popover" style="display:none;" onclick="event.stopPropagation()">
+              <div class="cal-header">
+                <button type="button" class="cal-nav-btn" onclick="mudarMesCalendario(-1)" title="Mês Anterior">‹</button>
+                <div class="cal-month-title" id="cal-month-title">Mês de Ano</div>
+                <button type="button" class="cal-nav-btn" onclick="mudarMesCalendario(1)" title="Próximo Mês">›</button>
+              </div>
+              <div class="cal-weekdays" id="cal-weekdays">
+                <span>D</span><span>S</span><span>T</span><span>Q</span><span>Q</span><span>S</span><span>S</span>
+              </div>
+              <div class="cal-days-grid" id="cal-days-grid">
+                <!-- Preenchido dinamicamente com dias e marcações verdes -->
+              </div>
+              <div class="cal-footer">
+                <div class="cal-legend">
+                  <span class="legend-item" title="Chamada já realizada (você pode clicar para consultar ou editar)"><span class="legend-dot dot-registrada"></span> Chamada Salva</span>
+                  <span class="legend-item" title="Dia oficial da eletiva"><span class="legend-dot dot-aula"></span> Dia de Aula</span>
+                </div>
+                <button type="button" class="cal-btn-hoje" onclick="selecionarDataHoje()">Hoje</button>
+              </div>
+            </div>
           </div>
 
           <!-- Indicativo Visual de Chamada (Nova vs Registrada) -->
@@ -1732,7 +2048,24 @@
     // --- 2. Busca de Dados Iniciais ---
     document.addEventListener("DOMContentLoaded", function() {
       initTheme();
-      document.getElementById('data').valueAsDate = new Date();
+      const hj = new Date();
+      const hjStr = formatLocalDateToISO(hj);
+      const dataInput = document.getElementById('data');
+      if (dataInput) dataInput.value = hjStr;
+      atualizarDisplayData(hjStr);
+      currentCalYear = hj.getFullYear();
+      currentCalMonth = hj.getMonth();
+
+      // Fechar calendário customizado ao clicar fora
+      document.addEventListener('click', function(e) {
+        const popover = document.getElementById('custom-calendar-popover');
+        const box = document.getElementById('btn-abrir-calendario');
+        if (popover && popover.style.display === 'block') {
+          if (!popover.contains(e.target) && (!box || !box.contains(e.target))) {
+            fecharCalendarioCustom();
+          }
+        }
+      });
       
       google.script.run
         .withSuccessHandler(populateEletivas)
@@ -1839,6 +2172,9 @@
       }
       
       atualizarHeaderNotas();
+      if (eletiva) {
+        carregarDatasRegistradasDaEletiva(eletiva.idEletiva);
+      }
       
       // Buscar Alunos (usando o idEletiva base)
       document.getElementById('loader').style.display = 'block';
@@ -2089,6 +2425,234 @@
       salvarAnotacaoAulaModal();
     }
 
+    // --- 3.1. Estado e Controle do Calendário Customizado ---
+    let datasRegistradasCache = new Set();
+    let currentCalYear = new Date().getFullYear();
+    let currentCalMonth = new Date().getMonth();
+
+    function formatLocalDateToISO(date) {
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, '0');
+      const d = String(date.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
+    function atualizarDisplayData(dateStr) {
+      const displayEl = document.getElementById('data-display');
+      if (!displayEl) return;
+      if (!dateStr) {
+        displayEl.innerText = "Selecione uma data...";
+        return;
+      }
+      const parts = dateStr.split('-');
+      if (parts.length === 3) {
+        const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+        const dayNames = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+        const dayName = dayNames[d.getDay()] || '';
+        displayEl.innerText = `${parts[2]}/${parts[1]}/${parts[0]} (${dayName})`;
+      } else {
+        displayEl.innerText = dateStr;
+      }
+    }
+
+    function carregarDatasRegistradasDaEletiva(idEletiva) {
+      if (!idEletiva) return;
+      google.script.run
+        .withSuccessHandler(function(dates) {
+          if (Array.isArray(dates)) {
+            datasRegistradasCache = new Set(dates);
+            renderCustomCalendar();
+          }
+        })
+        .withFailureHandler(function(err) {
+          console.error("Erro ao buscar datas registradas:", err);
+        })
+        .getDatasRegistradasDaEletiva(idEletiva);
+    }
+
+    function toggleCalendarioCustom(event) {
+      if (event) event.stopPropagation();
+      const popover = document.getElementById('custom-calendar-popover');
+      const box = document.getElementById('btn-abrir-calendario');
+      if (!popover) return;
+      const isOpen = popover.style.display === 'block';
+      if (isOpen) {
+        fecharCalendarioCustom();
+      } else {
+        const curDate = document.getElementById('data').value;
+        if (curDate) {
+          const parts = curDate.split('-');
+          if (parts.length === 3) {
+            currentCalYear = parseInt(parts[0], 10);
+            currentCalMonth = parseInt(parts[1], 10) - 1;
+          }
+        }
+        renderCustomCalendar();
+        popover.style.display = 'block';
+        if (box) box.classList.add('open');
+      }
+    }
+
+    function fecharCalendarioCustom() {
+      const popover = document.getElementById('custom-calendar-popover');
+      const box = document.getElementById('btn-abrir-calendario');
+      if (popover) popover.style.display = 'none';
+      if (box) box.classList.remove('open');
+    }
+
+    function renderCustomCalendar() {
+      const titleEl = document.getElementById('cal-month-title');
+      const gridEl = document.getElementById('cal-days-grid');
+      const weekdaysEl = document.getElementById('cal-weekdays');
+      if (!gridEl || !titleEl) return;
+
+      const nomesMeses = [
+        'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+        'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+      ];
+      titleEl.innerText = `${nomesMeses[currentCalMonth]} de ${currentCalYear}`;
+
+      const idStr = document.getElementById('eletiva').value;
+      const eletiva = eletivasCache.find(e => e.idUnico === idStr);
+      const dayMap = { 'domingo': 0, 'segunda-feira': 1, 'terça-feira': 2, 'quarta-feira': 3, 'quinta-feira': 4, 'sexta-feira': 5, 'sábado': 6 };
+      let diaEletivaIdx = -1;
+      if (eletiva && eletiva.dia) {
+        const diaNorm = eletiva.dia.trim().toLowerCase();
+        if (dayMap.hasOwnProperty(diaNorm)) {
+          diaEletivaIdx = dayMap[diaNorm];
+        }
+      }
+
+      if (weekdaysEl) {
+        const spans = weekdaysEl.querySelectorAll('span');
+        spans.forEach((sp, idx) => {
+          if (idx === diaEletivaIdx) sp.classList.add('dia-eletiva-col');
+          else sp.classList.remove('dia-eletiva-col');
+        });
+      }
+
+      gridEl.innerHTML = '';
+
+      const firstDayIndex = new Date(currentCalYear, currentCalMonth, 1).getDay();
+      const totalDays = new Date(currentCalYear, currentCalMonth + 1, 0).getDate();
+      const prevMonthLastDay = new Date(currentCalYear, currentCalMonth, 0).getDate();
+
+      const selectedDate = document.getElementById('data').value;
+      const todayISO = formatLocalDateToISO(new Date());
+
+      // Dias anteriores do mês passado para preenchimento
+      for (let i = firstDayIndex; i > 0; i--) {
+        const dayNum = prevMonthLastDay - i + 1;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'cal-day-cell day-outro-mes';
+        btn.innerHTML = `<span class="cal-day-num">${dayNum}</span>`;
+        btn.onclick = () => mudarMesCalendario(-1);
+        gridEl.appendChild(btn);
+      }
+
+      // Dias do mês atual
+      for (let d = 1; d <= totalDays; d++) {
+        const dayDate = new Date(currentCalYear, currentCalMonth, d);
+        const dow = dayDate.getDay();
+        const dStr = formatLocalDateToISO(dayDate);
+        const isDiaAula = (dow === diaEletivaIdx);
+        const isRegistrada = datasRegistradasCache.has(dStr);
+        const isSelected = (dStr === selectedDate);
+        const isToday = (dStr === todayISO);
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'cal-day-cell';
+
+        let titulo = `${String(d).padStart(2, '0')}/${String(currentCalMonth + 1).padStart(2, '0')}/${currentCalYear}`;
+
+        if (isRegistrada) {
+          btn.classList.add('day-registrada');
+          titulo += ' • Chamada já Registrada (clique para consultar ou editar)';
+        } else if (isDiaAula) {
+          btn.classList.add('day-dia-aula');
+          titulo += ' • Dia de Aula da Eletiva (Pendente de chamada)';
+        } else {
+          btn.classList.add('day-outro-dia');
+        }
+
+        if (isSelected) btn.classList.add('day-selected');
+        if (isToday) btn.classList.add('day-today');
+
+        btn.title = titulo;
+
+        let badgeHtml = '';
+        if (isRegistrada) {
+          badgeHtml = '<span class="cal-day-badge-check">✓</span>';
+        }
+
+        btn.innerHTML = `<span class="cal-day-num">${d}</span>${badgeHtml}`;
+        btn.onclick = () => selecionarDataDoCalendario(dStr);
+        gridEl.appendChild(btn);
+      }
+
+      // Preencher o restante da grade
+      const totalCells = firstDayIndex + totalDays;
+      const nextDays = (7 - (totalCells % 7)) % 7;
+      for (let n = 1; n <= nextDays; n++) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'cal-day-cell day-outro-mes';
+        btn.innerHTML = `<span class="cal-day-num">${n}</span>`;
+        btn.onclick = () => mudarMesCalendario(1);
+        gridEl.appendChild(btn);
+      }
+    }
+
+    function mudarMesCalendario(delta) {
+      currentCalMonth += delta;
+      if (currentCalMonth < 0) {
+        currentCalMonth = 11;
+        currentCalYear--;
+      } else if (currentCalMonth > 11) {
+        currentCalMonth = 0;
+        currentCalYear++;
+      }
+      renderCustomCalendar();
+    }
+
+    function selecionarDataDoCalendario(dateStr) {
+      const dataInput = document.getElementById('data');
+      if (dataInput) {
+        dataInput.value = dateStr;
+        atualizarDisplayData(dateStr);
+        fecharCalendarioCustom();
+        renderCustomCalendar();
+        onDataChange(true);
+      }
+    }
+
+    function selecionarDataHoje() {
+      const hj = new Date();
+      currentCalYear = hj.getFullYear();
+      currentCalMonth = hj.getMonth();
+      const hjStr = formatLocalDateToISO(hj);
+      selecionarDataDoCalendario(hjStr);
+    }
+
+    function navegarAulaAnterior() {
+      navegarAulaPasso(-7);
+    }
+
+    function navegarProximaAula() {
+      navegarAulaPasso(7);
+    }
+
+    function navegarAulaPasso(dias) {
+      const curVal = document.getElementById('data').value || formatLocalDateToISO(new Date());
+      const parts = curVal.split('-');
+      const d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+      d.setDate(d.getDate() + dias);
+      const novaDataStr = formatLocalDateToISO(d);
+      selecionarDataDoCalendario(novaDataStr);
+    }
+
     // --- 3.2. Indicador Visual de Chamada (Nova vs Registrada) ---
     function atualizarIndicadorStatusChamada(estado, dados = {}) {
       const box = document.getElementById('status-frequencia-box');
@@ -2185,7 +2749,12 @@
         const formattedDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
         const dayOfWeek = eletiva.dia ? eletiva.dia.toUpperCase() : '';
         titleEl.innerHTML = `Frequência: ${formattedDate} [${dayOfWeek}]<br><span style="font-size: 1.05rem; opacity: 0.8; font-weight: normal; display: inline-block; margin-top: 6px;">${eletiva.nome}</span>`;
+        currentCalYear = parseInt(parts[0], 10);
+        currentCalMonth = parseInt(parts[1], 10) - 1;
       }
+      
+      atualizarDisplayData(data);
+      renderCustomCalendar();
       
       // Validação do Dia da Semana
       const dateObj = new Date(parts[0], parts[1] - 1, parts[2]);
@@ -2340,9 +2909,11 @@
             });
           } else {
             showToast("Chamada, atividades e anotações salvas com sucesso!");
-            // Imediatamente atualiza o indicativo visual na tela
+            // Imediatamente atualiza o indicativo visual na tela e o calendário
             const countFaltas = document.querySelectorAll('.chk-aluno-periodo:not(:checked)').length;
             atualizarIndicadorStatusChamada('registrada', { totalFaltas: countFaltas });
+            datasRegistradasCache.add(data);
+            renderCustomCalendar();
             // Atualiza estatísticas em background
             carregarEstatisticasEletiva();
           }
@@ -2434,6 +3005,11 @@
 
       document.getElementById('summary-total-aulas').innerText = stats.totalAulas || 0;
       document.getElementById('summary-total-ativ').innerText = stats.totalAtividades || 0;
+
+      if (stats && Array.isArray(stats.datasRegistradas)) {
+        datasRegistradasCache = new Set(stats.datasRegistradas);
+        renderCustomCalendar();
+      }
 
       if (currentAlunosCache.length > 0) {
         renderAlunosNotas(currentAlunosCache);

@@ -39,11 +39,15 @@ Guia operacional passo a passo para **Professores, Coordenadores e Equipe da Sec
 
 ---
 
-### 1.2. Registro de Frequência Diária e Indicativo Visual de Status
+### 1.2. Registro de Frequência Diária, Calendário Interativo e Status
 1. No menu superior, clique na aba **"📋 Frequência Diária"**.
 2. Selecione a **Eletiva** desejada no seletor.
-3. Escolha a **Data** da aula.
-   > **Nota de Validação:** O sistema valida o dia da semana no calendário. Se a eletiva ocorre às segundas-feiras e você selecionar uma data de terça-feira, o salvamento será bloqueado para evitar inconsistências.
+3. Escolha a **Data** da aula através do **Calendário Interativo Personalizado**:
+   - Clique na caixa de data (`📅`) para abrir o calendário mensal integrado ao tema.
+   - **Dias Marcados em Verde (`🟢` / `✓`):** Dias em que a chamada já foi registrada para esta eletiva. **O professor pode clicar a qualquer momento para consultar ou editar a chamada.**
+   - **Dias de Aula da Eletiva (Borda Azul):** Indicam o dia oficial da semana da eletiva que ainda está pendente de chamada.
+   - **Navegação Rápida (`◀` e `▶`):** Permite avançar ou retroceder diretamente entre as aulas com um único clique.
+   - > **Nota de Validação:** O sistema valida o dia da semana no calendário. Se a eletiva ocorre às segundas-feiras e você selecionar uma data de terça-feira, o salvamento será bloqueado para evitar inconsistências.
 4. **Indicador Visual Imediato (Nova vs Já Registrada):**
    - **🆕 Nova Frequência (Azul Céu):** Indica que não há chamada registrada para a data escolhida. O botão de ação exibirá **"💾 Salvar Chamada"**.
    - **✅ Frequência Já Registrada (Verde Esmeralda):** Indica que a chamada desta data já foi salva anteriormente. Exibe a contagem de faltas registradas (ou 100% Presença) e o botão passa a ser **"🔄 Atualizar Chamada Registrada"**.
@@ -53,7 +57,7 @@ Guia operacional passo a passo para **Professores, Coordenadores e Equipe da Sec
    - **Vermelho = Aluno Ausente (Falta)**: Clique no botão do período em que o aluno faltou para deixá-lo vermelho.
 6. Se o aluno faltou a todas as aulas do dia, desmarque todos os períodos (o cartão ficará vermelho com alerta de falta total).
 7. Clique no botão **"💾 Salvar Chamada"** (ou **"🔄 Atualizar Chamada Registrada"**).
-8. **Controle de Duplicidade:** Caso já exista uma chamada registrada para aquela data/período, um aviso abrirá perguntando se deseja sobrescrever. Ao confirmar, o registro anterior é atualizado com segurança.
+8. **Edição e Atualização Segura:** O professor tem liberdade total para alterar qualquer chamada anterior e salvar as novas informações a qualquer instante. Caso já exista uma chamada registrada para aquela data/período, um aviso confirma a atualização com total segurança.
 
 ---
 

@@ -606,6 +606,39 @@ function getFaltasDaChamada(idEletiva, dataStr) {
 }
 
 /**
+ * Retorna a lista de datas (no formato YYYY-MM-DD) em que já foram realizadas chamadas na Eletiva.
+ * @param {string|number} idEletiva ID da Eletiva
+ * @returns {Array<string>} Lista de datas únicas ordenadas
+ */
+function getDatasRegistradasDaEletiva(idEletiva) {
+  if (!idEletiva) return [];
+  var idNorm = idEletiva.toString().trim();
+  var sheet = getPlanilha(idNorm);
+  if (!sheet || sheet.getLastRow() < 2) return [];
+
+  var dataRows = sheet.getDataRange().getValues();
+  var datasMap = {};
+
+  for (var i = 1; i < dataRows.length; i++) {
+    var rowDate = dataRows[i][1];
+    if (!rowDate) continue;
+
+    var rowDateStr = "";
+    if (rowDate instanceof Date) {
+      rowDateStr = Utilities.formatDate(rowDate, Session.getScriptTimeZone(), "yyyy-MM-dd");
+    } else {
+      rowDateStr = rowDate.toString().split('T')[0].substring(0, 10);
+    }
+
+    if (rowDateStr && rowDateStr.length === 10) {
+      datasMap[rowDateStr] = true;
+    }
+  }
+
+  return Object.keys(datasMap).sort();
+}
+
+/**
  * Lê a configuração de notas da Eletiva (Pontuação Máxima de Frequência e Atividades).
  */
 function getConfigNotas(idEletiva) {
@@ -723,12 +756,24 @@ function getEstatisticasEletiva(idEletiva) {
   var sheetEletiva = getPlanilha(idNorm);
   var aulasUnicasMap = {};
   var faltasPorAlunoMap = {};
+  var datasRegistradasMap = {};
 
   if (sheetEletiva && sheetEletiva.getLastRow() >= 2) {
     var dataRows = sheetEletiva.getDataRange().getValues();
     for (var i = 1; i < dataRows.length; i++) {
       var idAula = dataRows[i][0];
       if (idAula) aulasUnicasMap[idAula] = true;
+
+      var rDate = dataRows[i][1];
+      var rDateStr = "";
+      if (rDate instanceof Date) {
+        rDateStr = Utilities.formatDate(rDate, Session.getScriptTimeZone(), "yyyy-MM-dd");
+      } else if (rDate) {
+        rDateStr = rDate.toString().split('T')[0].substring(0, 10);
+      }
+      if (rDateStr && rDateStr.length === 10) {
+        datasRegistradasMap[rDateStr] = true;
+      }
 
       var tipoOcorrencia = dataRows[i][8];
       if (tipoOcorrencia === "F") {
@@ -837,6 +882,7 @@ function getEstatisticasEletiva(idEletiva) {
     configNotas: config,
     totalAulas: totalAulas,
     totalAtividades: totalAtividades,
+    datasRegistradas: Object.keys(datasRegistradasMap).sort(),
     alunosStats: alunosStats
   };
 }

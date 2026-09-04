@@ -77,3 +77,48 @@ function atualizarControleTurmas(idEletiva) {
   
   sheetEletiva.getRange("K1").setValue(turmasString);
 }
+
+/**
+ * Sanitiza e formata um valor de nota vindo do Google Sheets.
+ * Corrige o problema clássico onde valores decimais digitados com ponto (ex: 9.4 ou 1.9)
+ * são convertidos automaticamente pelo Google Sheets brasileiro em datas (09/04 ou 01/09).
+ * @param {*} raw Valor original da célula
+ * @returns {string} Nota no formato "0.0" a "10.0" ou "" se vazia/inválida
+ */
+function sanitizarNotaFinal(raw) {
+  if (raw === undefined || raw === null || raw === '') return '';
+  
+  if (raw instanceof Date) {
+    var dia = raw.getDate();
+    var mes = raw.getMonth() + 1;
+    var notaNum = parseFloat(dia + '.' + mes);
+    if (!isNaN(notaNum) && notaNum >= 0 && notaNum <= 10) {
+      return notaNum.toFixed(1);
+    }
+    return '';
+  }
+  
+  var str = raw.toString().trim();
+  if (str === '') return '';
+  
+  // Se contiver string de data previamente serializada (ex: "Thu Apr 09 2026...")
+  if (str.includes('GMT') || str.includes('00:00:00') || /^[A-Za-z]{3}\s[A-Za-z]{3}\s\d{2}/.test(str)) {
+    var d = new Date(str);
+    if (!isNaN(d.getTime())) {
+      var dia = d.getDate();
+      var mes = d.getMonth() + 1;
+      var notaNum = parseFloat(dia + '.' + mes);
+      if (!isNaN(notaNum) && notaNum >= 0 && notaNum <= 10) {
+        return notaNum.toFixed(1);
+      }
+    }
+    return '';
+  }
+  
+  var num = parseFloat(str.replace(',', '.'));
+  if (!isNaN(num) && num >= 0 && num <= 10) {
+    return (Math.round(num * 10) / 10).toFixed(1);
+  }
+  
+  return '';
+}

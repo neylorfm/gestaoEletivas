@@ -75,7 +75,7 @@ function getAlunosEnturmados() {
   for (var i = 1; i < data.length; i++) {
     var matricula = data[i][0];
     if (matricula) {
-      var nota = (data[i][4] !== undefined && data[i][4] !== null) ? data[i][4].toString() : '';
+      var nota = sanitizarNotaFinal(data[i][4]);
       enturmacoes.push({
         matricula: matricula.toString(),
         nome: data[i][1], // Fórmula ou Texto

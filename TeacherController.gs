@@ -135,7 +135,7 @@ function getAlunosDaEletiva(idEletiva) {
     var idEletivaAtual = row[3]; // Coluna D (índice 3: A=0, B=1, C=2, D=3)
     
     if (idEletivaAtual == idEletiva) {
-      var nota = (row[4] !== undefined && row[4] !== null) ? row[4].toString() : "";
+      var nota = sanitizarNotaFinal(row[4]);
       resultados.push({
         matricula: row[0], // Coluna A (índice 0)
         nome: row[1],      // Coluna B (índice 1)
@@ -228,7 +228,7 @@ function salvarNotasFinais(idEletiva, listaNotas) {
   for (var i = 1; i < data.length; i++) {
     var mat = data[i][0] ? data[i][0].toString() : '';
     var el = data[i][3];
-    var notaAtual = (data[i][4] !== undefined && data[i][4] !== null) ? data[i][4].toString() : '';
+    var notaAtual = sanitizarNotaFinal(data[i][4]);
     
     if (mat && el == idEletiva && notasMap.hasOwnProperty(mat)) {
       colENotas.push([notasMap[mat]]);
@@ -238,6 +238,7 @@ function salvarNotasFinais(idEletiva, listaNotas) {
     }
   }
   
+  sheet.getRange(2, 5, colENotas.length, 1).setNumberFormat('@');
   sheet.getRange(2, 5, colENotas.length, 1).setValues(colENotas);
   
   return {

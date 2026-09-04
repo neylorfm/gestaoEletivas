@@ -48,7 +48,7 @@ function gerarRelatorioSecretaria(payload) {
     
     var turma = entData[i][2];
     var idEletiva = entData[i][3];
-    var notaFinal = (entData[i][4] !== undefined && entData[i][4] !== null) ? entData[i][4].toString().trim() : '';
+    var notaFinal = sanitizarNotaFinal(entData[i][4]);
     
     var incluir = false;
     if (tipo === 'TURMA' && turma === valor) incluir = true;
@@ -298,7 +298,7 @@ function obterDadosExportacaoSIGE(payload) {
     var mat = entData[i][0] ? entData[i][0].toString().trim() : null;
     var elId = entData[i][3];
     if (mat && elId == idEletiva) {
-      var rawNota = (entData[i][4] !== undefined && entData[i][4] !== null) ? entData[i][4].toString().trim() : '';
+      var rawNota = sanitizarNotaFinal(entData[i][4]);
       alunosMap[mat] = {
         matricula: mat,
         nome: entData[i][1] || '',

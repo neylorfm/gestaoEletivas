@@ -2197,7 +2197,8 @@
       currentAlunosCache = alunos;
       originalNotasMap = {};
       alunos.forEach(a => {
-        originalNotasMap[a.matricula] = a.notaFinal || '';
+        a.notaFinal = sanitizarNotaJS(a.notaFinal);
+        originalNotasMap[a.matricula] = a.notaFinal;
       });
       
       renderAlunosFrequencia(alunos);
@@ -3081,6 +3082,29 @@
       showToast(`Notas calculadas para ${qtdAtualizadas} aluno(s) com base nas regras ativas! Clique em "Salvar Todas as Notas" para efetivar.`);
     }
 
+    function sanitizarNotaJS(raw) {
+      if (raw === undefined || raw === null || raw === '') return '';
+      const str = String(raw).trim();
+      if (str === '') return '';
+      if (str.includes('GMT') || str.includes('00:00:00') || /^[A-Za-z]{3}\s[A-Za-z]{3}\s\d{2}/.test(str)) {
+        const d = new Date(str);
+        if (!isNaN(d.getTime())) {
+          const dia = d.getDate();
+          const mes = d.getMonth() + 1;
+          const rec = parseFloat(dia + '.' + mes);
+          if (!isNaN(rec) && rec >= 0 && rec <= 10) {
+            return rec.toFixed(1);
+          }
+        }
+        return '';
+      }
+      const num = parseFloat(str.replace(',', '.'));
+      if (!isNaN(num) && num >= 0 && num <= 10) {
+        return (Math.round(num * 10) / 10).toFixed(1);
+      }
+      return '';
+    }
+
     function validarNota(str) {
       if (!str || str.trim() === '') {
         return { valid: true, empty: true, formatted: '' };
@@ -3113,7 +3137,7 @@
         card.dataset.nome = (aluno.nome || '').toLowerCase();
         
         const turmaTexto = aluno.turma ? ` (${aluno.turma})` : '';
-        const valorNota = aluno.notaFinal || '';
+        const valorNota = sanitizarNotaJS(aluno.notaFinal);
         
         let statusBadgeClass = 'badge-empty';
         let statusBadgeText = 'Sem Nota';
